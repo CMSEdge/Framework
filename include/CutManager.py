@@ -63,7 +63,8 @@ class CutManager:
       ##### Needed by RT calculation################ 
       self.HT = "(htJet35j_Edge > 200)"
       self.triggerHT = "(HLT_htall_Edge > 0 || HLT_htmet_Edge > 0 || HLT_atall_Edge > 0)"
-      self.numerator = self.AddList([self.goodLepton, self.donot(self.JetMETBaseline), self.donot(self.RSFOFDirectControlRegion), self.HT, self.triggerHT])
+      self.numerator = self.AddList([self.goodLepton, self.donot(self.JetMETBaseline), self.donot(self.RSFOFDirectControlRegion), self.HT, self.triggerHT, self.trigger])
+      self.denominator = self.AddList([self.goodLepton, self.donot(self.JetMETBaseline), self.donot(self.RSFOFDirectControlRegion), self.HT, self.triggerHT])
 
       ## for checks of the excess
       self.tightIso = 'max(Lep1_miniRelIso_Edge, Lep2_miniRelIso_Edge) < 0.05'

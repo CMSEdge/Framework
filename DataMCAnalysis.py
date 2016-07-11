@@ -63,11 +63,11 @@ def compareMMEEPlots(plotmm, plotee):
     plot.saveRatio(1, 1, 0, 4, h_ee, h_mm)
     
 
-def makeSummaryTable3l4l(plot_3l, plot_4l):
-    wz3l, wz3l_e, zz4l, zz4l_e = 0., 0., 0., 0.,
-    bkg3l, bkg3l_e, bkg4l, bkg4l_e = 0., 0., 0., 0.,
-    obs3l, obs4l = 0, 0
-    rat3l, rat3l_e, rat4l, rat4l_e = 0., 0., 0., 0.,
+def makeSummaryTable3l4l(plot_3l, plot_4l, plot_ttZ):
+    wz3l, wz3l_e, zz4l, zz4l_e, ttZ, ttZ_e = 0., 0., 0., 0.,0., 0.
+    bkg3l, bkg3l_e, bkg4l, bkg4l_e, bkgttZ, bkgttZ_e = 0., 0., 0., 0.,0., 0.
+    obs3l, obs4l, obsttZ = 0, 0, 0
+    rat3l, rat3l_e, rat4l, rat4l_e, ratttZ, ratttZ_e = 0., 0., 0., 0.,0., 0.
     
     for i, h_3l in enumerate(plot_3l.histos):
         if not i: continue
@@ -85,6 +85,7 @@ def makeSummaryTable3l4l(plot_3l, plot_4l):
     for i, h_4l in enumerate(plot_4l.histos):
         if not i: continue
         tmp_double = r.Double()
+        print "h_4l.GetName() ", h_4l.GetName()
         if 'ZZ' in h_4l.GetName():
             zz4l = h_4l.IntegralAndError(1, h_4l.GetNbinsX()+1, tmp_double)
             zz4l_e = tmp_double
@@ -93,11 +94,30 @@ def makeSummaryTable3l4l(plot_3l, plot_4l):
             bkg4l  += tmp_yield
             bkg4l_e = math.sqrt(bkg4l_e**2 + tmp_double**2)
         elif 'DATA' in h_4l.GetName():
-            obs4l = h_4l.Integral()
-        
+            obs4l = h_4l.Integral()                                                      
+    
+    for i, h_ttZ in enumerate(plot_ttZ.histos):
+        if not i: continue
+        tmp_double = r.Double()
+        print "h_ttZ.GetName() ", h_ttZ.GetName()
+        if 'TTZ' in h_ttZ.GetName():
+            ttZ = h_ttZ.IntegralAndError(1, h_ttZ.GetNbinsX()+1, tmp_double)
+            ttZ_e = tmp_double
+        elif not 'DATA' in h_ttZ.GetName(): 
+            print "now here!!! "
+            tmp_yield = h_ttZ.IntegralAndError(1, h_ttZ.GetNbinsX()+1, tmp_double)
+            bkgttZ  += tmp_yield
+            bkgttZ_e = math.sqrt(bkgttZ_e**2 + tmp_double**2)
+        elif 'DATA' in h_ttZ.GetName():
+            print "here obs!!!"
+            obsttZ = h_ttZ.Integral()     
+
+
     obsSub3l, obsSub3l_e, obsSub4l, obsSub4l_e = obs3l-bkg3l, math.sqrt(bkg3l_e**2 + obs3l), obs4l-bkg4l, math.sqrt(bkg4l_e**2 + obs4l)
-    rat3l, rat3l_e = helper.ratioError(wz3l, wz3l_e, obsSub3l, obsSub3l_e)
-    rat4l, rat4l_e = helper.ratioError(zz4l, zz4l_e, obsSub4l, obsSub4l_e)
+    obsSubttZ, obsSubttZ_e = obsttZ-bkgttZ, math.sqrt(bkgttZ_e**2 + obsttZ)
+    rat3l, rat3l_e = helper.ratioError(obsSub3l, obsSub3l_e, wz3l, wz3l_e)
+    rat4l, rat4l_e = helper.ratioError(obsSub4l, obsSub4l_e,zz4l, zz4l_e)
+    ratttZ, ratttZ_e = helper.ratioError(obsSubttZ, obsSubttZ_e,ttZ, ttZ_e)
 
     table3l4lComparisonString = '''\\documentclass[12pt,a4paper]{{article}}
 \\begin{{document}}
@@ -105,37 +125,42 @@ def makeSummaryTable3l4l(plot_3l, plot_4l):
 \\begin{{center}} 
 \\bgroup 
 \\def\\arraystretch{{1.2}} 
-\\caption{{3-lepton and 4-lepton control regions. Signal MC is WZ-$>$3lnu in the 3-lepton region and ZZ-$>$4l in the 4-lepton region.}} 
+\\caption{{3-lepton, 4-lepton and ttZ control regions. Signal MC is WZ-$>$3lnu in the 3-lepton region, ZZ-$>$4l in the 4-lepton region and ttZ-$>$2l2nu and ttZ-$>$qq in the ttZ region}} 
 \\label{{tab:tab3l4lcontrol}} 
-\\begin{{tabular}}{{l| c c }} 
-              & 3-lepton region & 4-lepton region \\\\ \\hline \\hline
-signal MC        & {wz3l:.2f}     $\\pm$  {wz3l_e:.2f}       & {zz4l:.2f}     $\\pm$  {zz4l_e:.2f}       \\\\ \\hline
-bkg. MC          & {bkg3l:.2f}  $\\pm$  {bkg3l_e:.2f}        & {bkg4l:.2f}  $\\pm$  {bkg4l_e:.2f}    \\\\ \\hline \\hline
-\\textbf{{data}}             & \\textbf{{{obs3l}}}                               & \\textbf{{{obs4l}}}      \\\\ \\hline
-data-bkg.        & {obsSub3l:.2f}   $\\pm$  {obsSub3l_e:.2f} & {obsSub4l:.2f}   $\\pm$  {obsSub4l_e:.2f}     \\\\ \\hline \\hline
-sig./(data-bkg.) & {rat3l:.2f}   $\\pm$  {rat3l_e:.2f}       & {rat4l:.2f}   $\\pm$  {rat4l_e:.2f}     \\\\ \\hline
+\\begin{{tabular}}{{l| c c c}} 
+              & 3-lepton region & 4-lepton region &  ttZ region\\\\ \\hline \\hline
+signal MC        & {wz3l:.2f}     $\\pm$  {wz3l_e:.2f}       & {zz4l:.2f}     $\\pm$  {zz4l_e:.2f}    & {ttZ:.2f}     $\\pm$  {ttZ_e:.2f}     \\\\ \\hline
+bkg. MC          & {bkg3l:.2f}  $\\pm$  {bkg3l_e:.2f}        & {bkg4l:.2f}  $\\pm$  {bkg4l_e:.2f}    &   {bkgttZ:.2f}  $\\pm$  {bkgttZ_e:.2f}\\\\ \\hline \\hline
+\\textbf{{data}}             & \\textbf{{{obs3l}}}                               & \\textbf{{{obs4l}}}    & \\textbf{{{obsttZ}}}   \\\\ \\hline
+data-bkg.        & {obsSub3l:.2f}   $\\pm$  {obsSub3l_e:.2f} & {obsSub4l:.2f}   $\\pm$  {obsSub4l_e:.2f}   & {obsSubttZ:.2f}   $\\pm$  {obsSubttZ_e:.2f}    \\\\ \\hline \\hline
+(data-bkg.)/sig. & {rat3l:.2f}   $\\pm$  {rat3l_e:.2f}       & {rat4l:.2f}   $\\pm$  {rat4l_e:.2f}     & {ratttZ:.2f}   $\\pm$  {ratttZ_e:.2f}    \\\\ \\hline
 
 \\end{{tabular}} 
 \\egroup 
 \\end{{center}} 
 \\end{{table}} 
-\\end{{document}}'''.format(wz3l=wz3l, wz3l_e=wz3l_e, zz4l=zz4l, zz4l_e=zz4l_e,
-                            bkg3l=bkg3l, bkg3l_e=bkg3l_e, bkg4l=bkg4l,bkg4l_e=bkg4l_e, 
-                            obs3l=int(obs3l),obs4l=int(obs4l),
-                            obsSub3l=obsSub3l, obsSub3l_e=obsSub3l_e, obsSub4l=obsSub4l, obsSub4l_e=obsSub4l_e,
-                            rat3l=rat3l, rat3l_e=rat3l_e, rat4l=rat4l, rat4l_e=rat4l_e)
-    compTableFile = open('plots/DataMC/12.9invfb/tables/controlRegion3l4l_comparison.tex','w')
+\\end{{document}}'''.format(wz3l=wz3l, wz3l_e=wz3l_e, zz4l=zz4l, zz4l_e=zz4l_e,ttZ=ttZ, ttZ_e=ttZ_e,
+                            bkg3l=bkg3l, bkg3l_e=bkg3l_e, bkg4l=bkg4l,bkg4l_e=bkg4l_e, bkgttZ=bkgttZ,bkgttZ_e=bkgttZ_e,
+                            obs3l=int(obs3l),obs4l=int(obs4l),obsttZ=int(obsttZ),
+                            obsSub3l=obsSub3l, obsSub3l_e=obsSub3l_e, obsSub4l=obsSub4l, obsSub4l_e=obsSub4l_e,obsSubttZ=obsSubttZ, obsSubttZ_e=obsSubttZ_e,
+                            rat3l=rat3l, rat3l_e=rat3l_e, rat4l=rat4l, rat4l_e=rat4l_e, ratttZ=ratttZ, ratttZ_e=ratttZ_e)
+    compTableFile = open('plots/DataMC/12.9invfb/tables/controlRegion3l4l_comparison.txt','w')
     compTableFile.write(table3l4lComparisonString)
     compTableFile.close()
 
 def makePlot(lumi, lumi_str, treeDA, treeMC, var, name, nbin, xmin, xmax, theCut, cuts,labelx, logx, returnplot = False, scaleToData = False, normalized = False, cumulative = False, onlyMC = False):
 
-    #print 'LUMI', lumi
-    #print 'scaletodata', scaleToData
+    print 'returnplot', returnplot
+    print 'scaletodata', scaleToData
+    print 'normalized', normalized
+    print 'cumulative', cumulative
+    print 'onlyMC', onlyMC
 
-    theCutDATA = cuts.AddList([theCut, cuts.trigger])
+    theCutDATA = cuts.AddList([theCut, cuts.trigger ])
+    theCutZ = cuts.AddList([theCut, cuts.Zmass ])
     MC   = treeMC.getTH1F(lumi, "hMC_%s"%(name), var, nbin, xmin, xmax, theCut, '', labelx)
     MCS  = treeMC.getStack(lumi, "hMCS_%s"%(name), var, nbin, xmin, xmax, theCut, "", labelx)
+    MCSZ  = treeMC.getStack(lumi, "hMCZS_%s"%(name), var, nbin, xmin, xmax, theCutZ, "", labelx)
     DATA = treeDA.getTH1F(lumi, "hDATA_%s"%(name), var, nbin, xmin, xmax, theCutDATA, '', labelx)
 
     if scaleToData:
@@ -149,6 +174,9 @@ def makePlot(lumi, lumi_str, treeDA, treeMC, var, name, nbin, xmin, xmax, theCut
             newStack.Add(_hnew)
         MC.Scale(daInt/mcInt)
 
+    for _i,_h in enumerate(MCS.GetHists()):
+        print "sample ", _h.GetName(), " has integral ", _h.Integral()
+        
     if normalized:
         hists = []
         for _i,_h in enumerate(MCS.GetHists()):
@@ -162,17 +190,17 @@ def makePlot(lumi, lumi_str, treeDA, treeMC, var, name, nbin, xmin, xmax, theCut
             hists.append(_h)
         yie_e = r.Double()
         yie = MC.IntegralAndError(1, MC.GetNbinsX()+1, yie_e)
-        MC.SetName('full MC')
+        MC.SetName('Full MC')
         MC  .Scale(1./MC.Integral())
         MC  .SetLineColor(r.kRed)
         MC  .SetLineWidth(2)
-        DATA.SetName('data')
+        DATA.SetName('Data')
         DATA.Scale(1./DATA.Integral())
         DATA.SetMarkerSize(0.8)
         DATA.SetMarkerColor(r.kBlack)
         DATA.SetLineColor(r.kBlack)
         hists.append(MC)
-        hists.append(DATA)
+        hists.append(DATA)                                                                   
 
     maxValmc = MC.GetMaximum() #GetBinContent(MC.GetMaximumBin())
     maxValdata = DATA.GetMaximum() #GetBinContent(DATA.GetMaximumBin())
@@ -201,6 +229,8 @@ def makePlot(lumi, lumi_str, treeDA, treeMC, var, name, nbin, xmin, xmax, theCut
     if not normalized:
         plot.addStack(MCS if not scaleToData else newStack, "HIST", 1, 1)
         plot.addHisto(DATA, "E1,SAME", "Data", "P", r.kBlack, 1, 0)
+        #for h in enumerate(MCSZ.GetHists()):
+        #    plot.addLatex(0.6, 0.6, "%s : %.1f"%(h.GetName, h.Integral()) )
     else:
         for h in hists:
             plot.addHisto(h, 'hist,same' if not h.GetName() == 'data' else 'p,same', h.GetName(), 'PL', h.GetLineColor(), 1, 0)
@@ -214,7 +244,7 @@ def makePlot(lumi, lumi_str, treeDA, treeMC, var, name, nbin, xmin, xmax, theCut
         else:
             for h in hists:
                 if onlyMC and not h.GetName() == 'data':
-                    cum_plot.addHisto(h.GetCumulative(), 'hist,same' if not h.GetName() == 'data' else 'p,same', h.GetName(), 'PL' if h.GetName() == 'data' else 'L', h.GetLineColor(), 1, 0)
+                    cum_plot.addHisto(h.GetCumulative(), 'hist,same' if not h.GetName() == 'w dPhi cut' else 'p,same', h.GetName(), 'PL' if h.GetName() == 'w dPhi cut' else 'L', h.GetLineColor(), 1, 0)
         cum_plot.save(1, 1, logx, lumi)
     
     if returnplot:
@@ -269,6 +299,8 @@ def makeSummaryEWino(plot_EWino):
             h_wz = copy.deepcopy(h_ew)
         if 'ZZ'   in h_ew.GetName():
             h_zz = copy.deepcopy(h_ew)
+        if 'TTZ'   in h_ew.GetName():
+            h_ttZ = copy.deepcopy(h_ew)
         if 'rare' in h_ew.GetName():
             h_rare = copy.deepcopy(h_ew)
         if 'DATA' in h_ew.GetName():
@@ -426,31 +458,22 @@ if __name__ == "__main__":
 
     print bcolors.HEADER + '[Data - MC comparisons] ' + bcolors.OKBLUE + 'Loading DATA and MC trees...' + bcolors.ENDC
 
-    #dyDatasets = ['DYJetsToLL_M10to50', 'DYJetsToLL_M50']
-    dyDatasets = ['DYJetsToLL_M50_HT100to200_ext', 'DYJetsToLL_M50_HT200to400_ext', 'DYJetsToLL_M50_HT400to600_ext', 'DYJetsToLL_M50_HT600toInf_ext']
-    ttDatasets = ['TT_pow_ext34']
-    #ttDatasets = ['TTJets_DiLepton_total']
-    mcDatasets = ['ZZ', 'WWTo2L2Nu', 'WZTo2L2Q', 'WZTo3LNu', 'TTZ_LO', 'TTW_LO']
-    mcDatasets += dyDatasets
+    dyDatasets = ['DYJetsToLL_M10to50_LO', 'DYJetsToLL_M50_LO']
+    #dyDatasets = ['DYJetsToLL_M10to50','DYJetsToLL_M50_HT100to200', 'DYJetsToLL_M50_HT200to400', 'DYJetsToLL_M50_HT400to600', 'DYJetsToLL_M50_HT600toInf']
+    ttDatasets = ['TTJets_DiLepton', 'TTJets_DiLepton_ext']
+    mcDatasets = ['ZZTo4L', 'WZTo3LNu', 'WWW', 'WWZ','WZZ', 'ZZZ',  'TTZToLLNuNu' ,'TTWToLNu', 'T_tWch', 'TBar_tWch' , 'TTJets_SingleLeptonFromTbar', 'TTJets_SingleLeptonFromT', 'TToLeptons_sch', 'TToLeptons_tch_powheg', 'TBarToLeptons_tch_powheg', 'TTHnobb_pow', 'VHToNonbb', 'WJetsToLNu_LO']
     mcDatasets += ttDatasets
-    #daDatasets = ['DoubleMuon_Run2016B-PromptReco-v2_runs_271036_275125', 'DoubleEG_Run2016B-PromptReco-v2_runs_271036_275125', 'MuonEG_Run2016B-PromptReco-v2_runs_271036_275125']
-    #daDatasets = ['DoubleMuon_Run2016B-PromptReco-v2_runs_271036_276097', 'DoubleEG_Run2016B-PromptReco-v2_runs_271036_276097', 'MuonEG_Run2016B-PromptReco-v2_runs_271036_276097',
-    #              'DoubleMuon_Run2016C-PromptReco-v2_runs_271036_276811', 'DoubleEG_Run2016C-PromptReco-v2_runs_271036_276811', 'MuonEG_Run2016C-PromptReco-v2_runs_271036_276811',
-    #              'DoubleMuon_Run2016D-PromptReco-v2_runs_271036_276811', 'DoubleEG_Run2016D-PromptReco-v2_runs_271036_276811', 'MuonEG_Run2016D-PromptReco-v2_runs_271036_276811']
+    mcDatasets += dyDatasets
+    #siDatasets = ['SMS_TChiWZ_ZToLL']
     daDatasets = ['DoubleMuon_Run2016B-PromptReco-v2_runs_273150_275376', 'DoubleEG_Run2016B-PromptReco-v2_runs_273150_275376', 'MuonEG_Run2016B-PromptReco-v2_runs_273150_275376',
                   'DoubleMuon_Run2016C-PromptReco-v2_runs_275420_276283', 'DoubleEG_Run2016C-PromptReco-v2_runs_275420_276283', 'MuonEG_Run2016C-PromptReco-v2_runs_275420_276283',
                   'DoubleMuon_Run2016D-PromptReco-v2_runs_276315_276811', 'DoubleEG_Run2016D-PromptReco-v2_runs_276315_276811', 'MuonEG_Run2016D-PromptReco-v2_runs_276315_276811']
 
-
-
-    treeMC = Sample.Tree(helper.selectSamples(opts.sampleFile, mcDatasets, 'MC'), 'MC'  , 0)
-    treeDA = Sample.Tree(helper.selectSamples(opts.sampleFile, daDatasets, 'DA'), 'DATA', 1)
-
+    treeMC = Sample.Tree(helper.selectSamples(opts.sampleFile, mcDatasets, 'MC'), 'MC'  , 0, isScan = 0)
+    treeDA = Sample.Tree(helper.selectSamples(opts.sampleFile, daDatasets, 'DA'), 'DATA', 1, isScan = 0)
+    #treeSI = Sample.Tree(helper.selectSamples(opts.sampleFile, siDatasets, 'SI'), 'SI', 0, isScan = 1)
     print bcolors.HEADER + '[Data - MC comparisons] ' + bcolors.OKBLUE + 'Trees successfully loaded...' + bcolors.ENDC
 
-    #lumi = 2.6 ; maxrun = 999999; lumi_str = '2.6invfb'
-    #lumi = 4.0 ; maxrun = 275125; lumi_str = '4.0invfb'
-    #lumi = 7.65 ; maxrun = 276097; lumi_str = '7.65invfb'
     lumi = 12.9 ; maxrun = 276811; lumi_str = '12.9invfb'
     gROOT.ProcessLine('.L include/tdrstyle.C')
     gROOT.SetBatch(1)
@@ -458,59 +481,120 @@ if __name__ == "__main__":
 
     cuts = CutManager.CutManager()
     labelmll = 'm_{ll} [GeV]'
-    labelmet = 'MET [GeV]'
+    labelmet = 'E_{T}^{miss} [GeV]'
     labelnjet = "N. Jets"
     #makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_OFSF_nll", [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300], 1, 1, cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLine]), cuts, labelmll, 0)
     
     ## EWino signal region and table
     ## =================================================================
-    ewino_SR = makePlot(12.9, '12.9invfb', treeDA, treeMC, "met_Edge", "met_ewino_SR", 12, 0, 300, cuts.AddList([cuts.ewinoSR, 'run_Edge <= 999999']), cuts, labelmet, 0, True)
-    makeSummaryEWino(ewino_SR)
-    print asdfs
+    #ewino_SR = makePlot(12.9, '12.9invfb', treeDA, treeMC, "met_Edge", "met_ewino_SR", 12, 0, 300, cuts.AddList([cuts.ewinoSR, 'run_Edge <= 999999']), cuts, labelmet, 0, True)
+    #makeSummaryEWino(ewino_SR)
     
-    plot_nll_sf     = makePlot(lumi, lumi_str, treeDA, treeMC, "nll_Edge", "nll_edgeBaseline"    , 14, 13., 27, cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLine, cuts.SF, cuts.Zveto ]), cuts, 'NLL', 0, True, False, True, True, True)
-    plot_nll_sf_onz = makePlot(lumi, lumi_str, treeDA, treeMC, "nll_Edge", "nll_edgeBaseline_onZ", 14, 13., 27, cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLine, cuts.SF, cuts.Zmass ]), cuts, 'NLL', 0, True, False, True, True, True)
-    plot_nll_sf_lm  = makePlot(lumi, lumi_str, treeDA, treeMC, "nll_Edge", "nll_edgeBaseline_loM", 14, 13., 27, cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLine, cuts.SF, cuts.loMass]), cuts, 'NLL', 0, True, False, True, True, True)
-    plot_nll_sf_hm  = makePlot(lumi, lumi_str, treeDA, treeMC, "nll_Edge", "nll_edgeBaseline_hiM", 14, 13., 27, cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLine, cuts.SF, cuts.hiMass]), cuts, 'NLL', 0, True, False, True, True, True)
+    #plot_nll_sf     = makePlot(lumi, lumi_str, treeDA, treeMC, "nll_Edge", "nll_edgeBaseline"    , 14, 13., 27, cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLine, cuts.SF, cuts.Zveto ]), cuts, 'NLL', 0, True, False, True, True, True)
+    #plot_nll_sf_onz = makePlot(lumi, lumi_str, treeDA, treeMC, "nll_Edge", "nll_edgeBaseline_onZ", 14, 13., 27, cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLine, cuts.SF, cuts.Zmass ]), cuts, 'NLL', 0, True, False, True, True, True)
+    #plot_nll_sf_lm  = makePlot(lumi, lumi_str, treeDA, treeMC, "nll_Edge", "nll_edgeBaseline_loM", 14, 13., 27, cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLine, cuts.SF, cuts.loMass]), cuts, 'NLL', 0, True, False, True, True, True)
+    #plot_nll_sf_hm  = makePlot(lumi, lumi_str, treeDA, treeMC, "nll_Edge", "nll_edgeBaseline_hiM", 14, 13., 27, cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLine, cuts.SF, cuts.hiMass]), cuts, 'NLL', 0, True, False, True, True, True)
 
+    #makePlot(lumi, lumi_str, treeSI, treeMC, "bestMjj_Edge", "mjj_ewinoSR", 20,  0,  300, cuts.AddList([cuts.ewinoSR]), cuts, 'm_{jj}', 0, True)
+    #makePlot(lumi, lumi_str, treeSI, treeMC, "bestMjj_Edge", "mjj", 20,  0,  300, cuts.AddList([cuts.goodLepton]), cuts, 'm_{jj}', 0, True)
     ## 3l and 4l plots
     ## =================================================================
-    ## plot_3l = makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge"    , "met_3lregion_AF", 14, 60, 200, cuts.AddList([cuts.goodLepton, cuts.AF, cuts.nj0, cuts.region3l]), cuts, labelmet, 0, True)
-    ## plot_4l = makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_4lregion_AF", 10,  0, 200, cuts.AddList([cuts.goodLepton, cuts.AF, cuts.nj0, cuts.region4l]), cuts, labelmll, 0, True)
+    #plot_ttZ = makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_ttZregion_AF_allSamples", 10,  0, 200, cuts.AddList([cuts.goodLepton, cuts.AF, cuts.nj0, cuts.regionttZ]), cuts, labelmll, 0, True)
+    #plot_ttZ_met = makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_ttZregion_AF_allSamples", 20,  0, 200, cuts.AddList([cuts.goodLepton, cuts.AF, cuts.nj0, cuts.regionttZ, cuts.Zmass]), cuts, labelmet, 0, True)
+    plot_3l = makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge"    , "met_3lregion", 14, 60, 200, cuts.AddList([cuts.goodLepton, cuts.AF, cuts.nj0, cuts.region3l]), cuts, labelmet, 0, True)
+    plot_3l_Zmass = makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge"    , "met_3lregion_Zmass", 14, 60, 200, cuts.AddList([cuts.goodLepton, cuts.AF, cuts.nj0, cuts.region3l, cuts.Zmass]), cuts, labelmet, 0, True)
+    plot_4l = makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_4lregion", 20,  6, 206, cuts.AddList([cuts.goodLepton, cuts.AF, cuts.nj0, cuts.region4l]), cuts, labelmll, 0, True)
+    plot_4l_Zmass = makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_4lregion_Zmass", 20,  6, 206, cuts.AddList([cuts.goodLepton, cuts.AF, cuts.nj0, cuts.region4l, cuts.Zmass]), cuts, labelmll, 0, True)
+    plot_ttZ = makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_ttZregion", 20,  6, 206, cuts.AddList([cuts.goodLepton, cuts.AF, cuts.nj0, cuts.regionttZ]), cuts, labelmll, 0, True)
+    plot_ttZ_Zmass = makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_ttZregion_Zmass", 20,  6, 206, cuts.AddList([cuts.goodLepton, cuts.AF, cuts.nj0, cuts.regionttZ, cuts.Zmass]), cuts, labelmll, 0, True)
     ## ## ## plot_4l = makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_4lregion_met0to30_AF", 10,  0, 200, cuts.AddList([cuts.goodLepton, cuts.AF, cuts.nj0, cuts.region4l, 'met_Edge < 30']), cuts, labelmll, 0, True)
-    ## makeSummaryTable3l4l(plot_3l, plot_4l)
-
+    makeSummaryTable3l4l(plot_3l_Zmass, plot_4l_Zmass, plot_ttZ_Zmass)
+    #print "made the table"
     #ttbar_region = cuts.AddList([cuts.goodLepton, cuts.OF, cuts.nj2, 'run_Edge <= %d'%maxrun, 'met_Edge >150'])
     #makePlot(lumi, lumi_str, treeDA, treeMC, "nBJetMedium35_Edge", "ttbar_region_met150_2jets_of_dataScaled", 4, 0, 4, ttbar_region, cuts, 'n_{b-jets}', 0, False, True)
-    ## fmll and r0b1b plots
-    ## =================================================================
 
-    ## r0b1b_of_cuts = cuts.AddList([cuts.goodLepton, cuts.OF, 'nBJetMedium25_Edge >= 0', cuts.nj2, 'j1MetDPhi_Edge > 1.', 'lepsMll_Edge > 61 && lepsMll_Edge < 121', 'run_Edge <= %d'%maxrun, 'mt2_Edge > 80.'])
-    ## r0b1b_of_den_cuts_e1b = cuts.AddList([cuts.goodLepton, cuts.OF, 'nBJetMedium25_Edge == 1', cuts.nj2, 'j1MetDPhi_Edge > 1.', 'lepsMll_Edge > 61 && lepsMll_Edge < 121', 'run_Edge <= %d'%maxrun, 'mt2_Edge > 80.'])
-    ## #makePlot(lumi, lumi_str, treeDA, treeMC, "nBJetMedium25_Edge", "r0b1b_of_nb_btagscaledPOWHEG", 4, -0.5, 3.5, r0b1b_of_cuts, cuts, 'n_{b-jets}', 0, True, True)
-    ## #makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "r0b1b_of_den_e1b", 14, 60, 130, r0b1b_of_den_cuts_e1b, cuts, labelmll, 0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "nVert_Edge", "nvtx_inclusive", 20,  0,  40, cuts.AddList([cuts.goodLepton]), cuts, 'n_{vertices}', 0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "nVert_Edge", "nvtx_inclusive_OF", 20,  0,  40, cuts.AddList([cuts.goodLepton, cuts.OF, cuts.nj1]), cuts, 'n_{vertices}',  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "nVert_Edge", "nvtx_inclusive_SF", 20,  0,  40, cuts.AddList([cuts.goodLepton, cuts.SF, cuts.nj1]), cuts, 'n_{vertices}',  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "nVert_Edge", "nvtx_inclusive_ee", 20,  0,  40, cuts.AddList([cuts.goodLepton, cuts.ee, cuts.nj1]), cuts, 'n_{vertices}',  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "nVert_Edge", "nvtx_inclusive_mm", 20,  0,  40, cuts.AddList([cuts.goodLepton, cuts.mm, cuts.nj1]), cuts, 'n_{vertices}',  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_inclusive_SF", 40, 20, 300, cuts.AddList([cuts.goodLepton, cuts.SF, cuts.nj1]), cuts, labelmll,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_inclusive_OF", 40, 20, 300, cuts.AddList([cuts.goodLepton, cuts.OF, cuts.nj1]), cuts, labelmll,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_inclusive_ee", 40, 20, 300, cuts.AddList([cuts.goodLepton, cuts.ee, cuts.nj1]), cuts, labelmll,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_inclusive_mm", 40, 20, 300, cuts.AddList([cuts.goodLepton, cuts.mm, cuts.nj1]), cuts, labelmll,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_inclusive_SF", 25, 0, 200, cuts.AddList([cuts.goodLepton, cuts.SF, cuts.nj1]), cuts, labelmet,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_inclusive_OF", 25, 0, 200, cuts.AddList([cuts.goodLepton, cuts.OF, cuts.nj1]), cuts, labelmet,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_inclusive_ee", 25, 0, 200, cuts.AddList([cuts.goodLepton, cuts.ee, cuts.nj1]), cuts, labelmet,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_inclusive_mm", 25, 0, 200, cuts.AddList([cuts.goodLepton, cuts.mm, cuts.nj1]), cuts, labelmet,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_DYJets_SF", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.SF, cuts.DYControlRegionNoMll]), cuts, labelmll,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_DYJets_OF", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.OF, cuts.DYControlRegionNoMll]), cuts, labelmll,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_DYJets_ee", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.ee, cuts.DYControlRegionNoMll]), cuts, labelmll,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_DYJets_mm", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.mm, cuts.DYControlRegionNoMll]), cuts, labelmll,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_DYJets_SF", 25, 0, 200, cuts.AddList([cuts.goodLepton, cuts.SF, cuts.DYControlRegionNoMET]), cuts, labelmet,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_DYJets_OF", 25, 0, 200, cuts.AddList([cuts.goodLepton, cuts.OF, cuts.DYControlRegionNoMET]), cuts, labelmet,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_DYJets_ee", 25, 0, 200, cuts.AddList([cuts.goodLepton, cuts.ee, cuts.DYControlRegionNoMET]), cuts, labelmet,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_DYJets_mm", 25, 0, 200, cuts.AddList([cuts.goodLepton, cuts.mm, cuts.DYControlRegionNoMET]), cuts, labelmet,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_ttbarcontrol_SF", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.SF, cuts.RSFOFDirectControlRegionNoMll]), cuts, labelmll,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_ttbarcontrol_OF", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.OF, cuts.RSFOFDirectControlRegionNoMll]), cuts, labelmll,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_ttbarcontrol_ee", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.ee, cuts.RSFOFDirectControlRegionNoMll]), cuts, labelmll,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_ttbarcontrol_mm", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.mm, cuts.RSFOFDirectControlRegionNoMll]), cuts, labelmll,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_ttbarcontrol_SF", 25, 0, 200, cuts.AddList([cuts.goodLepton, cuts.SF, cuts.RSFOFDirectControlRegionNoMET]), cuts, labelmet,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_ttbarcontrol_OF", 25, 0, 200, cuts.AddList([cuts.goodLepton, cuts.OF, cuts.RSFOFDirectControlRegionNoMET]), cuts, labelmet,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_ttbarcontrol_ee", 25, 0, 200, cuts.AddList([cuts.goodLepton, cuts.ee, cuts.RSFOFDirectControlRegionNoMET]), cuts, labelmet,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_ttbarcontrol_mm", 25, 0, 200, cuts.AddList([cuts.goodLepton, cuts.mm, cuts.RSFOFDirectControlRegionNoMET]), cuts, labelmet,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "nJetSel_Edge", "njet_inclusive_SF", 9, 0, 9, cuts.AddList([cuts.goodLepton, cuts.SF]), cuts, labelnjet,  0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "nJetSel_Edge", "njet_inclusive_OF", 9, 0, 9, cuts.AddList([cuts.goodLepton, cuts.OF]), cuts, labelnjet, 0 , True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "nJetSel_Edge", "njet_inclusive_ee", 9, 0, 9, cuts.AddList([cuts.goodLepton, cuts.ee]), cuts, labelnjet, 0, True)
+ #   makePlot(lumi, lumi_str, treeDA, treeMC, "nJetSel_Edge", "njet_inclusive_mm", 9, 0, 9, cuts.AddList([cuts.goodLepton, cuts.mm]), cuts, labelnjet, 0, True)                                              
 
-    ## fmll_of_1b_cuts = cuts.AddList([cuts.goodLepton, cuts.OF, 'nBJetMedium25_Edge >= 1', cuts.nj2, 'j1MetDPhi_Edge > 1.', 'lepsMll_Edge > 61 && lepsMll_Edge < 121', 'run_Edge <= %d'%maxrun, 'mt2_Edge > 80.'])
-    ## fmll_of_0b_cuts = cuts.AddList([cuts.goodLepton, cuts.OF, 'nBJetMedium25_Edge == 0', cuts.nj2, 'j1MetDPhi_Edge > 1.', 'lepsMll_Edge > 61 && lepsMll_Edge < 121', 'run_Edge <= %d'%maxrun, 'mt2_Edge > 80.'])
-    ## makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "fmll_of_1b", 14, 60, 200, fmll_of_1b_cuts, cuts, labelmll, 0, True)
-    ## makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "fmll_of_0b", 14, 60, 200, fmll_of_0b_cuts, cuts, labelmll, 0, True)
 
-    # ewino_of_eq1b = cuts.AddList([cuts.goodLepton, cuts.OF, 'nBJetMedium25_Edge == 1', cuts.nj2, 'j1MetDPhi_Edge > 1.', 'lepsMll_Edge > 61 && lepsMll_Edge < 121', 'run_Edge <= %d'%maxrun, 'mt2_Edge > 80.'])
-    # a =makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "ewino_of_1b_eq1b", 14, 60, 130, ewino_of_eq1b, cuts, labelmll, 0, True)
-    ## ewino_sf = cuts.AddList([cuts.goodLepton, cuts.SF, 'nBJetMedium25_Edge >= 1', cuts.nj2, 'j1MetDPhi_Edge > 1.', 'lepsMll_Edge > 61 && lepsMll_Edge < 121', cuts.Zveto, 'run_Edge <= %d'%maxrun, 'mt2_Edge > 80.'])
-    ## c = makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "ewino_sf_1b_zveto", 14, 60, 130, ewino_sf, cuts, labelmll, 0, True)
-    ## ewino_of = cuts.AddList([cuts.goodLepton, cuts.OF, 'nBJetMedium25_Edge >= 1', cuts.nj2, 'j1MetDPhi_Edge > 1.', 'lepsMll_Edge > 61 && lepsMll_Edge < 121', 'run_Edge <= %d'%maxrun, 'mt2_Edge > 80.'])
-    ## b = makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "ewino_of_1b", 14, 60, 130, ewino_of, cuts, labelmll, 0, True)
 
-    #nll = '(nll_Edge > 21)'
-    #makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_SF_nll", [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300], 1, 1, cuts.AddList([cuts.goodLepton, cuts.SF, cuts.SignalRegionBaseLine, nll]), cuts, labelmll, 0)
-    #makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_OF_nll", [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300], 1, 1, cuts.AddList([cuts.goodLepton, cuts.OF, cuts.SignalRegionBaseLine, nll]), cuts, labelmll, 0)
-    #makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_OFSF_nll", [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300], 1, 1, cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLine]), cuts, labelmll, 0)
-    #makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_ee", [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300], 1, 1, cuts.AddList([cuts.goodLepton, cuts.ee, cuts.SignalRegionBaseLine]), cuts, labelmll, 0)
-    #makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_mm", [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300], 1, 1, cuts.AddList([cuts.goodLepton, cuts.mm, cuts.SignalRegionBaseLine]), cuts, labelmll, 0)
-    #tightCharge = '(Lep1_tightCharge_Edge > 0 && Lep2_tightCharge_Edge > 0)'
-    #makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_SF_nll_tightCharge_ttpow", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.SF, cuts.SignalRegionBaseLine, nll, tightCharge]), cuts, labelmll, 0)
-    #makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_OF_nll_tightCharge_ttpow", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.OF, cuts.SignalRegionBaseLine, nll, tightCharge]), cuts, labelmll, 0)
-    #makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_ee_nll_tightCharge_ttpow", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.ee, cuts.SignalRegionBaseLine, nll, tightCharge]), cuts, labelmll, 0)
-    #makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_mm_nll_tightCharge_ttpow", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.mm, cuts.SignalRegionBaseLine, nll, tightCharge]), cuts, labelmll, 0)
-    #makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_signal_SF", 25, 0, 200, cuts.AddList([cuts.goodLepton, cuts.SF, cuts.nj2]), cuts, labelmet, 1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # =================================================================
+
+    # r0b1b_of_cuts = cuts.AddList([cuts.goodLepton, cuts.OF, 'nBJetMedium25_Edge >= 0', cuts.nj2, 'j1MetDPhi_Edge > 1.', 'lepsMll_Edge > 61 && lepsMll_Edge < 121', 'run_Edge <= %d'%maxrun, 'mt2_Edge > 80.'])
+    # r0b1b_of_den_cuts_e1b = cuts.AddList([cuts.goodLepton, cuts.OF, 'nBJetMedium25_Edge == 1', cuts.nj2, 'j1MetDPhi_Edge > 1.', 'lepsMll_Edge > 61 && lepsMll_Edge < 121', 'run_Edge <= %d'%maxrun, 'mt2_Edge > 80.'])
+    # #makePlot(lumi, lumi_str, treeDA, treeMC, "nBJetMedium25_Edge", "r0b1b_of_nb_btagscaledPOWHEG", 4, -0.5, 3.5, r0b1b_of_cuts, cuts, 'n_{b-jets}', 0, True, True)
+    # #makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "r0b1b_of_den_e1b", 14, 60, 130, r0b1b_of_den_cuts_e1b, cuts, labelmll, 0, True)
+
+    # fmll_of_1b_cuts = cuts.AddList([cuts.goodLepton, cuts.OF, 'nBJetMedium25_Edge >= 1', cuts.nj2, 'j1MetDPhi_Edge > 1.', 'lepsMll_Edge > 61 && lepsMll_Edge < 121', 'run_Edge <= %d'%maxrun, 'mt2_Edge > 80.'])
+    # fmll_of_0b_cuts = cuts.AddList([cuts.goodLepton, cuts.OF, 'nBJetMedium25_Edge == 0', cuts.nj2, 'j1MetDPhi_Edge > 1.', 'lepsMll_Edge > 61 && lepsMll_Edge < 121', 'run_Edge <= %d'%maxrun, 'mt2_Edge > 80.'])
+    # makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "fmll_of_1b", 14, 60, 200, fmll_of_1b_cuts, cuts, labelmll, 0, True)
+    # makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "fmll_of_0b", 14, 60, 200, fmll_of_0b_cuts, cuts, labelmll, 0, True)
+
+    #ewino_of_eq1b = cuts.AddList([cuts.goodLepton, cuts.OF, 'nBJetMedium25_Edge == 1', cuts.nj2, 'j1MetDPhi_Edge > 1.', 'lepsMll_Edge > 61 && lepsMll_Edge < 121', 'run_Edge <= %d'%maxrun, 'mt2_Edge > 80.'])
+    #a =makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "ewino_of_1b_eq1b", 14, 60, 130, ewino_of_eq1b, cuts, labelmll, 0, True)
+    # ewino_sf = cuts.AddList([cuts.goodLepton, cuts.SF, 'nBJetMedium25_Edge >= 1', cuts.nj2, 'j1MetDPhi_Edge > 1.', 'lepsMll_Edge > 61 && lepsMll_Edge < 121', cuts.Zveto, 'run_Edge <= %d'%maxrun, 'mt2_Edge > 80.'])
+    # c = makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "ewino_sf_1b_zveto", 14, 60, 130, ewino_sf, cuts, labelmll, 0, True)
+    # ewino_of = cuts.AddList([cuts.goodLepton, cuts.OF, 'nBJetMedium25_Edge >= 1', cuts.nj2, 'j1MetDPhi_Edge > 1.', 'lepsMll_Edge > 61 && lepsMll_Edge < 121', 'run_Edge <= %d'%maxrun, 'mt2_Edge > 80.'])
+    # b = makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "ewino_of_1b", 14, 60, 130, ewino_of, cuts, labelmll, 0, True)
+
+   # nll = '(nll_Edge > 21)'
+   # makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_SF_nll", [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300], 1, 1, cuts.AddList([cuts.goodLepton, cuts.SF, cuts.SignalRegionBaseLine, nll]), cuts, labelmll, 0)
+   # makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_OF_nll", [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300], 1, 1, cuts.AddList([cuts.goodLepton, cuts.OF, cuts.SignalRegionBaseLine, nll]), cuts, labelmll, 0)
+   # makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_OFSF_nll", [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300], 1, 1, cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLine]), cuts, labelmll, 0)
+   # makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_ee", [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300], 1, 1, cuts.AddList([cuts.goodLepton, cuts.ee, cuts.SignalRegionBaseLine]), cuts, labelmll, 0)
+   # makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_mm", [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300], 1, 1, cuts.AddList([cuts.goodLepton, cuts.mm, cuts.SignalRegionBaseLine]), cuts, labelmll, 0)
+   # tightCharge = '(Lep1_tightCharge_Edge > 0 && Lep2_tightCharge_Edge > 0)'
+   # makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_SF_nll_tightCharge_ttpow", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.SF, cuts.SignalRegionBaseLine, nll, tightCharge]), cuts, labelmll, 0)
+   # makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_OF_nll_tightCharge_ttpow", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.OF, cuts.SignalRegionBaseLine, nll, tightCharge]), cuts, labelmll, 0)
+   # makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_ee_nll_tightCharge_ttpow", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.ee, cuts.SignalRegionBaseLine, nll, tightCharge]), cuts, labelmll, 0)
+   # makePlot(lumi, lumi_str, treeDA, treeMC, "lepsMll_Edge", "mll_signal_mm_nll_tightCharge_ttpow", 20, 20, 300, cuts.AddList([cuts.goodLepton, cuts.mm, cuts.SignalRegionBaseLine, nll, tightCharge]), cuts, labelmll, 0)
+   # makePlot(lumi, lumi_str, treeDA, treeMC, "met_Edge", "met_signal_SF", 25, 0, 200, cuts.AddList([cuts.goodLepton, cuts.SF, cuts.nj2]), cuts, labelmet, 1)
