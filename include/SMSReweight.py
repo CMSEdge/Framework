@@ -40,8 +40,7 @@ class SMSReweight:
         xsecs  = eval(xsecf.read())
         xsec   = xsecs[mSMS1][0]
         ngen   = self.ngen.GetBinContent(self.ngen.FindBin(mSMS1,mSMS2,1))
-        print xsec, ngen
-        return xsec/ngen
+        return 1000.*xsec/ngen # xsec is in pb
 
     def reWeightHisto(self, mSMS1, mSMS2, histo):
         histoRW = histo.Clone(histo.GetName()+"_RW")
