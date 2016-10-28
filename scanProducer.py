@@ -23,25 +23,32 @@ def smearNumber(num):
     return smeared
 
 def getSRIDs(region):
-    if   region[0] == 'central': etaids = [1]
-    elif region[0] == 'forward': etaids = [2]
-    elif region[0] == 'inclusive': etaids = [1,2]
+    # region[0] is mll binning
+    # region[1] is nll binning
+    # region[2] is mt2 binning
 
-    if   region[1] == 'lowMass' : mllid = 1
-    elif region[1] == 'belowZ'  : mllid = 2
-    elif region[1] == 'onZ'     : mllid = 3
-    elif region[1] == 'aboveZ'  : mllid = 4
-    elif region[1] == 'highMass': mllid = 5
+    if region[0]   == 'belowZ'   : mllids = [1]
+    elif region[0] == 'onZ'      : mllids = [2]
+    elif region[0] == 'aboveZ'   : mllids = [3]
+    elif region[0] == 'highMass' : mllids = [4]
+    elif region[0] == 'vHighMass': mllids = [5]
+    elif region[0] == 'highinc'  : mllids = [3,4,5] # for only three mll bins
 
-    if   region[2] == 'incb'   : nbid = [0,1,2,3,4,5,6,7]
-    elif region[2] == '0b'     : nbid = [0              ]
-    elif region[2] == '1b'     : nbid = [  1,2,3,4,5,6,7]
-    elif region[2] == '2b'     : nbid = [    2,3,4,5,6,7]
-
+    if   region[1]   == 'lowNll'   : nllids = [0]
+    elif region[1]   == 'highNll'  : nllids = [1]
+    
+    if   region[2]   == 'lowMT2'   : mt2ids = [0]
+    elif region[2]   == 'highMT2'  : mt2ids = [1]
+    elif region[2]   == 'incMT2'   : mt2ids = [0,1]
+    elif region[2]   == 'lowHT'    : mt2ids = [0]
+    elif region[2]   == 'medHT'    : mt2ids = [1]
+    elif region[2]   == 'highHT'   : mt2ids = [2]
     allSRs = []
-    for bid in nbid:
-        for etaid in etaids:
-            allSRs.append(100*etaid + 10*bid + mllid)
+    for mllid in mllids:
+        for nllid in nllids:
+            for mt2id in mt2ids:
+                allSRs.append(100*mt2id + 10 *nllid + mllid)
+
 
     # print 'for region', '_'.join(region), 'returning srIDs', allSRs
 
@@ -87,109 +94,167 @@ def makePlots(var):
         lego+=1
     plot.save(1, 0, 0 , lumi)
 
-
 def makeMCDatacards():
-    daDatasets = ['DoubleMuon_Run2015C_25ns-05Oct_v1_runs_246908_260628' , 'DoubleEG_Run2015C_25ns-05Oct_v1_runs_246908_260628',
-                  'DoubleMuon_Run2015D-05Oct_v1_runs_246908_260628'      , 'DoubleEG_Run2015D-05Oct_v1_runs_246908_260628'     ,
-                  'DoubleMuon_Run2015D_v4_runs_246908_260628'            , 'DoubleEG_Run2015D_v4_runs_246908_260628'           ]
-
-    dyDatasets = ['DYJetsT0LL_M50']
-
-    dyDatasets = ['DYJetsToLL_M50_HT100to200',
-                  'DYJetsToLL_M50_HT200to400',
-                  'DYJetsToLL_M50_HT400to600',
-                  'DYJetsToLL_M50_HT600toInf']
-
-    global dic
-    samples = []; dic = {}
-    samples.append( Sample.Tree(helper.selectSamples(opts.sampleFile, daDatasets    , 'DA'), 'DA', 1) )
-    samples.append( Sample.Tree(helper.selectSamples(opts.sampleFile, ['TTLep_pow'] , 'TT'), 'TT', 0) )
-    samples.append( Sample.Tree(helper.selectSamples(opts.sampleFile, ['WZTo3L1Nu'     ] , 'WZ'), 'WZ', 0) )
-    samples.append( Sample.Tree(helper.selectSamples(opts.sampleFile, dyDatasets    , 'DY'), 'DY', 0) )
-
-    global nllDistributions, cumDistributions
-    nllDistributions = []
-    cumDistributions = []
-    for sample in samples:
-        all_cuts = scan.cuts_norm
-        #all_cuts = cuts.AddList([scan.cuts_norm, cuts.twoLeptons, cuts.trigger])
-        dic[sample.name] = sample.getTH1F(lumi, '%s_yields'%sample.name, 'srID_Edge', 200, 100, 300, all_cuts, '', 'SR ID')
-        nllDistributions.append( sample.getTH1F(lumi, '%s_nll'%sample.name, '-1.*TMath::Log(lh_ana_met_data_Edge*lh_ana_mlb_data_Edge*lh_ana_a3d_data_Edge*lh_ana_zpt_data_Edge)', 80, 12, 30, all_cuts, '', 'NLL') )
-
-    nllDistributions.append( scan.tree.getTH1F(lumi, 'signal_nll_350/100', '-1.*TMath::Log(lh_ana_met_data_Edge*lh_ana_mlb_data_Edge*lh_ana_a3d_data_Edge*lh_ana_zpt_data_Edge)', 80, 12, 30, '('+scan.cuts_norm+'&& GenSusyMNeutralino2_Edge == 350 && GenSusyMNeutralino_Edge == 100)', '', 'NLL') )
-    nllDistributions.append( scan.tree.getTH1F(lumi, 'signal_nll_350/20', '-1.*TMath::Log(lh_ana_met_data_Edge*lh_ana_mlb_data_Edge*lh_ana_a3d_data_Edge*lh_ana_zpt_data_Edge)', 80, 12, 30, '('+scan.cuts_norm+'&& GenSusyMNeutralino2_Edge == 350 && GenSusyMNeutralino_Edge == 20)', '', 'NLL') )
-    for i in nllDistributions:
-        #i.GetYaxis().SetRangeUser(0. )
-        #i.Scale(1./i.Integral())
-        cumDistributions.append( i.GetCumulative() )
-    
-    plot = Canvas.Canvas('%s/plot_nll'%scan.name, 'png,pdf', 0.6, 0.65, 0.85, 0.82)
-    lego = 0
-    for i,h in enumerate(nllDistributions):
-        if 'DA' in h.GetName(): continue
-        if 'WZ' in h.GetName(): continue
-        if 'DY' in h.GetName(): continue
-        h.SetMarkerStyle(20)
-        h.SetMarkerSize(0.8*h.GetMarkerSize())
-        h.SetMarkerColor(r.kBlack+i)
-        plot.addHisto(h, 'p %s'%('' if not i else 'same')    , h.GetName(), 'PL' , r.kBlack+i, 1,  lego)
-        lego+=1
-    plot.save(1, 0, 0 , lumi)
-    ##
-    plot = Canvas.Canvas('%s/plot_nll_cum'%scan.name, 'png,pdf', 0.6, 0.65, 0.85, 0.82)
-    lego = 0
-    for i,h in enumerate(cumDistributions):
-        if 'DA' in h.GetName(): continue
-        if 'WZ' in h.GetName(): continue
-        if 'DY' in h.GetName(): continue
-        h.SetMarkerStyle(20)
-        h.SetMarkerSize(0.8*h.GetMarkerSize())
-        h.SetMarkerColor(r.kBlack+i)
-        plot.addHisto(h, 'p %s'%('' if not i else 'same')    , h.GetName(), 'PL' , r.kBlack+i, 1,  lego)
-        lego+=1
-    plot.save(1, 0, 0 , lumi)
-    print adfsdafsd
-
+    print 'producing mc datacards'
+    ttDatasets = ['TT_pow_ext34']
+    dyDatasets = ['DYJetsToLL_M50_HT100to200_ext', 'DYJetsToLL_M50_HT200to400_ext',
+                  'DYJetsToLL_M50_HT400to600_ext', 'DYJetsToLL_M50_HT600toInf_ext']
+    print 'getting trees'
+    treeTT = Sample.Tree(helper.selectSamples(opts.sampleFile, ttDatasets, 'TT'), 'TT', 0, isScan = 0)
+    treeDY = Sample.Tree(helper.selectSamples(opts.sampleFile, dyDatasets, 'DY'), 'DY', 0, isScan = 0)
+    print 'getting yields'
+    print cuts.AddList([scan.cuts_norm,cuts.goodLepton])
+    tt = treeTT.getTH1F(lumi, 'tt_srs', scan.srID, 300, 0, 300, cuts.AddList([scan.cuts_norm,cuts.goodLepton]), '', '')
+    c = r.TCanvas()
+    tt.Draw()
+    c.SaveAs("srs.pdf")
+    dy = treeDY.getTH1F(lumi, 'dy_srs', scan.srID, 300, 0, 300, cuts.AddList([scan.cuts_norm,cuts.goodLepton]), '', '')
+    print 'doing datacards'
     for region in scan.regions:
-        dayield = (lumi/2.3)*sum( dic['DA'].GetBinContent(dic['DA'].FindBin(i)) for i in getSRIDs(region) )
-        bkyields = []; bkstats = []; systs = []
-        for name, bkg in dic.items():
-            if not name  in ['DA','DY']:
-                bkyields.append(sum( dic[name].GetBinContent(dic[name].FindBin(i))    for i in getSRIDs(region) ) )
-                bkstats .append(math.sqrt(sum( dic[name].GetBinError(dic[name].FindBin(i))**2 for i in getSRIDs(region) ) ) )
-                systs.append(1.15 if name == 'TT' else 1.2 if name == 'WZ' else 1.9)
-        tmp_dy = sum(dic['DY'].GetBinContent(dic['DY'].FindBin(i)) for i in getSRIDs(region))
-        print 'sum bkg', sum(bkyields)
-        print 'dy', tmp_dy
-        ## dyyield = math.sqrt( abs((dayield-sum(bkyields))) * tmp_dy )
-        dyyield = tmp_dy
-        bkyields.append(dyyield); bkstats.append(math.sqrt(dyyield));
-        systs.append(1.5)
-        tmp_dcf = open('datacards/empty_datacard.txt','r')
-        tmp_dcc = tmp_dcf.read()
-        nbkgs = len(list(d for d in dic.keys() if d != 'DA'))
-        tmp_dcc = tmp_dcc.replace('BINNAME'  , '_'.join(region) )
-        tmp_dcc = tmp_dcc.replace('BINS'     , ' '.join(['_'.join(region) for i in range(nbkgs)]) )
-        tmp_dcc = tmp_dcc.replace('BKGNAMES' , ' '.join(list(d for d in dic.keys() if d != 'DA')) )
-        tmp_dcc = tmp_dcc.replace('BKGNUMS'  , ' '.join(str(i) for i in range(1,nbkgs+1) )        )
-        tmp_dcc = tmp_dcc.replace('BKGYIELDS', ' '.join('%.2f'%i for i in bkyields )              )
-        tmp_dcc = tmp_dcc.replace('SYSDELTAS', ' '.join('-'    for i in range(nbkgs) )            )
-        tmp_dcc = tmp_dcc.replace('SYSLUMI'  , ' '.join(' -  ' for i in range(nbkgs) )            )
-        for i in range(nbkgs):
-            tmp_dcc+= 'systBKG{n} lnN - {before} {foo} {after} \n'.format(n=i+1, 
-                                                                          foo=systs[i], 
-                                                                          before=' '.join('-' for i in range(i)), 
-                                                                          after =' '.join('-' for i in range(nbkgs - i - 1)))
-        tmp_dcc = tmp_dcc.replace('SYSTS'    , ' '.join(str(i) for i in systs )                   )
-        #tmp_dcc = tmp_dcc.replace('SYSTATS'  , ' '.join('%.2f'%(1.+bkstats[i]/bkyields[i]) for i in range(nbkgs) ) )
-        tmp_dcc = tmp_dcc.replace('DATAOBS'  , str(int(dayield)))
-        tmp_dcc = tmp_dcc.replace('NBKG'     , str(nbkgs)       )
-        tmp_dc = open('datacards/datacards_{name}/mc_{reg}.txt'.format(name=scan.name, reg = '_'.join(region)), 'w')
-        tmp_dc.write(tmp_dcc)
-        tmp_dc.close()
+        totalTT = sum( tt.GetBinContent(tt.FindBin(i)) for i in getSRIDs(region) )
+        totalDY = sum( dy.GetBinContent(dy.FindBin(i)) for i in getSRIDs(region) )
+        mll = region[0]; mass = region[1]; nb = region[2]
+        bin_name = '%s_%s_%s'%(mll, mass, nb)
+        obs = int(totalTT+totalDY)
+        fs  = totalTT
+        fs_unc = 0.05
+        onz = totalDY
+        onz_e = 0.3*onz
+        of_yield = int(totalTT)
+        rsfof = 1.
+        
+        dc = '''# this is the datacard for bin {bin_name}
+imax 1  number of channels
+jmax 2  number of backgrounds
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+# only one channel here with observation {obs}
+bin            {bin_name}
+observation    {obs}
+------------
+bin        {bin_name}     {bin_name}     {bin_name}
+process    sig            FS             DY    
+process    0              1              2
+rate       XXRATEXX         {fs_bkg:.2f}       {dy_bkg:.2f}
+------------
+deltaS       lnN              1.20      -           -       
+lumi         lnN              1.12      -           -       
+FS_unc       lnN              -         {fs_unc:.2f}    -       
+{bin_name}_fs_stat      gmN {of_yield}   -         {rsfof:.3f}        -       
+DY_unc       lnN              -         -           {dy_unc:.2f}'''.format(bin_name=bin_name,
+                                                                           obs=int(obs),#
+                                                                           fs_bkg=fs,#
+                                                                           fs_unc=1+fs_unc,#
+                                                                           dy_bkg=max(0.01,onz),#
+                                                                           dy_unc=1+onz_e/abs(max(0.01,onz)),
+                                                                           of_yield=int(of_yield), #
+                                                                           rsfof=rsfof)
+        tmp_file = open('datacards/datacards_%s/mc_%s.txt'%(scan.name,bin_name),'w')
+        tmp_file.write(dc)
+        tmp_file.close()
+
+# def makeMCDatacards():
+#     daDatasets = ['DoubleMuon_Run2015C_25ns-05Oct_v1_runs_246908_260628' , 'DoubleEG_Run2015C_25ns-05Oct_v1_runs_246908_260628',
+#                   'DoubleMuon_Run2015D-05Oct_v1_runs_246908_260628'      , 'DoubleEG_Run2015D-05Oct_v1_runs_246908_260628'     ,
+#                   'DoubleMuon_Run2015D_v4_runs_246908_260628'            , 'DoubleEG_Run2015D_v4_runs_246908_260628'           ]
+
+#     dyDatasets = ['DYJetsT0LL_M50']
+
+#     dyDatasets = ['DYJetsToLL_M50_HT100to200',
+#                   'DYJetsToLL_M50_HT200to400',
+#                   'DYJetsToLL_M50_HT400to600',
+#                   'DYJetsToLL_M50_HT600toInf']
+
+#     global dic
+#     samples = []; dic = {}
+#     samples.append( Sample.Tree(helper.selectSamples(opts.sampleFile, daDatasets    , 'DA'), 'DA', 1) )
+#     samples.append( Sample.Tree(helper.selectSamples(opts.sampleFile, ['TTLep_pow'] , 'TT'), 'TT', 0) )
+#     samples.append( Sample.Tree(helper.selectSamples(opts.sampleFile, ['WZTo3L1Nu'     ] , 'WZ'), 'WZ', 0) )
+#     samples.append( Sample.Tree(helper.selectSamples(opts.sampleFile, dyDatasets    , 'DY'), 'DY', 0) )
+
+#     global nllDistributions, cumDistributions
+#     nllDistributions = []
+#     cumDistributions = []
+#     for sample in samples:
+#         all_cuts = scan.cuts_norm
+#         #all_cuts = cuts.AddList([scan.cuts_norm, cuts.twoLeptons, cuts.trigger])
+#         dic[sample.name] = sample.getTH1F(lumi, '%s_yields'%sample.name, 'srID_Edge', 200, 100, 300, all_cuts, '', 'SR ID')
+#         nllDistributions.append( sample.getTH1F(lumi, '%s_nll'%sample.name, '-1.*TMath::Log(lh_ana_met_data_Edge*lh_ana_mlb_data_Edge*lh_ana_a3d_data_Edge*lh_ana_zpt_data_Edge)', 80, 12, 30, all_cuts, '', 'NLL') )
+
+#     nllDistributions.append( scan.tree.getTH1F(lumi, 'signal_nll_350/100', '-1.*TMath::Log(lh_ana_met_data_Edge*lh_ana_mlb_data_Edge*lh_ana_a3d_data_Edge*lh_ana_zpt_data_Edge)', 80, 12, 30, '('+scan.cuts_norm+'&& GenSusyMNeutralino2_Edge == 350 && GenSusyMNeutralino_Edge == 100)', '', 'NLL') )
+#     nllDistributions.append( scan.tree.getTH1F(lumi, 'signal_nll_350/20', '-1.*TMath::Log(lh_ana_met_data_Edge*lh_ana_mlb_data_Edge*lh_ana_a3d_data_Edge*lh_ana_zpt_data_Edge)', 80, 12, 30, '('+scan.cuts_norm+'&& GenSusyMNeutralino2_Edge == 350 && GenSusyMNeutralino_Edge == 20)', '', 'NLL') )
+#     for i in nllDistributions:
+#         #i.GetYaxis().SetRangeUser(0. )
+#         #i.Scale(1./i.Integral())
+#         cumDistributions.append( i.GetCumulative() )
+    
+#     plot = Canvas.Canvas('%s/plot_nll'%scan.name, 'png,pdf', 0.6, 0.65, 0.85, 0.82)
+#     lego = 0
+#     for i,h in enumerate(nllDistributions):
+#         if 'DA' in h.GetName(): continue
+#         if 'WZ' in h.GetName(): continue
+#         if 'DY' in h.GetName(): continue
+#         h.SetMarkerStyle(20)
+#         h.SetMarkerSize(0.8*h.GetMarkerSize())
+#         h.SetMarkerColor(r.kBlack+i)
+#         plot.addHisto(h, 'p %s'%('' if not i else 'same')    , h.GetName(), 'PL' , r.kBlack+i, 1,  lego)
+#         lego+=1
+#     plot.save(1, 0, 0 , lumi)
+#     ##
+#     plot = Canvas.Canvas('%s/plot_nll_cum'%scan.name, 'png,pdf', 0.6, 0.65, 0.85, 0.82)
+#     lego = 0
+#     for i,h in enumerate(cumDistributions):
+#         if 'DA' in h.GetName(): continue
+#         if 'WZ' in h.GetName(): continue
+#         if 'DY' in h.GetName(): continue
+#         h.SetMarkerStyle(20)
+#         h.SetMarkerSize(0.8*h.GetMarkerSize())
+#         h.SetMarkerColor(r.kBlack+i)
+#         plot.addHisto(h, 'p %s'%('' if not i else 'same')    , h.GetName(), 'PL' , r.kBlack+i, 1,  lego)
+#         lego+=1
+#     plot.save(1, 0, 0 , lumi)
+#     print adfsdafsd
+
+#     for region in scan.regions:
+#         dayield = (lumi/2.3)*sum( dic['DA'].GetBinContent(dic['DA'].FindBin(i)) for i in getSRIDs(region) )
+#         bkyields = []; bkstats = []; systs = []
+#         for name, bkg in dic.items():
+#             if not name  in ['DA','DY']:
+#                 bkyields.append(sum( dic[name].GetBinContent(dic[name].FindBin(i))    for i in getSRIDs(region) ) )
+#                 bkstats .append(math.sqrt(sum( dic[name].GetBinError(dic[name].FindBin(i))**2 for i in getSRIDs(region) ) ) )
+#                 systs.append(1.15 if name == 'TT' else 1.2 if name == 'WZ' else 1.9)
+#         tmp_dy = sum(dic['DY'].GetBinContent(dic['DY'].FindBin(i)) for i in getSRIDs(region))
+#         print 'sum bkg', sum(bkyields)
+#         print 'dy', tmp_dy
+#         ## dyyield = math.sqrt( abs((dayield-sum(bkyields))) * tmp_dy )
+#         dyyield = tmp_dy
+#         bkyields.append(dyyield); bkstats.append(math.sqrt(dyyield));
+#         systs.append(1.5)
+#         tmp_dcf = open('datacards/empty_datacard.txt','r')
+#         tmp_dcc = tmp_dcf.read()
+#         nbkgs = len(list(d for d in dic.keys() if d != 'DA'))
+#         tmp_dcc = tmp_dcc.replace('BINNAME'  , '_'.join(region) )
+#         tmp_dcc = tmp_dcc.replace('BINS'     , ' '.join(['_'.join(region) for i in range(nbkgs)]) )
+#         tmp_dcc = tmp_dcc.replace('BKGNAMES' , ' '.join(list(d for d in dic.keys() if d != 'DA')) )
+#         tmp_dcc = tmp_dcc.replace('BKGNUMS'  , ' '.join(str(i) for i in range(1,nbkgs+1) )        )
+#         tmp_dcc = tmp_dcc.replace('BKGYIELDS', ' '.join('%.2f'%i for i in bkyields )              )
+#         tmp_dcc = tmp_dcc.replace('SYSDELTAS', ' '.join('-'    for i in range(nbkgs) )            )
+#         tmp_dcc = tmp_dcc.replace('SYSLUMI'  , ' '.join(' -  ' for i in range(nbkgs) )            )
+#         for i in range(nbkgs):
+#             tmp_dcc+= 'systBKG{n} lnN - {before} {foo} {after} \n'.format(n=i+1, 
+#                                                                           foo=systs[i], 
+#                                                                           before=' '.join('-' for i in range(i)), 
+#                                                                           after =' '.join('-' for i in range(nbkgs - i - 1)))
+#         tmp_dcc = tmp_dcc.replace('SYSTS'    , ' '.join(str(i) for i in systs )                   )
+#         #tmp_dcc = tmp_dcc.replace('SYSTATS'  , ' '.join('%.2f'%(1.+bkstats[i]/bkyields[i]) for i in range(nbkgs) ) )
+#         tmp_dcc = tmp_dcc.replace('DATAOBS'  , str(int(dayield)))
+#         tmp_dcc = tmp_dcc.replace('NBKG'     , str(nbkgs)       )
+#         tmp_dc = open('datacards/datacards_{name}/mc_{reg}.txt'.format(name=scan.name, reg = '_'.join(region)), 'w')
+#         tmp_dc.write(tmp_dcc)
+#         tmp_dc.close()
 
     
-    return dic
+#     return dic
     
 
 def runCmd(cmd):
@@ -209,10 +274,10 @@ def produceLimits(whichb, njobs):
         #if ind > 10: continue
         fd = basedir+d
         bstring = ''; b= ''
-        for i in whichb:
-            bstring += ' {fd}/{d}*_{b}.txt'.format(fd=fd,b=i,d=d)
-            b+=i
-        dc_name    = 'datacard_{massp}_full_{b}.txt'.format(massp=d,b=b)
+#        for i in whichb:
+        bstring += ' {fd}/{d}*.txt'.format(fd=fd,b=i,d=d)
+#            b+=i
+        dc_name    = 'datacard_{massp}_full.txt'.format(massp=d)
         final_dc   = '{fd}/{dc_name}'.format(fd=fd,dc_name=dc_name)
         runcmd     = 'combineCards.py -S {bstr} > {final_dc}'.format(bstr=bstring,final_dc=final_dc)
         combinecmd = 'combine -m {mass} -M Asymptotic {dc_name}'.format(mass=mass,dc_name=dc_name)
@@ -224,13 +289,13 @@ def produceLimits(whichb, njobs):
 
 def fillAndSaveDatacards(nbs):
     for region in scan.regions:
-        eta = region[0]; mass = region[1]; nb = region[2]
+        mll = region[0]; mass = region[1]; nb = region[2]
         if not scan.makeMCDatacards:
-            tmp_file = open('datacards/datacards_%s/%s_%s_%s.txt'%(scan.name,eta, mass, nb) ,'r')
+            tmp_file = open('datacards/datacards_%s/%s_%s_%s.txt'%(scan.name,mll, mass, nb) ,'r')
         else:
-            tmp_file = open('datacards/datacards_%s/mc_%s_%s_%s.txt'%(scan.name,eta, mass, nb) ,'r')
+            tmp_file = open('datacards/datacards_%s/mc_%s_%s_%s.txt'%(scan.name,mll, mass, nb) ,'r')
         tmp_dc  = tmp_file.read()
-        tmp_histo = getattr(scan, 'eff_%s_%s_%s'%(eta, mass, nb))
+        tmp_histo = getattr(scan, 'eff_%s_%s_%s'%(mll, mass, nb))
         for i in range(1, tmp_histo.GetXaxis().GetNbins()+1):
             for j in range(1, tmp_histo.GetYaxis().GetNbins()+1):
                 xmass = tmp_histo.GetXaxis().GetBinCenter(i)
@@ -269,35 +334,36 @@ def adaptBinning(target, current):
                 ret_histo.SetBinError  (ret_histo.FindBin(xval, yval, ret_histo.GetZaxis().GetBinCenter(k)), err )
     return final, ret_histo
 
-def getSRYield(eta, mll, nb):
-    if   eta == 'central'  : etaids = [1]
-    elif eta == 'forward'  : etaids = [2]
-    elif eta == 'inclusive': etaids = [1,2]
+def getSRYield(mll, nll, mt2):
+    if mll   == 'belowZ'   : mllids = [1]
+    elif mll == 'onZ'      : mllids = [2]
+    elif mll == 'aboveZ'   : mllids = [3]
+    elif mll == 'highMass' : mllids = [4]
+    elif mll == 'vHighMass': mllids = [5]
+    elif mll == 'highinc'  : mllids = [3,4,5] # for only three mll bins
 
-    if 'inc' in nb: nbid = [0,1,2,3,4,5,6,7]
-    elif '0' in nb: nbid = [0              ]
-    elif '1' in nb: nbid = [  1,2,3,4,5,6,7]
-    elif '2' in nb: nbid = [    2,3,4,5,6,7]
-
-    if   'low'   in mll: mllids = [1]
-    elif 'below' in mll: mllids = [2]
-    elif 'on'    in mll: mllids = [3]
-    elif 'above' in mll: mllids = [4]
-    elif 'high'  in mll: mllids = [5]
-    elif 'all'   in mll: mllids = [1,2,3,4,5]
+    if   nll   == 'lowNll'   : nllids = [0]
+    elif nll   == 'highNll'  : nllids = [1]
+    
+    if   mt2   == 'lowMT2'   : mt2ids = [0]
+    elif mt2   == 'highMT2'  : mt2ids = [1]
+    elif mt2   == 'incMT2'   : mt2ids = [0,1]
+    elif mt2   == 'lowHT'    : mt2ids = [0]
+    elif mt2   == 'medHT'    : mt2ids = [1]
+    elif mt2   == 'highHT'   : mt2ids = [2]
 
     allSRs = []
-    for etaid in etaids:
-        for bid in nbid:
-            for mllid in mllids:
-                allSRs.append(100*etaid + 10*bid + mllid)
+    for mllid in mllids:
+        for nllid in nllids:
+            for mt2id in mt2ids:
+                allSRs.append(100*mt2id + 10 *nllid + mllid)
 
-    print 'at signal region',eta, mll, nb
+    print 'at signal region',mll, nll, mt2
     print 'combining signal regions:',allSRs
 
-    scan_sr_yield = scan.ngen_2d.Clone('yield_%s_%s_%s'%(eta, mll, nb))
-    scan_sr_yield.SetTitle('yield_%s_%s_%s'%(eta, mll, nb))
-    scan_sr_yield.SetName ('yield_%s_%s_%s'%(eta, mll, nb))
+    scan_sr_yield = scan.ngen_2d.Clone('yield_%s_%s_%s'%(mll, nll, mt2))
+    scan_sr_yield.SetTitle('yield_%s_%s_%s'%(mll, nll, mt2))
+    scan_sr_yield.SetName ('yield_%s_%s_%s'%(mll, nll, mt2))
     scan_sr_yield.Reset()
     for x in range(1, scan.norm.GetNbinsX()+1):
         for y in range(1, scan.norm.GetNbinsY()+1):
@@ -310,12 +376,12 @@ def getSRYield(eta, mll, nb):
                 tmp_yield2 += (scan.norm.GetBinError  (scan.norm.GetBin(x, y, zbin)))**2
             scan_sr_yield.SetBinContent(scan_sr_yield.GetBin(x,y), tmp_yield)
             scan_sr_yield.SetBinError  (scan_sr_yield.GetBin(x,y), math.sqrt(tmp_yield2))
-    scan_sr_eff = scan_sr_yield.Clone('eff_%s_%s_%s'%(eta, mll, nb))
-    scan_sr_eff.SetTitle('eff_%s_%s_%s'%(eta, mll, nb))
+    scan_sr_eff = scan_sr_yield.Clone('eff_%s_%s_%s'%(mll, nll, mt2))
+    scan_sr_eff.SetTitle('eff_%s_%s_%s'%(mll, nll, mt2))
     scan_sr_eff.GetZaxis().SetRangeUser(0., scan.zmaxEff)
     scan_sr_eff.Divide(scan.ngen_2d)
-    setattr(scan, 'yield_%s_%s_%s'%(eta, mll, nb), scan_sr_yield)
-    setattr(scan, 'eff_%s_%s_%s'  %(eta, mll, nb), scan_sr_eff  )
+    setattr(scan, 'yield_%s_%s_%s'%(mll, nll, mt2), scan_sr_yield)
+    setattr(scan, 'eff_%s_%s_%s'  %(mll, nll, mt2), scan_sr_eff  )
 
  
 if __name__ == "__main__":
@@ -362,16 +428,16 @@ if __name__ == "__main__":
         ## everything that takes long should be done here!
         scan = Scans.Scan(opts.scanName)
         scan.tree = Sample.Tree(helper.selectSamples(opts.sampleFile, scan.datasets, 'SIG'), 'SIG'  , 0, isScan = True)
-        scan.norm = scan.tree.getTH3F(1., 'nPass_norm', 'srID_Edge:'+scan.yvar+':'+scan.xvar, scan.xbins.n+1, scan.xbins._min-scan.xbins.w/2., scan.xbins._max+scan.xbins.w/2.,  ## lumi set later for scans!!
-                                                                                                scan.ybins.n+1, scan.ybins._min-scan.ybins.w/2., scan.ybins._max+scan.ybins.w/2., 
-                                                                                                200, 100, 300, scan.cuts_norm, '', scan.xtitle, scan.ytitle, scan.ztitle)
+        scan.norm = scan.tree.getTH3F(1., 'nPass_norm', scan.srID+':'+scan.yvar+':'+scan.xvar, scan.xbins.n+1, scan.xbins._min-scan.xbins.w/2., scan.xbins._max+scan.xbins.w/2.,  ## lumi set later for scans!!
+                                      scan.ybins.n+1, scan.ybins._min-scan.ybins.w/2., scan.ybins._max+scan.ybins.w/2., 
+                                      300, 0, 300, scan.cuts_norm, '', scan.xtitle, scan.ytitle, scan.ztitle)
         
         #for i in ['met', 'zpt', 'maxjj', 'minjj', 'bestjj']: makePlots(i)
         #print asfsdfs
         if scan.makeMCDatacards:
             print 'preparing datacards from MC'
             a = makeMCDatacards()
-        print asfsdfs
+        #print asfsdfs
 
         print '=================================================='
         print '=================================================='
@@ -415,8 +481,8 @@ if __name__ == "__main__":
 
         ## here we get the 2D efficiencies for all signal regions
         for region in scan.regions:
-            eta = region[0]; mass = region[1]; nb = region[2]
-            getSRYield(eta, mass, nb)
+            mll = region[0]; nll = region[1]; mt2 = region[2]
+            getSRYield(mll, nll, mt2)
 
         ## set the scan tree to 0 before pickling. it's huge (that's what she said)
         scan.tree = 0

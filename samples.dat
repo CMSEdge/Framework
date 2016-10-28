@@ -46,8 +46,8 @@ HTMHT        r.kBlack   HTMHT_Run2016D-PromptReco-v2_runs_271036_276811         
 #-----------------------------------------------------------
 # BLOCK     COLOR         NAME                       LABEL                       LOCATION OF FRIENDS                                                                   XSEC    ISDATA
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-TTJets    r.kRed+9     TTJets_DiLepton                TT+Jets     /afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/mc_jun17_miniaodv2_noLHE/friends/       87314.8   0
-TTJets    r.kRed+9     TTJets_DiLepton_ext            TT+Jets     /afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/mc_jun17_miniaodv2_noLHE/friends/       87314.8   0
+TTJets    r.kRed+9     TTJets_DiLepton                TT+Jets     /afs/cern.ch/work/s/sesanche/public/ntuples/       87314.8   0
+TTJets    r.kRed+9     TTJets_DiLepton_ext            TT+Jets     /afs/cern.ch/work/s/sesanche/public/ntuples/       87314.8   0
 TTJets    r.kRed+9     TTJets_DiLepton_total          TT+Jets     /afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/mc_jun17_miniaodv2_noLHE/friends/       87314.8   0
 TT_pow    r.kRed+9     TT_pow_ext3                    TT+Jets     /afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/mc_jun17_miniaodv2_noLHE/friends/      831760.0   0
 TT_pow    r.kRed+9     TT_pow_ext4                    TT+Jets     /afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/mc_jun17_miniaodv2_noLHE/friends/      831760.0   0
@@ -76,3 +76,6 @@ singleT   r.kOrange+2  T_tWch                         singleT     /afs/cern.ch/w
 #rare       r.kRed+2     WZTo1L3Nu                     WZTo1L3Nu  /afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/mc_jun17_miniaodv2_noLHE/friends/   -               0
 #TTJets     r.kRed+9     TTLep_pow                     TTLep_pow                   /afs/cern.ch/work/p/pablom/public/Trees_800_11-06-2016/                    87314.8          0
 #rare       r.kRed+2     ZZTo2L2Q                      ZZTo2L2Q                    /afs/cern.ch/work/p/pablom/public/Trees_800_11-06-2016/                    3220.0           0
+T6bbllslepton      r.kBlue+3       SMS_T6bbllslepton_mSbottom400to575_mLSP150to550       T6bbllslepton      /afs/cern.ch/work/s/sesanche/public/ntuples 1.0   0
+T6bbllslepton      r.kBlue+3       SMS_T6bbllslepton_mSbottom600to775_mLSP150to725       T6bbllslepton      /afs/cern.ch/work/s/sesanche/public/ntuples 1.0   0
+T6bbllslepton      r.kBlue+3       SMS_T6bbllslepton_mSbottom800to950_mLSP150to900       T6bbllslepton      /afs/cern.ch/work/s/sesanche/public/ntuples 1.0   0
