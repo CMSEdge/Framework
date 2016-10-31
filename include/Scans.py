@@ -43,7 +43,7 @@ class Scan(object):
             self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',
                              'SMS_T6bbllslepton_mSbottom600to775_mLSP150to725',
                              'SMS_T6bbllslepton_mSbottom800to950_mLSP150to900']
-            self.xbins = binning(400,900,25)
+            self.xbins = binning(400,950,25)
             self.ybins = binning(200,900,25)
             self.xvar = 'GenSusyMScan1_Edge'
             self.yvar = 'GenSusyMScan2_Edge'
@@ -67,7 +67,7 @@ class Scan(object):
             self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',
                              'SMS_T6bbllslepton_mSbottom600to775_mLSP150to725',
                              'SMS_T6bbllslepton_mSbottom800to950_mLSP150to900']
-            self.xbins = binning(400,900,25)
+            self.xbins = binning(400,950,25)
             self.ybins = binning(200,900,25)
             self.xvar = 'GenSusyMScan1_Edge'
             self.yvar = 'GenSusyMScan2_Edge'
@@ -91,7 +91,7 @@ class Scan(object):
             self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',
                              'SMS_T6bbllslepton_mSbottom600to775_mLSP150to725',
                              'SMS_T6bbllslepton_mSbottom800to950_mLSP150to900']
-            self.xbins = binning(400,900,25)
+            self.xbins = binning(400,950,25)
             self.ybins = binning(200,900,25)
             self.xvar = 'GenSusyMScan1_Edge'
             self.yvar = 'GenSusyMScan2_Edge'
@@ -115,7 +115,7 @@ class Scan(object):
             self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',
                              'SMS_T6bbllslepton_mSbottom600to775_mLSP150to725',
                              'SMS_T6bbllslepton_mSbottom800to950_mLSP150to900']
-            self.xbins = binning(400,900,25)
+            self.xbins = binning(400,950,25)
             self.ybins = binning(200,900,25)
             self.xvar = 'GenSusyMScan1_Edge'
             self.yvar = 'GenSusyMScan2_Edge'
@@ -139,7 +139,7 @@ class Scan(object):
             self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',
                              'SMS_T6bbllslepton_mSbottom600to775_mLSP150to725',
                              'SMS_T6bbllslepton_mSbottom800to950_mLSP150to900']
-            self.xbins = binning(400,900,25)
+            self.xbins = binning(400,950,25)
             self.ybins = binning(200,900,25)
             self.xvar = 'GenSusyMScan1_Edge'
             self.yvar = 'GenSusyMScan2_Edge'

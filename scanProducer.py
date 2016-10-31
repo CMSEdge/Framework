@@ -383,6 +383,22 @@ def getSRYield(mll, nll, mt2):
     setattr(scan, 'yield_%s_%s_%s'%(mll, nll, mt2), scan_sr_yield)
     setattr(scan, 'eff_%s_%s_%s'  %(mll, nll, mt2), scan_sr_eff  )
 
+def getEffMapsSys(sys):
+    print 'getting scan for sys', sys
+    print 'still to put the sfs fully in place (everywheer th1, th2, th3)'
+    theCuts = scan.cuts_norm
+    for rpl in replaceCutsForSys[sys]:
+        theCuts = theCuts.replace(rpl[0],rpl[1])
+                
+    return scan.tree.getTH3F(1., 'nPass_norm'+sys, scan.srID+':'+scan.yvar+':'+scan.xvar,
+                             scan.xbins.n+1, scan.xbins._min-scan.xbins.w/2.,
+                             scan.xbins._max+scan.xbins.w/2., scan.ybins.n+1,
+                             scan.ybins._min-scan.ybins.w/2., 
+                             scan.ybins._max+scan.ybins.w/2., 
+                             300, 0, 300, theCuts, '',
+                             scan.xtitle, scan.ytitle, scan.ztitle, 
+                             extraWeightsForSys[sys])
+
  
 if __name__ == "__main__":
 
@@ -412,9 +428,39 @@ if __name__ == "__main__":
     ## have to think a way of reweighting the events with trigger and lepton SFs.
     ## weighting now done with isScan=True flag in samples.py
 
-    ## this should be then sr-ID:m_slepton:m_sbottom for the final scan
-    #cuts_norm = cuts.AddList([cuts.METJetsSignalRegion, cuts.GoodLeptonSFNoTrigger()]) ## trigger not available in fastsim
-    #cuts_norm = cuts_norm.replace(cuts.twoLeptons, 't.nPairLep_Edge > 0') ## remove the filters, ugly, but it's a bit intricate in the samples
+    global replaceCutsForSys, extraWeightsForSys
+    replaceCutsForSys = {'':      [],
+                         'jecUp': [['nBJetMedium35_Edge','nBJetMedium35_jecUp_Edge'],
+                                   ['mt2_Edge','mt2_jecUp_Edge'],
+                                   ['nll_Edge', 'nll_jecUp_Edge'],
+                                   ['met_Edge', 'met_jecUp_Edge'],
+                                   ['nJetSel_Edge','nJetSel_jecUp_Edge']],
+                         'jecDn': [['nBJetMedium35_Edge','nBJetMedium35_jecDn_Edge'],
+                                   ['mt2_Edge','mt2_jecDn_Edge'],
+                                   ['nll_Edge', 'nll_jecDn_Edge'],
+                                   ['met_Edge', 'met_jecDn_Edge'],
+                                   ['nJetSel_Edge','nJetSel_jecDn_Edge']],
+                         'bHeUp': [],
+                         'bHeDn': [],
+                         'bLiUp': [],
+                         'bLiDn': [],
+                         'ElUp' : [],
+                         'ElDn' : [],
+                         'MuUp' : [],
+                         'MuDn' : []}
+    
+    extraWeightsForSys = {'': '1',
+                          'jecUp': '1',
+                          'jecDn': '1',
+                          'bHeUp': 'weight_btagsf_heavy_UP_Edge/weight_btagsf_Edge',
+                          'bHeDn': 'weight_btagsf_heavy_DN_Edge/weight_btagsf_Edge',
+                          'bLiUp': 'weight_btagsf_light_UP_Edge/weight_btagsf_Edge',
+                          'bLiDn': 'weight_btagsf_light_DN_Edge/weight_btagsf_Edge',
+                          'ElUp' : 'weight_LepSF_ElUp_Edge / weight_LepSF_Edge',
+                          'ElDn' : 'weight_LepSF_ElDn_Edge / weight_LepSF_Edge',
+                          'MuUp' : 'weight_LepSF_MuUp_Edge / weight_LepSF_Edge',
+                          'MuDn' : 'weight_LepSF_MuDn_Edge / weight_LepSF_Edge'}
+
 
     ## ==============================================
     ## == try loading stuff from the pickled file ===
@@ -428,16 +474,39 @@ if __name__ == "__main__":
         ## everything that takes long should be done here!
         scan = Scans.Scan(opts.scanName)
         scan.tree = Sample.Tree(helper.selectSamples(opts.sampleFile, scan.datasets, 'SIG'), 'SIG'  , 0, isScan = True)
-        scan.norm = scan.tree.getTH3F(1., 'nPass_norm', scan.srID+':'+scan.yvar+':'+scan.xvar, scan.xbins.n+1, scan.xbins._min-scan.xbins.w/2., scan.xbins._max+scan.xbins.w/2.,  ## lumi set later for scans!!
-                                      scan.ybins.n+1, scan.ybins._min-scan.ybins.w/2., scan.ybins._max+scan.ybins.w/2., 
-                                      300, 0, 300, scan.cuts_norm, '', scan.xtitle, scan.ytitle, scan.ztitle)
+        pool = Pool(1)
+        systs = ['','ElUp','ElDn','MuUp','MuDn','jecUp','jecDn','bHeUp','bHeDn','bLiUp','bLiDn']
+        #scan.maps = pool.map( getEffMapsSys, systs)
+        #scan.maps = dict(zip( systs, scan.maps))
+        scan.maps = {}
+        for sys in systs:
+            scan.maps[sys] = getEffMapsSys(sys)
+        scan.norm = scan.maps['']
+        for key,hist in scan.maps.items():
+            print key, hist.Integral()
+
+#         for sys in ['']:
+# #        for sys in ['','ElUp','ElDn','MuUp','MuDn','jecUp','jecDn','bHeUp','bHeDn','bLiUp','bLiDn']:
+#             print 'getting scan for sys', sys
+#             print 'still to put the sfs fully in place (everywheer th1, th2, th3)'
+#             theCuts = scan.cuts_norm
+#             for rpl in replaceCutsForSys[sys]:
+#                 theCuts = theCuts.replace(rpl[0],rpl[1])
+                
+#             setattr(scan,'norm'+sys, scan.tree.getTH3F(1., 'nPass_norm', scan.srID+':'+scan.yvar+':'+scan.xvar,
+#                                                        scan.xbins.n+1, scan.xbins._min-scan.xbins.w/2.,
+#                                                        scan.xbins._max+scan.xbins.w/2., scan.ybins.n+1,
+#                                                        scan.ybins._min-scan.ybins.w/2., 
+#                                                        scan.ybins._max+scan.ybins.w/2., 
+#                                                        300, 0, 300, theCuts, '',
+#                                                        scan.xtitle, scan.ytitle, scan.ztitle, 
+#                                                        extraWeightsForSys[sys]))
         
-        #for i in ['met', 'zpt', 'maxjj', 'minjj', 'bestjj']: makePlots(i)
-        #print asfsdfs
+
         if scan.makeMCDatacards:
             print 'preparing datacards from MC'
             a = makeMCDatacards()
-        #print asfsdfs
+
 
         print '=================================================='
         print '=================================================='

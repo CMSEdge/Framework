@@ -36,13 +36,13 @@ class Sample:
         self.lumWeight = self.xSection / self.count
         self.puWeight    = "PileupW_Edge"
         self.btagWeight  = "weight_btagsf_Edge"
+        self.SFWeight    = "weight_LepSF_Edge"
       if self.isScan:
         self.trigScale  = 'weight_trigger_Edge'
-        self.SFWeight   = '1.0'
-        self.SFWeight   = '0.85'
         self.lumWeight  =  1.0
         self.puWeight   = "PileupW_Edge"
         self.btagWeight = "weight_btagsf_Edge"
+        self.SFWeight    = "weight_LepSF_Edge"
         self.smsCount =  self.ftfile.Get('CountSMS')
    def printSample(self):
       print "#################################"
@@ -100,7 +100,7 @@ class Sample:
       
       return (h_of if ofBin else h)
 
-   def getTH2F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, cut, options, xlabel, ylabel):
+   def getTH2F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, cut, options, xlabel, ylabel, extraWeight='1'):
    
      if(xmin == xmax) and (ymax == ymin):
         h = TH2F(name, "", len(nbinx)-1, array('d', nbinx),len(nbiny)-1, array('d', nbiny))
@@ -115,12 +115,16 @@ class Sample:
      h.GetYaxis().SetTitle(ylabel)
      
      if(self.isData == 0):
+<<<<<<< HEAD
         cut = cut + "* ( " + str(self.lumWeight*lumi) + " * genWeight_Edge/abs(genWeight_Edge) * " + self.puWeight + " * " + self.SFWeight +  " * " + self.btagWeight + " * " + self.trigScale + " )" 
+=======
+        cut = cut + "* ( " + str(self.lumWeight*lumi) + " * genWeight_Edge/abs(genWeight_Edge) * " + self.puWeight + " * " + self.SFWeight +  " * " + self.btagWeight + " * " + extraWeight +" )" 
+>>>>>>> Systematics partially implemented
      
      self.ttree.Project(name, var, cut, options) 
      return h
 
-   def getTH3F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel):
+   def getTH3F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel, extraWeight):
    
      if(xmin == xmax) and (ymax == ymin) and (zmax == zmin):
         h = TH3F(name, "", len(nbinx)-1, array('d', nbinx), len(nbiny)-1, array('d', nbiny), len(nbinz)-1, array('d', nbinz))
@@ -132,7 +136,11 @@ class Sample:
      h.GetZaxis().SetTitle(zlabel)
      
      if(self.isData == 0):
+<<<<<<< HEAD
         cut = cut + "* ( " + str(self.lumWeight*lumi) + " * genWeight_Edge/abs(genWeight_Edge) * " + self.puWeight + " * " + self.SFWeight +  " * " + self.btagWeight + " * " + self.trigScale + " )" 
+=======
+        cut = cut + "* ( " + str(self.lumWeight*lumi) + " * genWeight_Edge/abs(genWeight_Edge) * " + self.puWeight + " * " + self.SFWeight +  " * " + self.btagWeight + " * " + extraWeight + " )" 
+>>>>>>> Systematics partially implemented
      
      self.ttree.Project(name, var, cut, options) 
      return h
@@ -203,7 +211,7 @@ class Block:
 
      return h   
 
-   def getTH3F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel):
+   def getTH3F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel, extraWeight):
      if(xmin == xmax) and (ymax == ymin) and (zmax == zmin):
         h = TH3F(name, "", len(nbinx)-1, array('d', nbinx),len(nbiny)-1, array('d', nbiny),len(nbinz)-1, array('d', nbinz))
      else: 
@@ -217,7 +225,7 @@ class Block:
      for s in self.samples:
      
        AuxName = "auxT3_block" + s.name
-       haux = s.getTH3F(lumi, AuxName, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel)
+       haux = s.getTH3F(lumi, AuxName, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel,extraWeight)
        h.Add(haux)
        del haux
 
@@ -374,7 +382,7 @@ class Tree:
 
      return h   
 
-   def getTH3F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel):
+   def getTH3F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel, extraWeight):
      if(xmin == xmax) and (ymax == ymin) and (zmax == zmin):
         h = TH3F(name, "", len(nbinx)-1, array('d', nbinx),len(nbiny)-1, array('d', nbiny), len(nbinz)-1, array('d', nbinz))
      else: 
@@ -388,7 +396,7 @@ class Tree:
      for b in self.blocks:
      
        AuxName = "aux_block" + name + "_" + b.name
-       haux = b.getTH3F(lumi, AuxName, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel)
+       haux = b.getTH3F(lumi, AuxName, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel, extraWeight)
        h.Add(haux)
        del haux
 
