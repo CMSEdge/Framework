@@ -30,49 +30,47 @@ def makeMCDatacards():
     tt = treeTT.getTH1F(lumi, 'FSbkg', scan.srID, scan.srIDMax+1, -0.5, scan.srIDMax+0.5, cuts.AddList([scan.cuts_norm,cuts.goodLepton]), '', ''); tt.SetName('FSbkg')
     dy = treeDY.getTH1F(lumi, 'otherbkg', scan.srID, scan.srIDMax+1, -0.5, scan.srIDMax+0.5, cuts.AddList([scan.cuts_norm,cuts.goodLepton]), '', ''); dy.SetName('otherbkg')
     data = tt.Clone('data_obs'); data.Add(dy)
-    datacard = '''imax 1 number of bins
+    helper.ensureDirectory('datacards/datacards_%s/%s'%(scan.name,scan.name))
+    for SR, label in scan.shortLabels.items():
+        datacard = '''imax 1 number of bins
 jmax 2 number of processes minus 1
 kmax *  number of nuisance parameters
 ----------------------------------------------------------------------------------------------------------------------------------
-shapes XXXSIGNAL  *       signal_shapes.root      $PROCESS $PROCESS$SYSTEMATIC
-shapes FSbkg      *       ../../shapes.root             $PROCESS $PROCESS_$SYSTEMATIC
-shapes otherbkg   *       ../../shapes.root             $PROCESS $PROCESS_$SYSTEMATIC
-shapes data_obs   *       ../../shapes.root             $PROCESS $PROCESS_$SYSTEMATIC
-----------------------------------------------------------------------------------------------------------------------------------
-bin          A
+bin          {label}
 observation  {obs}   
 ----------------------------------------------------------------------------------------------------------------------------------
-bin          A             A              A
+bin          {label}      {label}        {label}
 process      XXXSIGNAL     FSbkg          otherbkg
 process      0             1              2   
 rate         XXXSIGRATE    {fs}           {other}
 ----------------------------------------------------------------------------------------------------------------------------------
-fs_stat gmN  {fs_int}  -            1.0             - 
+fs_stat_{label} gmN  {fs_int}  -            1.0             - 
 fs_unc lnN             -            1.05            - 
-jec   shape           1            -               -
-El    shape            1            -               -
-Mu    shape           1            -               -
-bHe   shape           1            -               -
-bLi   shape           1            -               -
+jec   lnN           XXjecXX            -               -
+El    lnN           XXElXX            -               -
+Mu    lnN           XXMuXX            -               -
+bHe   lnN           XXbHeXX            -               -
+bLi   lnN           XXbLiXX            -               -
+signalMCstats_{label} lnN    XXmcStatXX       -                -
 lumi   lnN             1.2            -               -
-signal lnN            1.3
-'''.format(obs = tt.Integral() + dy.Integral(), fs = tt.Integral(), other = dy.Integral())
+'''.format(obs = tt.GetBinContent(tt.FindBin(SR)) + dy.GetBinContent(dy.FindBin(SR)), 
+           fs  = tt.GetBinContent(tt.FindBin(SR)), other = dy.GetBinContent(dy.FindBin(SR)), 
+           label = label, fs_int = int(tt.GetBinContent(tt.FindBin(SR))))
+        outputFile = open('datacards/datacards_{scan}/{scan}/template_{sr}.txt'.format(scan=scan.name,sr=label),'w')
+        outputFile.write(datacard)
+        outputFile.close()
 
-    helper.ensureDirectory('datacards/datacards_%s/%s'%(scan.name,scan.name))
-    outputFile = open('datacards/datacards_%s/%s/template.txt'%(scan.name,scan.name),'w')
-    outputFile.write(datacard)
-    outputFile.close()
-
-    shapes = r.TFile('datacards/datacards_%s/shapes.root'%scan.name,'recreate'); 
-    tt.Write(); dy.Write(); data.Write();
-    shapes.Close()
+    # no shapes anymore :(
+    # shapes = r.TFile('datacards/datacards_%s/shapes.root'%scan.name,'recreate'); 
+    # tt.Write(); dy.Write(); data.Write();
+    # shapes.Close()
     
     
 
 def runCmd(cmd):
-    os.chdir (cmd[1])
+    os.chdir (cmd[2])
     os.system(cmd[0])
-#    os.system(cmd[2])
+    os.system(cmd[1])
     return True
 
 
@@ -84,10 +82,14 @@ def produceLimits( njobs ):
     for ind,d in enumerate(subdirs):
         mass = ''.join(i for i in d.split('_') if i.isdigit() )
         fd = basedir+d
+        srCards = ''
+        for SR, label in scan.shortLabels.items():
+            srCards += ' {fd}/datacard_{mass}_{label}.txt'.format(fd=fd,mass=d,label=label)
         dc_name    = '{fd}/datacard_{suffix}.txt'.format(fd=fd,suffix=d)
+        runcmd = 'combineCards.py -S {bstr} > {final_dc}'.format(bstr=srCards,final_dc=dc_name)
         combinecmd = 'combine -m {mass} -M Asymptotic {dc_name}'.format(mass=mass,dc_name=dc_name)
-        print combinecmd
-        tasks.append([combinecmd, fd])
+        print runcmd
+        tasks.append([runcmd,combinecmd, fd])
     pool.map(runCmd, tasks)
     print 'hadding everything'
     haddcmd = 'hadd -f {bd}/{name}_allLimits.root {bd}/*/higgs*.root'.format(name=scan.name,bd=basedir)
@@ -116,8 +118,7 @@ def adaptBinning(target, current):
 
 
 def getEffMapsSys(sys):
-    print 'getting scan for sys', sys
-    print 'still to put the sfs fully in place (everywheer th1, th2, th3)'
+    print ('getting scan for sys', sys) if len(sys) > 0 else 'getting nominal scan'
     theCuts = scan.cuts_norm
     for rpl in replaceCutsForSys[sys]:
         theCuts = theCuts.replace(rpl[0],rpl[1])
@@ -173,20 +174,23 @@ def PutHistosIntoRootFiles():
             if sysHistos[''].Integral() == 0: continue # if no sensitivity
 
 
-            helper.ensureDirectory('datacards/datacards_%s/%s/%s/'%(scan.name,scan.name,massString))
-            rootfile = r.TFile.Open('datacards/datacards_%s/%s/%s/signal_shapes.root'%(scan.name,scan.name,massString),'recreate')
-            for sys, histo in sysHistos.items():
-                histo.Write()
-            rootfile.Close()
-
-            template = open('datacards/datacards_%s/%s/template.txt'%(scan.name,scan.name)).read()
-            template = template.replace('XXXSIGNAL',massString)
-            template = template.replace('XXXSIGRATE', '%f'%sysHistos[''].Integral())
-            card = open('datacards/datacards_%s/%s/%s//datacard_%s.txt'%(scan.name,scan.name,massString,massString),'w')
-            card.write(template)
-            card.close()
-            # close at the end
-            rootfile.Close()
+            helper.ensureDirectory('datacards/datacards_{scan}/{scan}/{mass}/'.format(scan=scan.name,mass=massString))
+            for SR, label in scan.shortLabels.items():
+                template = open('datacards/datacards_{scan}/{scan}/template_{sr}.txt'.format(scan=scan.name,sr=label),'r').read()
+                template = template.replace('XXXSIGNAL',massString)
+                template = template.replace('XXXSIGRATE', '%f'%sysHistos[''].GetBinContent(sysHistos[''].FindBin(SR)))
+                for sys in scan.SysString.split():
+                    up = sysHistos[sys+'Up']  .GetBinContent(sysHistos[sys+'Up']  .FindBin(SR))
+                    dn = sysHistos[sys+'Down'].GetBinContent(sysHistos[sys+'Down'].FindBin(SR))
+                    nom= sysHistos['']        .GetBinContent(sysHistos['']        .FindBin(SR))
+                    template = template.replace('XX'+sys+'XX', '%4.2f/%4.2f'%(dn/nom,up/nom))
+                mcStat = sysHistos[''].GetBinError(sysHistos[''].FindBin(SR)) / sysHistos[''].GetBinContent(sysHistos[''].FindBin(SR))
+                template = template.replace('XXmcStatXX', '%f'%(1 + mcStat))
+                card = open('datacards/datacards_{scan}/{scan}/{mass}/datacard_{mass}_{label}.txt'.format(scan=scan.name,
+                                                                                                          mass=massString,
+                                                                                                          label=label),'w')
+                card.write(template)
+                card.close()
                 
 if __name__ == "__main__":
 
@@ -265,7 +269,7 @@ if __name__ == "__main__":
         scan.tree = Sample.Tree(helper.selectSamples(opts.sampleFile, scan.datasets, 'SIG'), 'SIG'  , 0, isScan = True)
         if scan.makeMCDatacards:
             print 'preparing datacards from MC'
-            #a = makeMCDatacards()
+            a = makeMCDatacards()
 
 
         ## Load the number of generated events to produce efficiency maps per systematic
@@ -291,12 +295,14 @@ if __name__ == "__main__":
         scan.ngen_3d = newbinning[1] ## this one has ngen in every single bin. for every SR. and it's 3D, so that's cool
         print 'this is the type of scan.ngen after', type(scan.ngen)
         getSREffMaps()
-#        print kk
-        systs = ['','ElUp','ElDown']#,'MuUp','MuDown','jecUp','jecDown','bHeUp','bHeDown','bLiUp','bLiDown']
 
+        scan.SysString = 'El Mu jec bHe bLi'
         scan.maps = {}
-        for sys in systs:
-            scan.maps[sys] = getEffMapsSys(sys)
+        scan.maps['']   = getEffMapsSys('')
+        for sys in scan.SysString.split():
+            scan.maps[sys+'Up']   = getEffMapsSys(sys+'Up')
+            scan.maps[sys+'Down'] = getEffMapsSys(sys+'Down')
+
         scan.norm = scan.maps['']
 
         scan.xy = scan.norm.Project3D('xy') # this means x versus y. so x is on the y-axis

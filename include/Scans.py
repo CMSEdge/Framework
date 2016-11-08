@@ -59,13 +59,52 @@ class Scan(object):
             self.shortLabels = { 0 : 'lowmll_lownll',
                                  1 : 'highmll_lownll',
                                  2 : 'lowmll_highnll',
-                                 3 : 'highmll_lownll'}
-
-                }
+                                 3 : 'highmll_highnll'}
             self.SRLabels = { 0 : 'Low  m_{ll} / t#bar{t}-like ',
                               1 : 'High m_{ll} / t#bar{t}-like ',
                               2 : 'Low  m_{ll} / Non t#bar{t}-like ',
                               3 : 'High m_{ll} / Non t#bar{t}-like '}
+
+        if self.name == 'Edge_MLLbins_MT2inc':
+            self.makeMCDatacards = True
+            self.paper = 'SUS15011'
+            self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',
+                             'SMS_T6bbllslepton_mSbottom600to775_mLSP150to725',
+                             'SMS_T6bbllslepton_mSbottom800to950_mLSP150to900']
+            self.xbins = binning(400,950,25)
+            self.ybins = binning(200,900,25)
+            self.xvar = 'GenSusyMScan1_Edge'
+            self.yvar = 'GenSusyMScan2_Edge'
+            self.cuts_norm = cuts.AddList([cuts.SignalRegionBaseLineNoTrigger, cuts.SF])
+            self.cuts_norm = self.cuts_norm.replace(cuts.twoLeptons, 'nPairLep_Edge > 0') ## remove the filters, ugly.
+            self.zminUL = 1e-3; self.zmaxUL = 1e3
+            self.zmaxEff = 0.30
+            self.xsecFile = ('datacards/sbottomXsec.txt')
+            self.regions = []
+            self.xtitle = 'm_{sbottom}'; self.ytitle = 'm_{neu2}'
+            self.srID   = '0*(lepsMll_Edge < 81) + 1*(lepsMll_Edge > 81)*(lepsMll_Edge < 101) + 2*(lepsMll_Edge > 101)*(lepsMll_Edge < 200.) + 3*(lepsMll_Edge > 200)*(lepsMll_Edge < 300) + 4*(lepsMll_Edge > 300) + 0*(nll_Edge < 21.) + 5*(nll_Edge > 21.)'
+            self.srIDMax = 9 # its good to avoid empty bins to be in the safe side
+            self.shortLabels = { 0: 'belowZ_lownll',
+                                 1: 'onZ_lownll',
+                                 2: 'highmll1_lownll',
+                                 3: 'highmll2_lownll',
+                                 4: 'highmll2_lownll',
+                                 5: 'belowZ_highnll',
+                                 6: 'onZ_highnll',
+                                 7: 'highmll1_highnll',
+                                 8: 'highmll2_highnll',
+                                 9: 'highmll2_highnll'  }
+            self.SRLabels = { 0: 'Below Z / t#bar{t}-like ',
+                              1: 'On Z / t#bar{t}-like',
+                              2: 'Above Z / t#bar{t}-like',
+                              3: 'High m_{ll} / t#bar{t}-like',
+                              4: 'Very High m_{ll} / t#bar{t}-like', 
+                              5: 'Below Z / Non t#bar{t}-like ',
+                              6: 'On Z / Non t#bar{t}-like',
+                              7: 'Above Z / Non t#bar{t}-like',
+                              8: 'High m_{ll} / Non t#bar{t}-like',
+                              9: 'Very High m_{ll} / Non t#bar{t}-like' }
+
 
 # if self.name == 'Edge_ICHEP':
 
