@@ -28,10 +28,34 @@ class CutManager:
       self.nbj2 = "(nBJetMedium25_Edge >= 2)"
       self.nbj1 = "(nBJetMedium25_Edge >= 1)"
       self.nbj0 = "(nBJetMedium25_Edge >= 0)"
+      self.nbExact2 = '(nBJetMedium25_Edge == 2)'
       self.MET100 = "(met_Edge > 100)"
       self.MET150 = "(met_Edge > 150)"
       self.MET200 = "(met_Edge > 200)"
-      self.JetMETBaseline = "(met_Edge > 150 && nJetSel_Edge >= 2)"
+      self.mT2_80 = "(mt2_Edge > 80)"
+      self.mT2_100 = "(mt2_Edge > 100)"
+      self.bVeto  = "(nBJetMedium25_Edge == 0)"
+      self.ThirdLeptonVeto = '(nLepLoose_Edge == 2)'
+      self.JetMETPhi04 = "abs(j1MetDPhi_Edge) >  0.4 && abs(j2MetDPhi_Edge) > 0.4"
+      # to do cuts #####################################
+      print 'still to do this'
+      self.mjj110  = '1'
+      self.mbb150  = '1'
+      self.mT2b200 = '1'
+      self.mbb150  = '1'
+######################
+      self.narrowZMass = '(lepsMll_Edge > 86 && lepsMll_Edge < 96)'
+      self.trigger = "((" + self.trigMMc + " && " + self.mm + ") || (" + self.trigEEc + " && " + self.ee + ") || (" + self.trigEMc + " && " + self.OF + "))"
+      self.Baseline = self.AddList([self.nj2,self.MET100,self.JetMETPhi04,self.goodLepton, self.trigger])
+      self.BaselineNoTrigger = self.AddList([self.nj2,self.MET100,self.JetMETPhi04,self.goodLepton])
+      self.EdgeBaseline = self.AddList( [self.MET150, self.mT2_80])
+      self.ewinoCharNeu = self.AddList( [self.MET150, self.bVeto,  self.mjj110, self.narrowZMass]); 
+      print 'has this a third lepton veto?'
+      self.ewinoNeuNeu  = self.AddList( [self.nbExact2, self.narrowZMass, self.mT2b200, self.mbb150])
+      self.strongOnZBVeto    = self.AddList( [ self.mT2_80  , self.bVeto ])
+      self.strongOnZWithB    = self.AddList( [ self.mT2_100 , self.nbj1   ])
+      self.strongOnZBase     = self.AddList( [self.narrowZMass, self.ThirdLeptonVeto, self.OR(strongOnZBase,strongOnZWithB)])
+
       self.lowmass = "lepsMll_Edge > 20 && lepsMll_Edge < 81"
       self.Zmass = "lepsMll_Edge > 81 && lepsMll_Edge < 101"
       self.loMass= "lepsMll_Edge <  81."
@@ -39,9 +63,11 @@ class CutManager:
       self.ZmassExtended = "lepsMll_Edge > 61 && lepsMll_Edge < 121"
       self.Zveto = "!(lepsMll_Edge > 81 && lepsMll_Edge < 101)"
       self.highmass = "lepsMll_Edge > 101"
-      self.trigger = "((" + self.trigMMc + " && " + self.mm + ") || (" + self.trigEEc + " && " + self.ee + ") || (" + self.trigEMc + " && " + self.OF + "))"
       self.SignalRegionBaseLine          = self.AddList([self.goodLepton, self.JetMETBaseline, self.trigger ]) 
       self.SignalRegionBaseLineNoTrigger = self.AddList([self.goodLepton, self.JetMETBaseline]) 
+#      self.SignalRegionBaseLine = self.AddList([self.goodLepton, self.trigger, self.JetMETBaseline]) 
+#      self.SignalRegionBaseLineNoTrigger = self.AddList([self.goodLepton, self.JetMETBaseline]) 
+
       self.region3l = '(nLepTight_Edge == 3 && met_Edge > 60 && nBJetMedium25_Edge == 0)'
       self.region4l = '(nLepTight_Edge == 4)'
 
@@ -63,8 +89,8 @@ class CutManager:
       ##### Needed by RT calculation################ 
       self.HT = "(htJet35j_Edge > 200)"
       self.triggerHT = "(HLT_htall_Edge > 0 || HLT_htmet_Edge > 0 || HLT_atall_Edge > 0)"
-      self.numerator = self.AddList([self.goodLepton, self.donot(self.JetMETBaseline), self.donot(self.RSFOFDirectControlRegion), self.HT, self.triggerHT, self.trigger])
-      self.denominator = self.AddList([self.goodLepton, self.donot(self.JetMETBaseline), self.donot(self.RSFOFDirectControlRegion), self.HT, self.triggerHT])
+      self.numerator = self.AddList([self.goodLepton, self.donot(self.Baseline), self.donot(self.RSFOFDirectControlRegion), self.HT, self.triggerHT, self.trigger])
+      self.denominator = self.AddList([self.goodLepton, self.donot(self.Baseline), self.donot(self.RSFOFDirectControlRegion), self.HT, self.triggerHT])
 
       ## for checks of the excess
       self.tightIso = 'max(Lep1_miniRelIso_Edge, Lep2_miniRelIso_Edge) < 0.05'

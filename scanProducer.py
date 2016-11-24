@@ -40,9 +40,9 @@ bin          {label}
 observation  {obs}   
 ----------------------------------------------------------------------------------------------------------------------------------
 bin          {label}      {label}        {label}
-process      XXXSIGNAL     FSbkg          otherbkg
+process      XXSIGNALXX     FSbkg          otherbkg
 process      0             1              2   
-rate         XXXSIGRATE    {fs}           {other}
+rate         XXSIGRATEXX    {fs}           {other}
 ----------------------------------------------------------------------------------------------------------------------------------
 fs_stat_{label} gmN  {fs_int}  -            1.0             - 
 fs_unc lnN             -            1.05            - 
@@ -177,8 +177,8 @@ def PutHistosIntoRootFiles():
             helper.ensureDirectory('datacards/datacards_{scan}/{scan}/{mass}/'.format(scan=scan.name,mass=massString))
             for SR, label in scan.shortLabels.items():
                 template = open('datacards/datacards_{scan}/{scan}/template_{sr}.txt'.format(scan=scan.name,sr=label),'r').read()
-                template = template.replace('XXXSIGNAL',massString)
-                template = template.replace('XXXSIGRATE', '%f'%sysHistos[''].GetBinContent(sysHistos[''].FindBin(SR)))
+                template = template.replace('XXSIGNALXX',massString)
+                template = template.replace('XXSIGRATEXX', '%f'%sysHistos[''].GetBinContent(sysHistos[''].FindBin(SR)))
                 for sys in scan.SysString.split():
                     up = sysHistos[sys+'Up']  .GetBinContent(sysHistos[sys+'Up']  .FindBin(SR))
                     dn = sysHistos[sys+'Down'].GetBinContent(sysHistos[sys+'Down'].FindBin(SR))

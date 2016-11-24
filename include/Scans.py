@@ -37,7 +37,7 @@ class Scan(object):
         self.__dict__.update(d)
 
     def loadData(self):
-        if self.name == 'Edge_ICHEP':
+        if self.name == 'Edge_ICHEP2016':
             self.makeMCDatacards = True
             self.paper = 'SUS15011'
             self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',
@@ -65,9 +65,9 @@ class Scan(object):
                               2 : 'Low  m_{ll} / Non t#bar{t}-like ',
                               3 : 'High m_{ll} / Non t#bar{t}-like '}
 
-        if self.name == 'Edge_MLLbins_MT2inc':
-            self.makeMCDatacards = True
-            self.paper = 'SUS15011'
+        if self.name == 'Edge_Moriond2017':
+            self.makeMCDatacards = False
+            self.paper = 'SUS16034'
             self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',
                              'SMS_T6bbllslepton_mSbottom600to775_mLSP150to725',
                              'SMS_T6bbllslepton_mSbottom800to950_mLSP150to900']
@@ -75,251 +75,156 @@ class Scan(object):
             self.ybins = binning(200,900,25)
             self.xvar = 'GenSusyMScan1_Edge'
             self.yvar = 'GenSusyMScan2_Edge'
-            self.cuts_norm = cuts.AddList([cuts.SignalRegionBaseLineNoTrigger, cuts.SF])
+            self.cuts_norm = cuts.AddList([cuts.BaselineNoTrigger, cuts.SF, cuts.EdgeBaseline])
             self.cuts_norm = self.cuts_norm.replace(cuts.twoLeptons, 'nPairLep_Edge > 0') ## remove the filters, ugly.
             self.zminUL = 1e-3; self.zmaxUL = 1e3
             self.zmaxEff = 0.30
             self.xsecFile = ('datacards/sbottomXsec.txt')
             self.regions = []
             self.xtitle = 'm_{sbottom}'; self.ytitle = 'm_{neu2}'
-            self.srID   = '0*(lepsMll_Edge < 81) + 1*(lepsMll_Edge > 81)*(lepsMll_Edge < 101) + 2*(lepsMll_Edge > 101)*(lepsMll_Edge < 200.) + 3*(lepsMll_Edge > 200)*(lepsMll_Edge < 300) + 4*(lepsMll_Edge > 300) + 0*(nll_Edge < 21.) + 5*(nll_Edge > 21.)'
-            self.srIDMax = 9 # its good to avoid empty bins to be in the safe side
-            self.shortLabels = { 0: 'belowZ_lownll',
-                                 1: 'onZ_lownll',
-                                 2: 'highmll1_lownll',
-                                 3: 'highmll2_lownll',
+            self.srID   = '0*(lepsMll_Edge < 60) + 1*(lepsMll_Edge > 60)*(lepsMll_Edge < 86) + 2*(lepsMll_Edge > 96)*(lepsMll_Edge < 150.) + 3*(lepsMll_Edge > 150)*(lepsMll_Edge < 200) + 4*(lepsMll_Edge > 200)*(lepsMll_Edge < 300) + 5*(lepsMll_Edge > 300)*(lepsMll_Edge < 400) + 6*(lepsMll_Edge > 400) + 0*(nll_Edge < 21.) + 7*(nll_Edge > 21.)'
+            self.srIDMax = 13 # its good to avoid empty bins to be in the safe side
+            self.shortLabels = { 0: 'lowmll_lownll',
+                                 1: 'belowZ_lownll',
+                                 2: 'aboveZ_lownll',
+                                 3: 'highmll1_lownll',
                                  4: 'highmll2_lownll',
-                                 5: 'belowZ_highnll',
-                                 6: 'onZ_highnll',
-                                 7: 'highmll1_highnll',
-                                 8: 'highmll2_highnll',
-                                 9: 'highmll2_highnll'  }
-            self.SRLabels = { 0: 'Below Z / t#bar{t}-like ',
-                              1: 'On Z / t#bar{t}-like',
+                                 5: 'highmll3_lownll',
+                                 6: 'highmll4_lownll',
+                                 7: 'lowmll_highnll',
+                                 8: 'belowZ_highnll',
+                                 9: 'aboveZ_highnll',
+                                10: 'highmll1_highnll',
+                                11: 'highmll2_highnll',
+                                12: 'highmll3_highnll',
+                                13: 'highmll4_highnll'}
+            self.SRLabels = { 0: 'Low Z / t#bar{t}-like ',
+                              1: 'Below Z / t#bar{t}-like',
                               2: 'Above Z / t#bar{t}-like',
                               3: 'High m_{ll} / t#bar{t}-like',
-                              4: 'Very High m_{ll} / t#bar{t}-like', 
-                              5: 'Below Z / Non t#bar{t}-like ',
-                              6: 'On Z / Non t#bar{t}-like',
-                              7: 'Above Z / Non t#bar{t}-like',
-                              8: 'High m_{ll} / Non t#bar{t}-like',
-                              9: 'Very High m_{ll} / Non t#bar{t}-like' }
+                              4: 'Very high m_{ll} / t#bar{t}-like',
+                              5: 'Even higher m_{ll} / t#bar{t}-like',
+                              6: 'Huge m_{ll} / t#bar{t}-like',
+                              7: 'Low Z / Non t#bar{t}-like ',
+                              8: 'Below Z / Non t#bar{t}-like',
+                              9: 'Above Z / Non t#bar{t}-like',
+                             10: 'High m_{ll} / Non t#bar{t}-like',
+                             11: 'Very high m_{ll} / Non t#bar{t}-like',
+                             12: 'Even higher m_{ll} / Non t#bar{t}-like',
+                             13: 'Huge m_{ll} / Non t#bar{t}-like'}
 
-
-# if self.name == 'Edge_ICHEP':
-
-        #     self.makeMCDatacards = True
-        #     self.paper = 'SUS15011'
-        #     self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',
-        #                      'SMS_T6bbllslepton_mSbottom600to775_mLSP150to725',
-        #                      'SMS_T6bbllslepton_mSbottom800to950_mLSP150to900']
-        #     self.xbins = binning(400,950,25)
-        #     self.ybins = binning(200,900,25)
-        #     self.xvar = 'GenSusyMScan1_Edge'
-        #     self.yvar = 'GenSusyMScan2_Edge'
-        #     self.cuts_norm = cuts.AddList([cuts.SignalRegionBaseLineNoTrigger, cuts.SF])
-        #     self.cuts_norm = self.cuts_norm.replace(cuts.twoLeptons, 'nPairLep_Edge > 0') ## remove the filters, ugly.
-        #     self.zminUL = 1e-3; self.zmaxUL = 1e3
-        #     self.zmaxEff = 0.30
-        #     self.xsecFile = ('datacards/sbottomXsec.txt')
-        #     self.regions = []
-        #     # 4 signal regions
-        #     for mll in ['belowZ','highinc']:
-        #         for nll in ['lowNll', 'highNll']:
-        #             for mt2 in ['incMT2']:
-        #                 self.regions.append([mll,nll,mt2])
-        #     self.xtitle = 'm_{sbottom}'; self.ytitle = 'm_{neu2}'
-        #     self.srID   = '1*(lepsMll_Edge < 81) + 2*(lepsMll_Edge > 81)*(lepsMll_Edge < 101) + 3*(lepsMll_Edge > 101)*(lepsMll_Edge < 200.) + 4*(lepsMll_Edge > 200)*(lepsMll_Edge < 300) + 5*(lepsMll_Edge > 300) + 0*(nll_Edge < 21.) + 10*(nll_Edge > 21.) + 0*(mt2_Edge < 80.) + 100*(mt2_Edge > 80.)'
-
-        # if self.name == 'Edge_MLLbins_MT2inc':
-        #     self.makeMCDatacards = True
-        #     self.paper = 'SUS15011'
-        #     self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',
-        #                      'SMS_T6bbllslepton_mSbottom600to775_mLSP150to725',
-        #                      'SMS_T6bbllslepton_mSbottom800to950_mLSP150to900']
-        #     self.xbins = binning(400,950,25)
-        #     self.ybins = binning(200,900,25)
-        #     self.xvar = 'GenSusyMScan1_Edge'
-        #     self.yvar = 'GenSusyMScan2_Edge'
-        #     self.cuts_norm = cuts.AddList([cuts.SignalRegionBaseLineNoTrigger, cuts.SF])
-        #     self.cuts_norm = self.cuts_norm.replace(cuts.twoLeptons, 'nPairLep_Edge > 0') ## remove the filters, ugly.
-        #     self.zminUL = 1e-3; self.zmaxUL = 1e3
-        #     self.zmaxEff = 0.30
-        #     self.xsecFile = ('datacards/sbottomXsec.txt')
-        #     self.regions = []
-        #     # 10 signal regions
-        #     for mll in ['belowZ','onZ','aboveZ','highMass', 'vHighMass' ]:
-        #         for nll in ['lowNll', 'highNll']:
-        #             for mt2 in ['incMT2']:
-        #                 self.regions.append([mll,nll,mt2])
-        #     self.xtitle = 'm_{sbottom}'; self.ytitle = 'm_{neu2}'
-        #     self.srID   = '1*(lepsMll_Edge < 81) + 2*(lepsMll_Edge > 81)*(lepsMll_Edge < 101) + 3*(lepsMll_Edge > 101)*(lepsMll_Edge < 200.) + 4*(lepsMll_Edge > 200)*(lepsMll_Edge < 300) + 5*(lepsMll_Edge > 300) + 0*(nll_Edge < 21.) + 10*(nll_Edge > 21.) + 0*(mt2_Edge < 80.) + 100*(mt2_Edge > 80.)'
-
-        # if self.name == 'Edge_MLLbins_MT2bins':
-        #     self.paper = 'SUS15011'
-        #     self.makeMCDatacards = True
-        #     self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',
-        #                      'SMS_T6bbllslepton_mSbottom600to775_mLSP150to725',
-        #                      'SMS_T6bbllslepton_mSbottom800to950_mLSP150to900']
-        #     self.xbins = binning(400,950,25)
-        #     self.ybins = binning(200,900,25)
-        #     self.xvar = 'GenSusyMScan1_Edge'
-        #     self.yvar = 'GenSusyMScan2_Edge'
-        #     self.cuts_norm = cuts.AddList([cuts.SignalRegionBaseLineNoTrigger, cuts.SF])
-        #     self.cuts_norm = self.cuts_norm.replace(cuts.twoLeptons, 'nPairLep_Edge > 0') ## remove the filters, ugly.
-        #     self.zminUL = 1e-3; self.zmaxUL = 1e3
-        #     self.zmaxEff = 0.30
-        #     self.xsecFile = ('datacards/sbottomXsec.txt')
-        #     self.regions = []
-        #     # 20 signal regions
-        #     for mll in ['belowZ','onZ','aboveZ','highMass', 'vHighMass' ]:
-        #         for nll in ['lowNll', 'highNll']:
-        #             for mt2 in ['lowMT2','highMT2']:
-        #                 self.regions.append([mll,nll,mt2])
-        #     self.xtitle = 'm_{sbottom}'; self.ytitle = 'm_{neu2}'
-        #     self.srID   = '1*(lepsMll_Edge < 81) + 2*(lepsMll_Edge > 81)*(lepsMll_Edge < 101) + 3*(lepsMll_Edge > 101)*(lepsMll_Edge < 200.) + 4*(lepsMll_Edge > 200)*(lepsMll_Edge < 300) + 5*(lepsMll_Edge > 300) + 0*(nll_Edge < 21.) + 10*(nll_Edge > 21.) + 0*(mt2_Edge < 80.) + 100*(mt2_Edge > 80.)'
-
-        # if self.name == 'Edge_MLLbins_MT2cut':
-        #     self.paper = 'SUS15011'
-        #     self.makeMCDatacards = True
-        #     self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',
-        #                      'SMS_T6bbllslepton_mSbottom600to775_mLSP150to725',
-        #                      'SMS_T6bbllslepton_mSbottom800to950_mLSP150to900']
-        #     self.xbins = binning(400,950,25)
-        #     self.ybins = binning(200,900,25)
-        #     self.xvar = 'GenSusyMScan1_Edge'
-        #     self.yvar = 'GenSusyMScan2_Edge'
-        #     self.cuts_norm = cuts.AddList([cuts.SignalRegionBaseLineNoTrigger, cuts.SF])
-        #     self.cuts_norm = self.cuts_norm.replace(cuts.twoLeptons, 'nPairLep_Edge > 0') ## remove the filters, ugly.
-        #     self.zminUL = 1e-3; self.zmaxUL = 1e3
-        #     self.zmaxEff = 0.30
-        #     self.xsecFile = ('datacards/sbottomXsec.txt')
-        #     self.regions = []
-        #     # 20 signal regions
-        #     for mll in ['belowZ','onZ','aboveZ','highMass', 'vHighMass' ]:
-        #         for nll in ['lowNll', 'highNll']:
-        #             for mt2 in ['highMT2']:
-        #                 self.regions.append([mll,nll,mt2])
-        #     self.xtitle = 'm_{sbottom}'; self.ytitle = 'm_{neu2}'
-        #     self.srID   = '1*(lepsMll_Edge < 81) + 2*(lepsMll_Edge > 81)*(lepsMll_Edge < 101) + 3*(lepsMll_Edge > 101)*(lepsMll_Edge < 200.) + 4*(lepsMll_Edge > 200)*(lepsMll_Edge < 300) + 5*(lepsMll_Edge > 300) + 0*(nll_Edge < 21.) + 10*(nll_Edge > 21.) + 0*(mt2_Edge < 80.) + 100*(mt2_Edge > 80.)'
-
-        if self.name == 'Edge_MLLbins_HTbins':
-            self.paper = 'SUS15011'
-            self.makeMCDatacards = True
-            self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',
-                             'SMS_T6bbllslepton_mSbottom600to775_mLSP150to725',
-                             'SMS_T6bbllslepton_mSbottom800to950_mLSP150to900']
+        if self.name == 'CharNeu_Moriond2017':
+            self.makeMCDatacards = False
+            self.paper = 'SUS16034'
+            self.datasets = ['work in progress :) ']
             self.xbins = binning(400,950,25)
             self.ybins = binning(200,900,25)
             self.xvar = 'GenSusyMScan1_Edge'
             self.yvar = 'GenSusyMScan2_Edge'
-            self.cuts_norm = cuts.AddList([cuts.SignalRegionBaseLineNoTrigger, cuts.SF])
-            self.cuts_norm = self.cuts_norm.replace(cuts.twoLeptons, 'nPairLep_Edge > 0') ## remove the filters, ugly.
+            self.cuts_norm = cuts.AddList([cuts.BaselineNoTrigger, cuts.SF, cuts.ewinoCharNeu])
+            self.cuts_norm = self.cuts_norm.replace(cuts.twoLeptons, 'nPairLep_Edge > 0')
             self.zminUL = 1e-3; self.zmaxUL = 1e3
             self.zmaxEff = 0.30
-            self.xsecFile = ('datacards/sbottomXsec.txt')
+            self.xsecFile = ('datacards/charneuXsec.txt')
             self.regions = []
-            # 20 signal regions
-            for mll in ['belowZ','onZ','aboveZ','highMass', 'vHighMass' ]:
-                for nll in ['lowNll', 'highNll']:
-                    for ht in ['lowHT','medHT','highHT']:
-                        self.regions.append([mll,nll,ht])
-            self.xtitle = 'm_{sbottom}'; self.ytitle = 'm_{neu2}'
-            self.srID   = '1*(lepsMll_Edge < 81) + 2*(lepsMll_Edge > 81)*(lepsMll_Edge < 101) + 3*(lepsMll_Edge > 101)*(lepsMll_Edge < 200.) + 4*(lepsMll_Edge > 200)*(lepsMll_Edge < 300) + 5*(lepsMll_Edge > 300) + 0*(nll_Edge < 21.) + 10*(nll_Edge > 21.) + 0*(htJet35j_Edge < 400.) + 100*(htJet35j_Edge > 400.)*(htJet35j_Edge < 800.) + 200*(htJet35j_Edge > 800.)'
+            self.xtitle = 'm_{chi^{0}_{2}} = m_{chi^{+}_{1}}'; self.ytitle = 'm_{chi^{0}_{1}}'
+            self.srID   = '0'
+            self.srIDMax = 0 
+            self.shortLabels = {0: 'only SR' }
+            self.SRLabels    = {0: 'only SR' }
 
-
-        if self.name == 'T6bbslepton':
-            self.paper = 'SUS15011'
-            self.datasets = ['SMS_T6bbllslepton_mSbottom400To575_mLSP150To550',
-                             'SMS_T6bbllslepton_mSbottom600To775_mLSP150To725',
-                             'SMS_T6bbllslepton_mSbottom800To950_mLSP150To900']
-            self.xbins = binning(400,900,25)
-            self.ybins = binning(200,900,25)
+        if self.name == 'NeuNeu_Moriond2017':
+            self.makeMCDatacards = False
+            self.paper = 'SUS16034'
+            self.datasets = ['work in progress :) ']
+            self.xbins =  binning(400,950,25) # ### to do the proper binning
+            self.ybins =  binning(200,900,25) # ### to do the proper binning
             self.xvar = 'GenSusyMScan1_Edge'
             self.yvar = 'GenSusyMScan2_Edge'
-            self.cuts_norm = cuts.AddList([cuts.METJetsSignalRegion, cuts.GoodLeptonSFNoTrigger()]) ## trigger not available in fastsim
-            self.cuts_norm = self.cuts_norm.replace(cuts.twoLeptons, 'nPairLep_Edge > 0') ## remove the filters, ugly.
+            self.cuts_norm = cuts.AddList([cuts.BaselineNoTrigger, cuts.SF, cuts.ewinoNeuNeu])
+            self.cuts_norm = self.cuts_norm.replace(cuts.twoLeptons, 'nPairLep_Edge > 0')
             self.zminUL = 1e-3; self.zmaxUL = 1e3
             self.zmaxEff = 0.30
-            self.xsecFile = ('/afs/cern.ch/user/m/mdunser/edgeSW/Framework/datacards/sbottomXsec.txt')
+            self.xsecFile = ('datacards/neuneuXsec.txt')
             self.regions = []
-            for eta in ['central','forward']:#,'inclusive']:
-                for mass in ['lowMass', 'belowZ', 'onZ', 'aboveZ', 'highMass']:#,'allMass']:
-                    for nb in ['incb', '0b', '1b', '2b']:
-                        self.regions.append([eta,mass,nb])
-            #self.regions.append([eta,mass,nb] for eta in ['central','forward'] for mass in ['allMass', 'lowMass', 'belowZ', 'onZ', 'aboveZ', 'highMass'] for nb in ['incb', '0b', '1b', '2b'] )
-            self.xtitle = 'm_{sbottom}'; self.ytitle = 'm_{neu2}'
+            self.xtitle = 'm_{chi^{0}_{1}} = m_{chi^{0}_{1}}'; self.ytitle = 'm_{chi^{0}_{1}}'
+            self.srID   = '0*(met_Edge > 100)*(met_Edge < 150) + 1*(met_Edge > 150)*(met_Edge < 250) + 2*(met_Edge > 250)'
+            self.srIDMax = 2
+            self.shortLabels = {0: 'lowmet',
+                                1: 'medmet',
+                                2: 'highmet'}
+            self.SRLabels    = {0: '100 GeV < ME_{T} < 150 GeV',
+                                1: '150 GeV < ME_{T} < 250 GeV',
+                                2: '250 GeV > ME_{T}'}
 
-        if self.name == 'T6bbsleptonMET150':
-            self.paper = 'SUS15011MET150'
-            self.datasets = ['SMS_T6bbllslepton_mSbottom400To575_mLSP150To550',
-                             'SMS_T6bbllslepton_mSbottom600To775_mLSP150To725',
-                             'SMS_T6bbllslepton_mSbottom800To950_mLSP150To900']
-            self.xbins = binning(400,900,25)
-            self.ybins = binning(200,900,25)
+        if self.name == 'StrongOnZ_Moriond2017':
+            self.makeMCDatacards = False
+            self.paper = 'SUS16034'
+            self.datasets = ['T5ZZ work in progress :) ']
+            self.xbins = binning(400,950,25) # ### to do the proper binning 
+            self.ybins = binning(200,900,25) # ### to do the proper binning 
             self.xvar = 'GenSusyMScan1_Edge'
             self.yvar = 'GenSusyMScan2_Edge'
-            self.cuts_norm = cuts.AddList([cuts.METJetsSignalRegion, cuts.GoodLeptonSFNoTrigger(), 'met_Edge > 150']) ## trigger not available in fastsim
-            self.cuts_norm = self.cuts_norm.replace(cuts.twoLeptons, 'nPairLep_Edge > 0') ## remove the filters, ugly.
+            self.cuts_norm = cuts.AddList([cuts.BaselineNoTrigger, cuts.SF,cuts.strongOnZBase])
+            self.cuts_norm = self.cuts_norm.replace(cuts.twoLeptons, 'nPairLep_Edge > 0')
             self.zminUL = 1e-3; self.zmaxUL = 1e3
             self.zmaxEff = 0.30
-            self.xsecFile = ('/afs/cern.ch/user/m/mdunser/edgeSW/Framework/datacards/sbottomXsec.txt')
+            self.xsecFile = ('datacards/gluinoXsec.txt')
             self.regions = []
-            for eta in ['central','forward']:#,'inclusive']:
-                for mass in ['lowMass', 'belowZ', 'onZ', 'aboveZ', 'highMass']:#,'allMass']:
-                    for nb in ['incb', '0b', '1b', '2b']:
-                        self.regions.append([eta,mass,nb])
-            #self.regions.append([eta,mass,nb] for eta in ['central','forward'] for mass in ['allMass', 'lowMass', 'belowZ', 'onZ', 'aboveZ', 'highMass'] for nb in ['incb', '0b', '1b', '2b'] )
-            self.xtitle = 'm_{sbottom}'; self.ytitle = 'm_{neu2}'
-
-        if self.name == 'TChiChiSleps':
-            self.paper = 'SUS16777'
-            self.datasets = ['TChiChi_slep_mCha600_mLSP50',
-                             'TChiChi_slep_mCha350_mLSP200']
-            self.xbins = binning(350,650,50)
-            self.ybins = binning(  0,250,50)
-            self.xvar = 'GenSusyMChargino1_Edge'
-            self.yvar = 'GenSusyMNeutralino_Edge'
-            self.cuts_norm = cuts.AddList(['met_Edge > 150', 'nJetSel_Edge < 2', cuts.GoodLeptonAFNoTrigger()]) ## trigger not available in fastsim
-            self.cuts_norm = self.cuts_norm.replace(cuts.twoLeptons, 'nPairLep_Edge > 0') ## remove the filters, ugly.
-            self.zminUL = 1e-3; self.zmaxUL = 1e3
-            self.zmaxEff = 0.30
-            self.xsecFile = ('/afs/cern.ch/user/m/mdunser/edgeSW/Framework/datacards/chaChaXsec_wino.txt')
-            self.regions = []
-            for eta in ['central','forward']:#,'inclusive']:
-                for mass in ['lowMass', 'belowZ', 'onZ', 'aboveZ', 'highMass']:#,'allMass']:
-                    for nb in ['0b']:
-                        self.regions.append([eta,mass,nb])
-            #self.regions.append([eta,mass,nb] for eta in ['central','forward'] for mass in ['allMass', 'lowMass', 'belowZ', 'onZ', 'aboveZ', 'highMass'] for nb in ['incb', '0b', '1b', '2b'] )
-            self.xtitle = 'm_{sbottom}'; self.ytitle = 'm_{neu2}'
-            self.has3DGen = False
-
-        if self.name == 'TChiNeuWZ':
-            self.makeMCDatacards = True
-            self.paper = 'SUS16888'
-            self.datasets = ['TChiNeu_WZ_mCha350_mLSP100',
-                             'TChiNeu_WZ_mCha200_mLSP100',
-                             'TChiNeu_WZ_mCha350_mLSP20' ]
-            self.xbins = binning(150,400,50)
-            self.ybins = binning(  0,140,20)
-            self.xvar = 'GenSusyMNeutralino2_Edge'
-            self.yvar = 'GenSusyMNeutralino_Edge'
-            self.cuts_norm = cuts.AddList([cuts.METJetsSignalRegion, cuts.GoodLeptonSFNoTrigger()])#, 'met_Edge > 200 && maxMjj_Edge > 50 && maxMjj_Edge < 150 && -1.*TMath::Log(lh_ana_met_data_Edge*lh_ana_mlb_data_Edge*lh_ana_a3d_data_Edge*lh_ana_zpt_data_Edge) > 19.0']) ## trigger not available in fastsim
-            self.cuts_norm = self.cuts_norm.replace(cuts.twoLeptons, 'nPairLep_Edge > 0') ## remove the filters, ugly.
-            self.zminUL = 1e-3; self.zmaxUL = 1e3
-            self.zmaxEff = 0.30
-            self.xsecFile = ('/afs/cern.ch/user/m/mdunser/edgeSW/Framework/datacards/chaNeuXsec_wino.txt')
-            self.regions = []
-            #for eta in ['central','forward']:#,'inclusive']:
-            for eta in ['inclusive']:
-                for mass in ['onZ']:#,'allMass']:
-                    for nb in ['0b']:
-                        self.regions.append([eta,mass,nb])
-            #self.regions.append([eta,mass,nb] for eta in ['central','forward'] for mass in ['allMass', 'lowMass', 'belowZ', 'onZ', 'aboveZ', 'highMass'] for nb in ['incb', '0b', '1b', '2b'] )
-            self.xtitle = 'm_{Chargino=Neutralino2}'; self.ytitle = 'm_{LSP}'
-            self.has3DGen = False
-            self.br = 0.1 ## Z goes only to leptons
-
+            self.xtitle = 'm_{#tilde{g}}'; self.ytitle = 'm_{chi^{0}_{1}}'
+            self.srID   = '{bveto} * ( {j23} *( {ht500}*0 -10000*(1-{ht500}))  + {j45}*( {ht500}*1 -10000*(1-{ht500})) + {j6}*2) + {withb} * ({j23}*({ht200}*3 + -100000*(1-{ht200})) + {j45}*({ht200}*4 -10000*(1-{ht200})) + {j6}*5) -100000*(!{bveto} && !{withb}) + 0*(met_Edge > 100)*(met_Edge < 150) + 6*(met_Edge > 150)*(met_Edge < 225) + 12*(met_Edge > 225)*(met_Edge < 300) + 18*(met_Edge > 300)'.format(bveto = cuts.strongOnZBVeto, withb= cuts.strongOnZWithB, j23 = '(nJetSel_Edge == 2 || nJetSel_Edge == 3)', j45 = '(nJetSel_Edge == 4 || nJetSel_Edge ==5 )', j6 = '(nJetSel_Edge > 5)', ht200 = '(htJet35j_Edge > 200)', ht500 = '(htJet35j_Edge > 500)')
+            # negative values are not inside the selection. they should fall on the underflow of the histogram
+            self.srIDMax = 23
+            self.shortLabels = { 0: 'bveto_23jets_lowmet',
+                                 1: 'bveto_45jets_lowmet',
+                                 2: 'bveto_6jets_lowmet',
+                                 3: 'withb_23jets_lowmet',
+                                 4: 'withb_45jets_lowmet',
+                                 5: 'withb_6jets_lowmet',
+                                 6: 'bveto_23jets_medmet',
+                                 7: 'bveto_45jets_medmet',
+                                 8: 'bveto_6jets_medmet',
+                                 9: 'withb_23jets_medmet',
+                                10: 'withb_45jets_medmet',
+                                11: 'withb_6jets_medmet',
+                                12: 'bveto_23jets_highmet',
+                                13: 'bveto_45jets_highmet',
+                                14: 'bveto_6jets_highmet',
+                                15: 'withb_23jets_highmet',
+                                16: 'withb_45jets_highmet',
+                                17: 'withb_6jets_highmet',
+                                18: 'bveto_23jets_vhighmet',
+                                19: 'bveto_45jets_vhighmet',
+                                20: 'bveto_6jets_vhighmet',
+                                21: 'withb_23jets_vhighmet',
+                                22: 'withb_45jets_vhighmet',
+                                23: 'withb_6jets_vhighmet'
+                                 }
+            self.SRLabels    = { 0: 'bveto_23jets_lowmet',
+                                 1: 'bveto_45jets_lowmet',
+                                 2: 'bveto_6jets_lowmet',
+                                 3: 'withb_23jets_lowmet',
+                                 4: 'withb_45jets_lowmet',
+                                 5: 'withb_6jets_lowmet',
+                                 6: 'bveto_23jets_medmet',
+                                 7: 'bveto_45jets_medmet',
+                                 8: 'bveto_6jets_medmet',
+                                 9: 'withb_23jets_medmet',
+                                10: 'withb_45jets_medmet',
+                                11: 'withb_6jets_medmet',
+                                12: 'bveto_23jets_highmet',
+                                13: 'bveto_45jets_highmet',
+                                14: 'bveto_6jets_highmet',
+                                15: 'withb_23jets_highmet',
+                                16: 'withb_45jets_highmet',
+                                17: 'withb_6jets_highmet',
+                                18: 'bveto_23jets_vhighmet',
+                                19: 'bveto_45jets_vhighmet',
+                                20: 'bveto_6jets_vhighmet',
+                                21: 'withb_23jets_vhighmet',
+                                22: 'withb_45jets_vhighmet',
+                                23: 'withb_6jets_vhighmet'
+                                 }
     def loadXsecs(self):
         if not self.xsecFile:
             estring = 'ERROR: no xsec file specified for scan {name}!!!\nExiting...'.format(name=self.name)
