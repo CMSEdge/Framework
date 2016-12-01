@@ -39,10 +39,9 @@ class CutManager:
       self.JetMETPhi04 = "abs(j1MetDPhi_Edge) >  0.4 && abs(j2MetDPhi_Edge) > 0.4"
       # to do cuts #####################################
       print 'still to do this'
-      self.mjj110  = '1'
-      self.mbb150  = '1'
-      self.mT2b200 = '1'
-      self.mbb150  = '1'
+      self.mjj110  = 'dphiMjj_Edge < 110.'
+      self.mbb150  = 'mbb_Edge < 150.'
+      self.mT2b200 = 'mt2bb_Edge > 200.'
 ######################
       self.narrowZMass = '(lepsMll_Edge > 86 && lepsMll_Edge < 96)'
       self.trigger = "((" + self.trigMMc + " && " + self.mm + ") || (" + self.trigEEc + " && " + self.ee + ") || (" + self.trigEMc + " && " + self.OF + "))"

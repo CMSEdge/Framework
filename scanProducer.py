@@ -120,10 +120,11 @@ def adaptBinning(target, current):
 def getEffMapsSys(sys):
     print ('getting scan for sys', sys) if len(sys) > 0 else 'getting nominal scan'
     theCuts = scan.cuts_norm
+    srId = scan.srID
     for rpl in replaceCutsForSys[sys]:
         theCuts = theCuts.replace(rpl[0],rpl[1])
-                
-    effMap = scan.tree.getTH3F(1., 'nPass_norm'+sys, scan.srID+':'+scan.yvar+':'+scan.xvar,
+        srId    = srId.replace(rpl[0],rpl[1])
+    effMap = scan.tree.getTH3F(1., 'nPass_norm'+sys, srID+':'+scan.yvar+':'+scan.xvar,
                                scan.xbins.n+1, scan.xbins._min-scan.xbins.w/2.,
                                scan.xbins._max+scan.xbins.w/2., scan.ybins.n+1,
                                scan.ybins._min-scan.ybins.w/2., 
@@ -223,14 +224,26 @@ if __name__ == "__main__":
     global replaceCutsForSys, extraWeightsForSys
     replaceCutsForSys = {'':      [],
                          'jecUp'  : [['nBJetMedium35_Edge','nBJetMedium35_jecUp_Edge'],
+                                     ['nBJetMedium25_Edge','nBJetMedium25_jecUp_Edge'],
                                      ['mt2_Edge','mt2_jecUp_Edge'],
+                                     ['mbb_Edge','mbb_jecUp_Edge'],
                                      ['nll_Edge', 'nll_jecUp_Edge'],
                                      ['met_Edge', 'met_jecUp_Edge'],
+                                     ['dphiMjj_Edge', 'dphiMjj_jecUp_Edge'],
+                                     ['mt2bb_Edge', 'mt2bb_jecUp_Edge'],
+                                     ['mbb_Edge', 'mbb_jecUp_Edge'],
+                                     ['htJet35j_Edge', 'htJet35j_jecUp_Edge'],
                                      ['nJetSel_Edge','nJetSel_jecUp_Edge']],
                          'jecDown': [['nBJetMedium35_Edge','nBJetMedium35_jecDn_Edge'],
+                                     ['nBJetMedium25_Edge','nBJetMedium25_jecDn_Edge'],
                                      ['mt2_Edge','mt2_jecDn_Edge'],
+                                     ['mbb_Edge','mbb_jecDn_Edge'],
                                      ['nll_Edge', 'nll_jecDn_Edge'],
                                      ['met_Edge', 'met_jecDn_Edge'],
+                                     ['dphiMjj_Edge', 'dphiMjj_jecDn_Edge'],
+                                     ['mt2bb_Edge', 'mt2bb_jecDn_Edge'],
+                                     ['mbb_Edge', 'mbb_jecDn_Edge'],
+                                     ['htJet35j_Edge', 'htJet35j_jecDn_Edge'],
                                      ['nJetSel_Edge','nJetSel_jecDn_Edge']],
                          'bHeUp'  : [],
                          'bHeDown': [],
@@ -244,10 +257,10 @@ if __name__ == "__main__":
     extraWeightsForSys = {''       : '1',
                           'jecUp'  : '1',
                           'jecDown': '1',
-                          'bHeUp'  : 'weight_btagsf_heavy_UP_Edge/weight_btagsf_Edge',
-                          'bHeDown': 'weight_btagsf_heavy_DN_Edge/weight_btagsf_Edge',
-                          'bLiUp'  : 'weight_btagsf_light_UP_Edge/weight_btagsf_Edge',
-                          'bLiDown': 'weight_btagsf_light_DN_Edge/weight_btagsf_Edge',
+                          'bHeUp'  : 'weight_btagsf_heavy_UP_Edge / weight_btagsf_Edge',
+                          'bHeDown': 'weight_btagsf_heavy_DN_Edge / weight_btagsf_Edge',
+                          'bLiUp'  : 'weight_btagsf_light_UP_Edge / weight_btagsf_Edge',
+                          'bLiDown': 'weight_btagsf_light_DN_Edge / weight_btagsf_Edge',
                           'ElUp'   : 'weight_LepSF_ElUp_Edge / weight_LepSF_Edge',
                           'ElDown' : 'weight_LepSF_ElDn_Edge / weight_LepSF_Edge',
                           'MuUp'   : 'weight_LepSF_MuUp_Edge / weight_LepSF_Edge',
