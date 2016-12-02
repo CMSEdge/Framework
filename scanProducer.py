@@ -214,6 +214,7 @@ def PutHistosIntoRootFiles():
                         var = (nom+var) / 2 
                     template = template.replace('XX'+sys+'XX', '%4.4f'%(var/nom))
                 mcStat = sysHistos[''].GetBinError(sysHistos[''].FindBin(SR)) / sysHistos[''].GetBinContent(sysHistos[''].FindBin(SR))
+                print mcStat
                 template = template.replace('XXmcStatXX', '%f'%(1 + mcStat))
                 card = open('datacards/datacards_{scan}/{scan}/{mass}/datacard_{mass}_{label}.txt'.format(scan=scan.name,
                                                                                                           mass=massString,
@@ -244,7 +245,7 @@ if __name__ == "__main__":
     ##ttDatasets = ['TTLep_pow']
     ##treeTT = Sample.Tree(helper.selectSamples(opts.sampleFile, ttDatasets, 'TT'), 'TT'  , 0, isScan = False)
     cuts = CutManager.CutManager()
-    lumi = 10.0
+    lumi = 36.2
 
     ## have to think a way of reweighting the events with trigger and lepton SFs.
     ## weighting now done with isScan=True flag in samples.py
@@ -281,7 +282,8 @@ if __name__ == "__main__":
                          'ElDown' : [],
                          'MuUp'   : [],
                          'MuDown' : [],
-                         'genMet' : [['met_Edge','genMet_Edge']]}
+                         'genMet' : [['met_Edge','genMet_Edge'],
+                                     ['nll_Edge','nll_genMet_Edge']]}
     
     extraWeightsForSys = {''       : '1',
                           'jecUp'  : '1',
@@ -368,7 +370,7 @@ if __name__ == "__main__":
     if opts.reloadLimits:
         print 'reloading limits and datacards'
  #        fillAndSaveDatacards(dobs)
-        produceLimits(6)
+        produceLimits(1)
 
     os.system('mkdir -p mkdir -p makeExclusionPlot/config/%s/'%scan.paper)
     scan.makeExclusion()
