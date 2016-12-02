@@ -48,12 +48,12 @@ class CutManager:
       self.Baseline = self.AddList([self.nj2,self.MET100,self.JetMETPhi04,self.goodLepton, self.trigger])
       self.BaselineNoTrigger = self.AddList([self.nj2,self.MET100,self.JetMETPhi04,self.goodLepton])
       self.EdgeBaseline = self.AddList( [self.MET150, self.mT2_80])
-      self.ewinoCharNeu = self.AddList( [self.MET150, self.bVeto,  self.mjj110, self.narrowZMass]); 
+      self.ewinoCharNeu = self.AddList( [self.MET150, self.bVeto,  self.mjj110, self.narrowZMass, self.ThirdLeptonVeto]); 
       print 'has this a third lepton veto?'
-      self.ewinoNeuNeu  = self.AddList( [self.nbExact2, self.narrowZMass, self.mT2b200, self.mbb150])
+      self.ewinoNeuNeu  = self.AddList( [self.nbExact2, self.narrowZMass, self.mT2b200, self.mbb150, self.ThirdLeptonVeto])
       self.strongOnZBVeto    = self.AddList( [ self.mT2_80  , self.bVeto ])
       self.strongOnZWithB    = self.AddList( [ self.mT2_100 , self.nbj1   ])
-      self.strongOnZBase     = self.AddList( [self.narrowZMass, self.ThirdLeptonVeto, self.OR(strongOnZBase,strongOnZWithB)])
+      self.strongOnZBase     = self.AddList( [self.narrowZMass, self.ThirdLeptonVeto, self.OR(self.strongOnZBVeto,self.strongOnZWithB)])
 
       self.lowmass = "lepsMll_Edge > 20 && lepsMll_Edge < 81"
       self.Zmass = "lepsMll_Edge > 81 && lepsMll_Edge < 101"

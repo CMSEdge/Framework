@@ -40,9 +40,9 @@ bin          {label}
 observation  {obs}   
 ----------------------------------------------------------------------------------------------------------------------------------
 bin          {label}      {label}        {label}
-process      XXSIGNALXX     FSbkg          otherbkg
+process      XXSIGNALXX     FSbkg          DY
 process      0             1              2   
-rate         XXSIGRATEXX    {fs}           {other}
+rate         XXSIGRATEXX    {fs}           {DY}
 ----------------------------------------------------------------------------------------------------------------------------------
 fs_stat_{label} gmN  {fs_int}  -            1.0             - 
 fs_unc lnN             -            1.05            - 
@@ -51,10 +51,12 @@ El    lnN           XXElXX            -               -
 Mu    lnN           XXMuXX            -               -
 bHe   lnN           XXbHeXX            -               -
 bLi   lnN           XXbLiXX            -               -
+genMet lnU              XXgenMetXX         -               - 
 signalMCstats_{label} lnN    XXmcStatXX       -                -
+dySys  lnN           -                  -            1.4
 lumi   lnN             1.2            -               -
 '''.format(obs = tt.GetBinContent(tt.FindBin(SR)) + dy.GetBinContent(dy.FindBin(SR)), 
-           fs  = tt.GetBinContent(tt.FindBin(SR)), other = dy.GetBinContent(dy.FindBin(SR)), 
+           fs  = tt.GetBinContent(tt.FindBin(SR)), DY = dy.GetBinContent(dy.FindBin(SR)), 
            label = label, fs_int = int(tt.GetBinContent(tt.FindBin(SR))))
         outputFile = open('datacards/datacards_{scan}/{scan}/template_{sr}.txt'.format(scan=scan.name,sr=label),'w')
         outputFile.write(datacard)
@@ -68,8 +70,11 @@ lumi   lnN             1.2            -               -
     
 
 def runCmd(cmd):
+    print cmd[2]
     os.chdir (cmd[2])
+    print cmd[0]
     os.system(cmd[0])
+    print cmd[1]
     os.system(cmd[1])
     return True
 
@@ -82,9 +87,12 @@ def produceLimits( njobs ):
     for ind,d in enumerate(subdirs):
         mass = ''.join(i for i in d.split('_') if i.isdigit() )
         fd = basedir+d
-        srCards = ''
-        for SR, label in scan.shortLabels.items():
-            srCards += ' {fd}/datacard_{mass}_{label}.txt'.format(fd=fd,mass=d,label=label)
+        # srCards = ''
+        # for SR, label in scan.shortLabels.items():
+        #     srCards += ' {fd}/datacard_{mass}_{label}.txt'.format(fd=fd,mass=d,label=label)
+
+        # some SRs are empty so, better this way
+        srCards = ' {fd}/datacard_{mass}_*.txt'.format(fd=fd,mass=d)
         dc_name    = '{fd}/datacard_{suffix}.txt'.format(fd=fd,suffix=d)
         runcmd = 'combineCards.py -S {bstr} > {final_dc}'.format(bstr=srCards,final_dc=dc_name)
         combinecmd = 'combine -m {mass} -M Asymptotic {dc_name}'.format(mass=mass,dc_name=dc_name)
@@ -122,9 +130,11 @@ def getEffMapsSys(sys):
     theCuts = scan.cuts_norm
     srId = scan.srID
     for rpl in replaceCutsForSys[sys]:
+        print 'replacing',rpl[0],rpl[1]
         theCuts = theCuts.replace(rpl[0],rpl[1])
         srId    = srId.replace(rpl[0],rpl[1])
-    effMap = scan.tree.getTH3F(1., 'nPass_norm'+sys, srID+':'+scan.yvar+':'+scan.xvar,
+    print sys, theCuts, srId
+    effMap = scan.tree.getTH3F(1., 'nPass_norm'+sys, srId+':'+scan.yvar+':'+scan.xvar,
                                scan.xbins.n+1, scan.xbins._min-scan.xbins.w/2.,
                                scan.xbins._max+scan.xbins.w/2., scan.ybins.n+1,
                                scan.ybins._min-scan.ybins.w/2., 
@@ -158,7 +168,7 @@ def getSREffMaps():
     effmaps.Close()
 
 def PutHistosIntoRootFiles():
-    
+    print 'everything into datacards'
     for i in range(1, scan.norm.GetXaxis().GetNbins()+1):
         for j in range(1, scan.norm.GetYaxis().GetNbins()+1):
             xval = scan.norm.GetXaxis().GetBinCenter(i)
@@ -179,12 +189,30 @@ def PutHistosIntoRootFiles():
             for SR, label in scan.shortLabels.items():
                 template = open('datacards/datacards_{scan}/{scan}/template_{sr}.txt'.format(scan=scan.name,sr=label),'r').read()
                 template = template.replace('XXSIGNALXX',massString)
-                template = template.replace('XXSIGRATEXX', '%f'%sysHistos[''].GetBinContent(sysHistos[''].FindBin(SR)))
-                for sys in scan.SysString.split():
+                # central value is the average of nominal and genMET -.-
+                nom = sysHistos['']        .GetBinContent(sysHistos['']        .FindBin(SR))
+                if nom == 0: 
+                    print 'no events in', label, 'for', i, j
+                    continue
+                var = sysHistos['genMet']  .GetBinContent(sysHistos['genMet']  .FindBin(SR))
+                nom = (nom+var) / 2 
+                template = template.replace('XXSIGRATEXX', '%4.4f'%nom)
+
+
+                for sys in scan.SysStringUpDown.split():
                     up = sysHistos[sys+'Up']  .GetBinContent(sysHistos[sys+'Up']  .FindBin(SR))
                     dn = sysHistos[sys+'Down'].GetBinContent(sysHistos[sys+'Down'].FindBin(SR))
                     nom= sysHistos['']        .GetBinContent(sysHistos['']        .FindBin(SR))
-                    template = template.replace('XX'+sys+'XX', '%4.2f/%4.2f'%(dn/nom,up/nom))
+#                    print sys, up, dn, nom
+                    template = template.replace('XX'+sys+'XX', '%4.4f/%4.4f'%(dn/nom,up/nom))
+
+                for sys in scan.SysString.split():
+                    var = sysHistos[sys]  .GetBinContent(sysHistos[sys]  .FindBin(SR))
+                    nom= sysHistos['']    .GetBinContent(sysHistos['']   .FindBin(SR))
+                    # gen met variation is different...
+                    if sys == 'genMet':
+                        var = (nom+var) / 2 
+                    template = template.replace('XX'+sys+'XX', '%4.4f'%(var/nom))
                 mcStat = sysHistos[''].GetBinError(sysHistos[''].FindBin(SR)) / sysHistos[''].GetBinContent(sysHistos[''].FindBin(SR))
                 template = template.replace('XXmcStatXX', '%f'%(1 + mcStat))
                 card = open('datacards/datacards_{scan}/{scan}/{mass}/datacard_{mass}_{label}.txt'.format(scan=scan.name,
@@ -252,7 +280,8 @@ if __name__ == "__main__":
                          'ElUp'   : [],
                          'ElDown' : [],
                          'MuUp'   : [],
-                         'MuDown' : []}
+                         'MuDown' : [],
+                         'genMet' : [['met_Edge','genMet_Edge']]}
     
     extraWeightsForSys = {''       : '1',
                           'jecUp'  : '1',
@@ -264,7 +293,8 @@ if __name__ == "__main__":
                           'ElUp'   : 'weight_LepSF_ElUp_Edge / weight_LepSF_Edge',
                           'ElDown' : 'weight_LepSF_ElDn_Edge / weight_LepSF_Edge',
                           'MuUp'   : 'weight_LepSF_MuUp_Edge / weight_LepSF_Edge',
-                          'MuDown' : 'weight_LepSF_MuDn_Edge / weight_LepSF_Edge'}
+                          'MuDown' : 'weight_LepSF_MuDn_Edge / weight_LepSF_Edge',
+                          'genMet' : '1'}
 
 
     ## ==============================================
@@ -309,15 +339,21 @@ if __name__ == "__main__":
         print 'this is the type of scan.ngen after', type(scan.ngen)
         getSREffMaps()
 
-        scan.SysString = 'El Mu jec bHe bLi'
+        scan.SysStringUpDown = 'El Mu jec bHe bLi'
+        scan.SysString = 'genMet'
         scan.maps = {}
         scan.maps['']   = getEffMapsSys('')
+        print 'normali systematics'
         for sys in scan.SysString.split():
+            scan.maps[sys] = getEffMapsSys(sys)
+
+        print 'up/down systematics'
+        for sys in scan.SysStringUpDown.split():
             scan.maps[sys+'Up']   = getEffMapsSys(sys+'Up')
             scan.maps[sys+'Down'] = getEffMapsSys(sys+'Down')
 
         scan.norm = scan.maps['']
-
+        print 'getting serveral maps'
         scan.xy = scan.norm.Project3D('xy') # this means x versus y. so x is on the y-axis
         scan.xz = scan.norm.Project3D('xz')
         scan.yx = scan.norm.Project3D('yx') # that's the inclusive efficiency map
@@ -326,7 +362,7 @@ if __name__ == "__main__":
         scan.zy = scan.norm.Project3D('zy')
  
         PutHistosIntoRootFiles()
-
+        print 'done. now calculating limits'
         
 
     if opts.reloadLimits:

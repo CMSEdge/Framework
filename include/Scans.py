@@ -30,7 +30,7 @@ class Scan(object):
         self.yvar = 'GenSusyMScan2_Edge'
         self.loadData()
         self.loadXsecs()
-
+        self.doTwoSigmas = False
     def __getstate__(self): 
         return self.__dict__
     def __setstate__(self, d): 
@@ -66,7 +66,8 @@ class Scan(object):
                               3 : 'High m_{ll} / Non t#bar{t}-like '}
 
         if self.name == 'Edge_Moriond2017':
-            self.makeMCDatacards = False
+            self.makeMCDatacards = True; print 'cambiar esto'
+            self.doTwoSigmas = True
             self.paper = 'SUS16034'
             self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',
                              'SMS_T6bbllslepton_mSbottom600to775_mLSP150to725',
@@ -265,10 +266,19 @@ class Scan(object):
         self.ex_exp_p1s = copy.deepcopy(self.yx)
         self.ex_exp_p1s.SetTitle("nominal exclusion plot expected + 1 sigma exp"); self.ex_exp_p1s.SetName('ex_exp_p1s')
         self.ex_exp_p1s.Reset()
-        ## expected limit +1 sigma(exp)
+        ## expected limit -1 sigma(exp)
         self.ex_exp_m1s = copy.deepcopy(self.yx)
         self.ex_exp_m1s.SetTitle("nominal exclusion plot expected - 1 sigma exp"); self.ex_exp_m1s.SetName('ex_exp_m1s')
         self.ex_exp_m1s.Reset()
+
+        ## expected limit +2 sigma(exp)
+        self.ex_exp_p2s = copy.deepcopy(self.yx)
+        self.ex_exp_p2s.SetTitle("nominal exclusion plot expected + 2 sigma exp"); self.ex_exp_p2s.SetName('ex_exp_p2s')
+        self.ex_exp_p2s.Reset()
+        ## expected limit -2 sigma(exp)
+        self.ex_exp_m2s = copy.deepcopy(self.yx)
+        self.ex_exp_m2s.SetTitle("nominal exclusion plot expected - 2 sigma exp"); self.ex_exp_m2s.SetName('ex_exp_m2s')
+        self.ex_exp_m2s.Reset()
     
         for point in limittree:
             mass      = str(int(point.mh))
@@ -283,6 +293,11 @@ class Scan(object):
                 self.ex_exp_p1s.Fill(massx, massy, point.limit)
             elif 0.83 < point.quantileExpected < 0.85:
                 self.ex_exp_m1s.Fill(massx, massy, point.limit)
+            elif 0.97 < point.quantileExpected < 0.98:
+                self.ex_exp_m2s.Fill(massx, massy, point.limit)
+            elif 0.02 < point.quantileExpected < 0.03:
+                self.ex_exp_p2s.Fill(massx, massy, point.limit)
+
         zmax = self.ex_obs.GetMaximum()
         self.ex_obs    .GetZaxis().SetRangeUser(0.,10.)
         self.ex_obs_p1s.GetZaxis().SetRangeUser(0.,10.)
@@ -290,6 +305,8 @@ class Scan(object):
         self.ex_exp    .GetZaxis().SetRangeUser(0.,10.)
         self.ex_exp_p1s.GetZaxis().SetRangeUser(0.,10.)
         self.ex_exp_m1s.GetZaxis().SetRangeUser(0.,10.)
+        self.ex_exp_p2s.GetZaxis().SetRangeUser(0.,10.)
+        self.ex_exp_m2s.GetZaxis().SetRangeUser(0.,10.)
         out  = r.TFile('limits_%s.root'%self.name,'recreate')
         self.ex_obs.Write()
         out.Close()
@@ -369,12 +386,16 @@ class Scan(object):
         self.ex_obs_smoothed_graph    .Write()
         self.ex_obs_p1s_smoothed_graph.Write()
         self.ex_obs_m1s_smoothed_graph.Write()
+        if self.doTwoSigmas: 
+            self.ex_exp_p2s_smoothed_graph.Write()
+            self.ex_exp_m2s_smoothed_graph.Write()
         f.Close()
         print '... done saving the results file'
     
     def makePrettyPlots(self):
         print 'starting to make pretty plots'
-        for t in ['_obs', '_obs_p1s', '_obs_m1s', '_exp', '_exp_p1s', '_exp_m1s']:
+        for t in ['_obs', '_obs_p1s', '_obs_m1s', '_exp', '_exp_p1s', '_exp_m1s', '_exp_p2s', '_exp_m2s']:
+            if self.doTwoSigmas and '2' in t: continue
             tmp_2d_graph = r.TGraph2D(getattr(self, 'ex%s'%t))
             xbinsize = 12.5; ybinsize = 12.5
             tmp_2d_graph.SetNpx( int((tmp_2d_graph.GetXmax() - tmp_2d_graph.GetXmin())/xbinsize) )
