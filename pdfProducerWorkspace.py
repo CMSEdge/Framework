@@ -121,7 +121,8 @@ class pdfClass:
         self.tree.SetBranchStatus('met_Edge'        , 1); self.tree.SetBranchStatus('min_mlb1_Edge'   , 1); 
         self.tree.SetBranchStatus('sum_mlb_Edge'    , 1); self.tree.SetBranchStatus('st_Edge'         , 1);
         self.tree.SetBranchStatus('lepsZPt_Edge'    , 1); self.tree.SetBranchStatus('d3D_Edge'        , 1);
-        self.tree.SetBranchStatus('lepsDPhi_Edge'   , 1);
+        self.tree.SetBranchStatus('lepsDPhi_Edge'   , 1); self.tree.SetBranchStatus('j1MetDPhi_Edge'  , 1);
+        self.tree.SetBranchStatus('j2MetDPhi_Edge'  , 1)
         
     def makeVarSet(self):
         self.l1p = ROOT.RooRealVar('Lep1_pt_Edge'    , 'l1p',   0., 1000., 'GeV'); self.l2p = ROOT.RooRealVar('Lep2_pt_Edge'    , 'l2p',   0., 1000., 'GeV');
@@ -132,8 +133,8 @@ class pdfClass:
         self.mlp = ROOT.RooRealVar('metl1DPhi_Edge'  , 'mlp',   0.,3.142 , ''   ); self.mll = ROOT.RooRealVar('lepsMll_Edge'    , 'mll',  20., 1000., 'GeV');
         self.mlb = ROOT.RooRealVar('sum_mlb_Edge'    , 'mlb',   0., 3000., 'GeV'); self.st  = ROOT.RooRealVar('st_Edge'         , 'st' , 100., 5000., 'GeV');
         self.zpt = ROOT.RooRealVar('lepsZPt_Edge'    , 'zpt',   0., 1000., 'GeV'); ## old self.evt = ROOT.RooRealVar('evt'             , 'evt',   0.,1e7   , ''   );
-        self.a3d = ROOT.RooRealVar('d3D_Edge'        , 'a3d', 0.2 , 3.14 , ''   );
-        self.ldp = ROOT.RooRealVar('lepsDPhi_Edge'   , 'ldp', 0.  , 3.14 , ''   );
+        self.a3d = ROOT.RooRealVar('d3D_Edge'        , 'a3d', 0.2 , 3.14 , ''   ); self.dp1 = ROOT.RooRealVar('j1MetDPhi_Edge'  , 'dp1', -3.2, 3.2, '');
+        self.ldp = ROOT.RooRealVar('lepsDPhi_Edge'   , 'ldp', 0.  , 3.14 , ''   ); self.dp2 = ROOT.RooRealVar('j2MetDPhi_Edge'  , 'dp2', -3.2, 3.2, '');
         self.nlt = ROOT.RooRealVar('nLepTight_Edge'  , 'nlt',  0 , 4 , ''   );
         self.wgt = ROOT.RooRealVar('lumwgt'          , 'wgt', self.mcWgt, self.mcWgt, ''); self.wgt.setConstant(1);
 
@@ -141,6 +142,7 @@ class pdfClass:
         self.varSet.add(self.met); self.varSet.add(self.mlp); self.varSet.add(self.mll); self.varSet.add(self.mlp);
         self.varSet.add(self.mlb); self.varSet.add(self.st); self.varSet.add(self.zpt); ## old self.varSet.add(self.evt);
         self.varSet.add(self.wgt); self.varSet.add(self.a3d); self.varSet.add(self.nlt); self.varSet.add(self.ldp)
+        self.varSet.add(self.dp1); self.varSet.add(self.dp2)
 
     def makeDatasets(self, cutlist):
         for cut, name in cutlist.items():
@@ -302,26 +304,30 @@ if __name__ == '__main__':
         print '%-20s : %-20s' %(key, value)
 
     cuts = CutManager.CutManager()
-    cuts_sr_met150_of = cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLineNoTrigger, cuts.OF]); cuts_sr_met150_of = cleanCut(cuts_sr_met150_of)
-    cuts_sr_met150_sf = cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLineNoTrigger, cuts.SF]); cuts_sr_met150_sf = cleanCut(cuts_sr_met150_sf)
+#    cuts_sr_met150_of = cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLineNoTrigger, cuts.OF]); cuts_sr_met150_of = cleanCut(cuts_sr_met150_of)
+    cuts_sr_met150_of = cuts.AddList([cuts.BaselineNoTrigger, cuts.OF, cuts.MET150]); cuts_sr_met150_of = cleanCut(cuts_sr_met150_of)
+#    cuts_sr_met150_sf = cuts.AddList([cuts.goodLepton, cuts.SignalRegionBaseLineNoTrigger, cuts.SF]); cuts_sr_met150_sf = cleanCut(cuts_sr_met150_sf)
+    cuts_sr_met150_sf = cuts.AddList([cuts.BaselineNoTrigger, cuts.SF, cuts.MET150]); cuts_sr_met150_sf = cleanCut(cuts_sr_met150_sf)
     
-    # 4fb-1 ## 2016 data and MC
-    # 4fb-1 tt_tfile = ROOT.TFile('/afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/mc_jun17_miniaodv2_noLHE/friends/evVarFriend_TTJets_DiLepton_total.root')
-    # 4fb-1 tt_tree = tt_tfile.Get('sf/t')
-    # 4fb-1 #em_tfile = ROOT.TFile('/afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/data_jun20_prompt/friends/evVarFriend_MuonEG_Run2016B-PromptReco-v2.root')
-    # 4fb-1 em_tfile = ROOT.TFile('/afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/data_jun23_prompt_4invfb/friends/evVarFriend_MuonEG_Run2016B-PromptReco-v2_runs_271036_275125.root')
-    # 4fb-1 em_tree = em_tfile.Get('sf/t')
-    # ## 7.65 fb-1
-    # tt_tfile = ROOT.TFile('/afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/mc_jun17_miniaodv2_noLHE/friends/evVarFriend_TT_pow_ext34.root')
-    # tt_tree = tt_tfile.Get('sf/t')
-    # em_tfile = ROOT.TFile('/afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/data_jul15_7p65invfb/friendsAllJobs/evVarFriend_MuonEG_Run2016B-PromptReco-v2_runs_271036_276097.root')
-    # em_tree = em_tfile.Get('sf/t')
-    ## 12.9 fb-1
-    tt_tfile = ROOT.TFile('/afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/mc_jun17_miniaodv2_noLHE/friends/evVarFriend_TT_pow_ext34.root')
-    tt_tree = tt_tfile.Get('sf/t')
-    em_tfile = ROOT.TFile('/afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/data_jul21_runC_runD_12p9invfb_done/friends/allEMU.root')
-    em_tree = em_tfile.Get('sf/t')
-    
+    ## 2016 data and MC
+#    tt_tfile = ROOT.TFile('/afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/mc_jun17_miniaodv2_noLHE/friends/evVarFriend_TTJets_DiLepton_total.root')
+#    tt_tree = tt_tfile.Get('sf/t')
+    #em_tfile = ROOT.TFile('/afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/data_jun20_prompt/friends/evVarFriend_MuonEG_Run2016B-PromptReco-v2.root')
+#    em_tfile = ROOT.TFile('/afs/cern.ch/work/m/mdunser/public/edgeTrees/trees_80X_ICHEP/data_jun23_prompt_4invfb/friends/evVarFriend_MuonEG_Run2016B-PromptReco-v2_runs_271036_275125.root')
+#    em_tree = em_tfile.Get('sf/t')
+    em_tree = ROOT.TChain('sf/t')
+    em_tree.Add('/afs/cern.ch/work/s/sesanche/public/ntuples/Data/evVarFriend_MuonEG_Run2016B_23Sep2016_v3_runs_273150_275376_part1.root')
+    em_tree.Add('/afs/cern.ch/work/s/sesanche/public/ntuples/Data/evVarFriend_MuonEG_Run2016B_23Sep2016_v3_runs_273150_275376_part2.root')
+    em_tree.Add('/afs/cern.ch/work/s/sesanche/public/ntuples/Data/evVarFriend_MuonEG_Run2016B_23Sep2016_v3_runs_273150_275376_part3.root')
+    em_tree.Add('/afs/cern.ch/work/s/sesanche/public/ntuples/Data/evVarFriend_MuonEG_Run2016B_23Sep2016_v3_runs_273150_275376_part4.root')
+    em_tree.Add('/afs/cern.ch/work/s/sesanche/public/ntuples/Data/evVarFriend_MuonEG_Run2016C_23Sep2016_v1_runs_271036_284044.root')
+    em_tree.Add('/afs/cern.ch/work/s/sesanche/public/ntuples/Data/evVarFriend_MuonEG_Run2016D_23Sep2016_v1_runs_271036_284044.root')
+    em_tree.Add('/afs/cern.ch/work/s/sesanche/public/ntuples/Data/evVarFriend_MuonEG_Run2016E_23Sep2016_v1_runs_271036_284044.root')
+    em_tree.Add('/afs/cern.ch/work/s/sesanche/public/ntuples/Data/evVarFriend_MuonEG_Run2016H-PromptReco-v2_runs_281613_284035.root')
+    em_tree.Add('/afs/cern.ch/work/s/sesanche/public/ntuples/Data/evVarFriend_MuonEG_Run2016H-PromptReco-v3_runs_284036_284044.root')
+
+
+   
     dss = []
     em_data = pdfClass('em_data', em_tree)
     dss.append(em_data)

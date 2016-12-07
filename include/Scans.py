@@ -66,7 +66,7 @@ class Scan(object):
                               3 : 'High m_{ll} / Non t#bar{t}-like '}
 
         if self.name == 'Edge_Moriond2017':
-            self.makeMCDatacards = True; print 'cambiar esto'
+#            self.makeMCDatacards = True; print 'cambiar esto'
             self.doTwoSigmas = True
             self.paper = 'SUS16034'
             self.datasets = ['SMS_T6bbllslepton_mSbottom400to575_mLSP150to550',

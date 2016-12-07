@@ -49,6 +49,9 @@ fs_unc lnN             -            1.05            -
 jec   lnN           XXjecXX            -               -
 El    lnN           XXElXX            -               -
 Mu    lnN           XXMuXX            -               -
+FastSimEl   lnN     XXFastSimElXX     -              - 
+FastSimMu   lnN     XXFastSimMuXX     -              -
+SigTrig  lnN          1.05             -               -
 bHe   lnN           XXbHeXX            -               -
 bLi   lnN           XXbLiXX            -               -
 genMet lnU              XXgenMetXX         -               - 
@@ -187,6 +190,7 @@ def PutHistosIntoRootFiles():
 
             helper.ensureDirectory('datacards/datacards_{scan}/{scan}/{mass}/'.format(scan=scan.name,mass=massString))
             for SR, label in scan.shortLabels.items():
+                itsOk = True
                 template = open('datacards/datacards_{scan}/{scan}/template_{sr}.txt'.format(scan=scan.name,sr=label),'r').read()
                 template = template.replace('XXSIGNALXX',massString)
                 # central value is the average of nominal and genMET -.-
@@ -205,7 +209,11 @@ def PutHistosIntoRootFiles():
                     nom= sysHistos['']        .GetBinContent(sysHistos['']        .FindBin(SR))
 #                    print sys, up, dn, nom
                     template = template.replace('XX'+sys+'XX', '%4.4f/%4.4f'%(dn/nom,up/nom))
+                    if dn/nom < 1e-4 or up/nom < 1e-4: 
+                        print 'theres an issue in', xval, yval, label, sys, ' probably related to not having enough mc in that region. Skiping that region'
+                        itsOk = False
 
+                if not itsOk: continue
                 for sys in scan.SysString.split():
                     var = sysHistos[sys]  .GetBinContent(sysHistos[sys]  .FindBin(SR))
                     nom= sysHistos['']    .GetBinContent(sysHistos['']   .FindBin(SR))
@@ -214,7 +222,7 @@ def PutHistosIntoRootFiles():
                         var = (nom+var) / 2 
                     template = template.replace('XX'+sys+'XX', '%4.4f'%(var/nom))
                 mcStat = sysHistos[''].GetBinError(sysHistos[''].FindBin(SR)) / sysHistos[''].GetBinContent(sysHistos[''].FindBin(SR))
-                print mcStat
+
                 template = template.replace('XXmcStatXX', '%f'%(1 + mcStat))
                 card = open('datacards/datacards_{scan}/{scan}/{mass}/datacard_{mass}_{label}.txt'.format(scan=scan.name,
                                                                                                           mass=massString,
@@ -252,51 +260,59 @@ if __name__ == "__main__":
 
     global replaceCutsForSys, extraWeightsForSys
     replaceCutsForSys = {'':      [],
-                         'jecUp'  : [['nBJetMedium35_Edge','nBJetMedium35_jecUp_Edge'],
-                                     ['nBJetMedium25_Edge','nBJetMedium25_jecUp_Edge'],
-                                     ['mt2_Edge','mt2_jecUp_Edge'],
-                                     ['mbb_Edge','mbb_jecUp_Edge'],
-                                     ['nll_Edge', 'nll_jecUp_Edge'],
-                                     ['met_Edge', 'met_jecUp_Edge'],
-                                     ['dphiMjj_Edge', 'dphiMjj_jecUp_Edge'],
-                                     ['mt2bb_Edge', 'mt2bb_jecUp_Edge'],
-                                     ['mbb_Edge', 'mbb_jecUp_Edge'],
-                                     ['htJet35j_Edge', 'htJet35j_jecUp_Edge'],
-                                     ['nJetSel_Edge','nJetSel_jecUp_Edge']],
-                         'jecDown': [['nBJetMedium35_Edge','nBJetMedium35_jecDn_Edge'],
-                                     ['nBJetMedium25_Edge','nBJetMedium25_jecDn_Edge'],
-                                     ['mt2_Edge','mt2_jecDn_Edge'],
-                                     ['mbb_Edge','mbb_jecDn_Edge'],
-                                     ['nll_Edge', 'nll_jecDn_Edge'],
-                                     ['met_Edge', 'met_jecDn_Edge'],
-                                     ['dphiMjj_Edge', 'dphiMjj_jecDn_Edge'],
-                                     ['mt2bb_Edge', 'mt2bb_jecDn_Edge'],
-                                     ['mbb_Edge', 'mbb_jecDn_Edge'],
-                                     ['htJet35j_Edge', 'htJet35j_jecDn_Edge'],
-                                     ['nJetSel_Edge','nJetSel_jecDn_Edge']],
-                         'bHeUp'  : [],
-                         'bHeDown': [],
-                         'bLiUp'  : [],
-                         'bLiDown': [],
-                         'ElUp'   : [],
-                         'ElDown' : [],
+                         'jecUp'       : [['nBJetMedium35_Edge','nBJetMedium35_jecUp_Edge'],
+                                          ['nBJetMedium25_Edge','nBJetMedium25_jecUp_Edge'],
+                                          ['mt2_Edge','mt2_jecUp_Edge'],
+                                          ['mbb_Edge','mbb_jecUp_Edge'],
+                                          ['nll_Edge', 'nll_jecUp_Edge'],
+                                          ['met_Edge', 'met_jecUp_Edge'],
+                                          ['dphiMjj_Edge', 'dphiMjj_jecUp_Edge'],
+                                          ['mt2bb_Edge', 'mt2bb_jecUp_Edge'],
+                                          ['mbb_Edge', 'mbb_jecUp_Edge'],
+                                          ['htJet35j_Edge', 'htJet35j_jecUp_Edge'],
+                                          ['nJetSel_Edge','nJetSel_jecUp_Edge']],
+                         'jecDown'     : [['nBJetMedium35_Edge','nBJetMedium35_jecDn_Edge'],
+                                          ['nBJetMedium25_Edge','nBJetMedium25_jecDn_Edge'],
+                                          ['mt2_Edge','mt2_jecDn_Edge'],
+                                          ['mbb_Edge','mbb_jecDn_Edge'],
+                                          ['nll_Edge', 'nll_jecDn_Edge'],
+                                          ['met_Edge', 'met_jecDn_Edge'],
+                                          ['dphiMjj_Edge', 'dphiMjj_jecDn_Edge'],
+                                          ['mt2bb_Edge', 'mt2bb_jecDn_Edge'],
+                                          ['mbb_Edge', 'mbb_jecDn_Edge'],
+                                          ['htJet35j_Edge', 'htJet35j_jecDn_Edge'],
+                                          ['nJetSel_Edge','nJetSel_jecDn_Edge']],
+                         'bHeUp'        : [],
+                         'bHeDown'      : [],
+                         'bLiUp'        : [],
+                         'bLiDown'      : [],
+                         'ElUp'         : [],
+                         'ElDown'       : [],
+                         'FastSimElUp'  : [],
+                         'FastSimElDown': [],
+                         'FastSimMuUp'  : [],
+                         'FastSimMuDown': [],
                          'MuUp'   : [],
                          'MuDown' : [],
                          'genMet' : [['met_Edge','genMet_Edge'],
                                      ['nll_Edge','nll_genMet_Edge']]}
     
-    extraWeightsForSys = {''       : '1',
-                          'jecUp'  : '1',
-                          'jecDown': '1',
-                          'bHeUp'  : 'weight_btagsf_heavy_UP_Edge / weight_btagsf_Edge',
-                          'bHeDown': 'weight_btagsf_heavy_DN_Edge / weight_btagsf_Edge',
-                          'bLiUp'  : 'weight_btagsf_light_UP_Edge / weight_btagsf_Edge',
-                          'bLiDown': 'weight_btagsf_light_DN_Edge / weight_btagsf_Edge',
-                          'ElUp'   : 'weight_LepSF_ElUp_Edge / weight_LepSF_Edge',
-                          'ElDown' : 'weight_LepSF_ElDn_Edge / weight_LepSF_Edge',
-                          'MuUp'   : 'weight_LepSF_MuUp_Edge / weight_LepSF_Edge',
-                          'MuDown' : 'weight_LepSF_MuDn_Edge / weight_LepSF_Edge',
-                          'genMet' : '1'}
+    extraWeightsForSys = {''          : '1',
+                          'jecUp'     : '1',
+                          'jecDown'   : '1',
+                          'bHeUp'     : 'weight_btagsf_heavy_UP_Edge / weight_btagsf_Edge',
+                          'bHeDown'   : 'weight_btagsf_heavy_DN_Edge / weight_btagsf_Edge',
+                          'bLiUp'     : 'weight_btagsf_light_UP_Edge / weight_btagsf_Edge',
+                          'bLiDown'   : 'weight_btagsf_light_DN_Edge / weight_btagsf_Edge',
+                          'ElUp'      : 'weight_LepSF_ElUp_Edge / weight_LepSF_Edge',
+                          'ElDown'    : 'weight_LepSF_ElDn_Edge / weight_LepSF_Edge',
+                          'FastSimElUp'  : 'weight_FSlepSF_ElUp_Edge / weight_FSlepSF_Edge',
+                          'FastSimElDown': 'weight_FSlepSF_ElDn_Edge / weight_FSlepSF_Edge',
+                          'FastSimMuUp'  : 'weight_FSlepSF_MuUp_Edge / weight_FSlepSF_Edge',
+                          'FastSimMuDown': 'weight_FSlepSF_MuDn_Edge / weight_FSlepSF_Edge',
+                          'MuUp'      : 'weight_LepSF_MuUp_Edge / weight_LepSF_Edge',
+                          'MuDown'    : 'weight_LepSF_MuDn_Edge / weight_LepSF_Edge',
+                          'genMet'    : '1'}
 
 
     ## ==============================================
@@ -341,7 +357,7 @@ if __name__ == "__main__":
         print 'this is the type of scan.ngen after', type(scan.ngen)
         getSREffMaps()
 
-        scan.SysStringUpDown = 'El Mu jec bHe bLi'
+        scan.SysStringUpDown = 'El Mu jec bHe bLi FastSimEl FastSimDown'
         scan.SysString = 'genMet'
         scan.maps = {}
         scan.maps['']   = getEffMapsSys('')
