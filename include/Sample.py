@@ -72,14 +72,7 @@ class Sample:
       print "#################################"
 
 
-   def getTH1F(self, lumi, name, var, nbin, xmin, xmax, cut, options, xlabel,  extraWeight, doKfactorGENVar):
-   #def getTH1F(self, lumi, name, var, nbin, xmin, xmax, cut, options, xlabel, ofBin=True, extraWeight="1", ylabel = 'Events', doKfactorGENVar = "noKFactor"):
-#      if doKfactorGENVar == 'doTGraph':
-#          fileD =  TFile("kfactors.root");
-#          hScale = fileD.Get("kfactorsPt");
-#          hScale.Fit("pol6")
-#          fit = hScale.GetFunction("pol6");
-#          fileD.Close()    
+   def getTH1F(self, lumi, name, var, nbin, xmin, xmax, cut, options, xlabel):
       ofBin = True
       ylabel = 'Events'
       if(xmin == xmax):                                          
@@ -105,68 +98,10 @@ class Sample:
       h_of.GetYaxis().SetTitle(ylabel)
 
       addCut = ""
-      #if self.isData:
-      #  if(name.find("DoubleMuon") != -1):
-      #    addCut = "(!((Lep1_pdgId_Edge * Lep2_pdgId_Edge == -121) || (Lep1_pdgId_Edge * Lep2_pdgId_Edge == -143)))"
-      #    cut = cut + "* ( " + addCut + " ) "
-      #  if(name.find("DoubleEG") != -1):
-      #    addCut = "(!((Lep1_pdgId_Edge * Lep2_pdgId_Edge == -169) || (Lep1_pdgId_Edge * Lep2_pdgId_Edge == -143)))"
-      #    cut = cut + "* ( " + addCut + " ) "
-      #  if(name.find("MuonEG") != -1):
-      #    addCut = "(!((Lep1_pdgId_Edge * Lep2_pdgId_Edge == -121) || (Lep1_pdgId_Edge * Lep2_pdgId_Edge == -169)))"
-      #    cut = cut + "* ( " + addCut + " ) "
-       
-      #fileD =  TFile("kfactors.root");
       kf = "1"  
       if(self.isData == 0):
-          if (self.doKfactor == 1 ): #this is the kfactor for ZZto4l
-#              if doKfactorGENVar == 'doTGraph':
-#                  kf = "("
-#                  scalebins = [[0, 5], [5,10],[10, 15],[15, 20], [20,25], [25,30], [30,35], [35,40], [40,45], [45,50], [50,55], [55,60], [60,65], [65,70],[70, 75], [75,80], [80,85], [85,90], [90,95],[95, 100], [100, 1000]]
-#                  for q in scalebins:   
-#                      mini = float(min(scalebins[scalebins.index(q)]))
-#                      maxi = float(max(scalebins[scalebins.index(q)]))
-#                      mid = float((mini+maxi)/2)
-#                      p0 = fit.GetParameter(0) 
-#                      p1 = fit.GetParameter(1) 
-#                      p2 = fit.GetParameter(2) 
-#                      p3 = fit.GetParameter(3) 
-#                      p4 = fit.GetParameter(4) 
-#                      p5 = fit.GetParameter(5) 
-#                      p6 = fit.GetParameter(6) 
-#                      #x = hScale.GetY() 
-#                      #kf = "( "+str(p0)+"+ ("+str(p1)+"*abs(GENptZZ_Edge)))"
-#                      kf = "( "+str(p0)+"+ (("+str(p1)+")*GENptZZ_Edge) + (("+str(p2)+")*GENptZZ_Edge**2)+(("+str(p3)+")*GENptZZ_Edge**3)+(("+str(p4)+")*GENptZZ_Edge**4)+(("+str(p5)+")*GENptZZ_Edge**5)+(("+str(p6)+")*GENptZZ_Edge**6))*(GENptZZ_Edge < 100)"
-#                      #kf = "( "+str(p0)+"+ (("+str(p1)+")*GENptZZ_Edge) + (("+str(p2)+")*GENptZZ_Edge**2)+(("+str(p3)+")*GENptZZ_Edge**3)+(("+str(p4)+")*GENptZZ_Edge**4)+(("+str(p5)+")*GENptZZ_Edge**5)+(("+str(p6)+")*GENptZZ_Edge**6))*(GENptZZ_Edge < 100) + 1.584*(GENptZZ_Edge > 100)"
-#                      #kf = "( "+str(p0)+"+ ("+str(p1)+"*abs(GENptZZ_Edge)) + ("+str(p2)+"*abs(GENptZZ_Edge)^2)+("+str(p3)+"*abs(GENptZZ_Edge)^3)+("+str(p4)+"*abs(GENptZZ_Edge)^4)+("+str(p5)+"*abs(GENptZZ_Edge)^5)+("+str(p6)+"*abs(GENptZZ_Edge)^6))"
-#                          #kf = kf +  str(x[scalebins.index(q)]) +"*(abs(GENptZZ_Edge)>" +str(mini)+"&&abs(GENptZZ_Edge)<="+ str(maxi) +")"
-#                      #else:
-#                      #    kf = kf + "+"+ str(x[scalebins.index(q)]) +"*(abs(GENptZZ_Edge)>" +str(mini)+" &&abs(GENptZZ_Edge)<="+ str(maxi) +")"
-#                  #kf = kf+ ")"       
-#                  print kf
-              if doKfactorGENVar == 'ZZmass':
-                  kf = "(1.23613*(abs(GENmassZZ_Edge)>0.0&&abs(GENmassZZ_Edge)<=25.0)+1.1755*(abs(GENmassZZ_Edge)>25.0 &&abs(GENmassZZ_Edge)<=50.0 )+ 1.1704*(abs(GENmassZZ_Edge)>50.0 &&abs(GENmassZZ_Edge)<=75.0 )+ 1.0314*(abs(GENmassZZ_Edge)>75.0 &&abs(GENmassZZ_Edge)<=100.0)+1.0528*(abs(GENmassZZ_Edge)>100.0&&abs(GENmassZZ_Edge)<=125.0)+1.1128*(abs(GENmassZZ_Edge)>125.0&&abs(GENmassZZ_Edge)<=150.0)+1.1336*(abs(GENmassZZ_Edge)>150.0&&abs(GENmassZZ_Edge)<=175.0)+1.1035*(abs(GENmassZZ_Edge)>175.0&&abs(GENmassZZ_Edge)<=200.0)+1.1005*(abs(GENmassZZ_Edge)>200.0&&abs(GENmassZZ_Edge)<=225.0)+1.1097*(abs(GENmassZZ_Edge)>225.0&&abs(GENmassZZ_Edge)<=250.0)+1.1206*(abs(GENmassZZ_Edge)>250.0&&abs(GENmassZZ_Edge)<=275.0)+1.1158*(abs(GENmassZZ_Edge)>275.0&&abs(GENmassZZ_Edge)<=300.0)+1.1390*(abs(GENmassZZ_Edge)>300.0&&abs(GENmassZZ_Edge)<=325.0)+1.1485*(abs(GENmassZZ_Edge)>325.0&&abs(GENmassZZ_Edge)<=350.0)+1.1461*(abs(GENmassZZ_Edge)>350.0&&abs(GENmassZZ_Edge)<=375.0)+1.1457*(abs(GENmassZZ_Edge)>375.0&&abs(GENmassZZ_Edge)<=400.0)+1.1382*(abs(GENmassZZ_Edge)>400.0&&abs(GENmassZZ_Edge)<=425.0)+1.1552*(abs(GENmassZZ_Edge)>425.0&&abs(GENmassZZ_Edge)<=450.0)+1.1367*(abs(GENmassZZ_Edge)>450.0&&abs(GENmassZZ_Edge)<=475.0)+1.1322*(abs(GENmassZZ_Edge)>475.0))"
-              if doKfactorGENVar == 'ZZpt':
-                  kf =  "(0.64155*(abs(GENptZZ_Edge)>0.0&&abs(GENptZZ_Edge)<=5.0)+1.0998*(abs(GENptZZ_Edge)>5.0 &&abs(GENptZZ_Edge)<=10.0) +1.2939*(abs(GENptZZ_Edge)>10.0&&abs(GENptZZ_Edge)<=15.0)+1.3785*(abs(GENptZZ_Edge)>15.0&&abs(GENptZZ_Edge)<=20.0)+1.4243*(abs(GENptZZ_Edge)>20.0&&abs(GENptZZ_Edge)<=25.0)+1.4503*(abs(GENptZZ_Edge)>25.0&&abs(GENptZZ_Edge)<=30.0)+1.4701*(abs(GENptZZ_Edge)>30.0&&abs(GENptZZ_Edge)<=35.0)+1.4882*(abs(GENptZZ_Edge)>35.0&&abs(GENptZZ_Edge)<=40.0)+1.5057*(abs(GENptZZ_Edge)>40.0&&abs(GENptZZ_Edge)<=45.0)+1.5021*(abs(GENptZZ_Edge)>45.0&&abs(GENptZZ_Edge)<=50.0)+1.5091*(abs(GENptZZ_Edge)>50.0&&abs(GENptZZ_Edge)<=55.0)+1.5246*(abs(GENptZZ_Edge)>55.0&&abs(GENptZZ_Edge)<=60.0)+1.5240*(abs(GENptZZ_Edge)>60.0&&abs(GENptZZ_Edge)<=65.0)+1.5241*(abs(GENptZZ_Edge)>65.0&&abs(GENptZZ_Edge)<=70.0)+1.5542*(abs(GENptZZ_Edge)>70.0&&abs(GENptZZ_Edge)<=75.0)+1.5254*(abs(GENptZZ_Edge)>75.0&&abs(GENptZZ_Edge)<=80.0)+1.5789*(abs(GENptZZ_Edge)>80.0&&abs(GENptZZ_Edge)<=85.0)+1.5303*(abs(GENptZZ_Edge)>85.0&&abs(GENptZZ_Edge)<=90.0)+1.5614*(abs(GENptZZ_Edge)>90.0&&abs(GENptZZ_Edge)<=95.0)+1.5446*(abs(GENptZZ_Edge)>95.0&&abs(GENptZZ_Edge)<=100.0)+1.5722*(abs(GENptZZ_Edge)>100.0))"
-              if doKfactorGENVar == 'noKFactor':
-                  kf = "1"
-          if (self.doKfactor == 2): #this is the kfactor for ZZto2l2nu
-              if doKfactorGENVar == 'ZZmass':
-                  kf = "(1.25094*(abs(GENmassZZ_Edge)>0.0&&abs(GENmassZZ_Edge)<=25.0)+1.2245*(abs(GENmassZZ_Edge)>25.0 &&abs(GENmassZZ_Edge)<=50.0 )+1.1928*(abs(GENmassZZ_Edge)>50.0 &&abs(GENmassZZ_Edge)<=75.0 )+1.0459*(abs(GENmassZZ_Edge)>75.0 &&abs(GENmassZZ_Edge)<=100.0)+1.0832*(abs(GENmassZZ_Edge)>100.0&&abs(GENmassZZ_Edge)<=125.0)+1.0999*(abs(GENmassZZ_Edge)>125.0&&abs(GENmassZZ_Edge)<=150.0)+1.1669*(abs(GENmassZZ_Edge)>150.0&&abs(GENmassZZ_Edge)<=175.0)+1.1039*(abs(GENmassZZ_Edge)>175.0&&abs(GENmassZZ_Edge)<=200.0)+1.1059*(abs(GENmassZZ_Edge)>200.0&&abs(GENmassZZ_Edge)<=225.0)+1.1069*(abs(GENmassZZ_Edge)>225.0&&abs(GENmassZZ_Edge)<=250.0)+1.1119*(abs(GENmassZZ_Edge)>250.0&&abs(GENmassZZ_Edge)<=275.0)+1.1352*(abs(GENmassZZ_Edge)>275.0&&abs(GENmassZZ_Edge)<=300.0)+1.1189*(abs(GENmassZZ_Edge)>300.0&&abs(GENmassZZ_Edge)<=325.0)+1.1389*(abs(GENmassZZ_Edge)>325.0&&abs(GENmassZZ_Edge)<=350.0)+1.1546*(abs(GENmassZZ_Edge)>350.0&&abs(GENmassZZ_Edge)<=375.0)+1.1734*(abs(GENmassZZ_Edge)>375.0&&abs(GENmassZZ_Edge)<=400.0)+1.2009*(abs(GENmassZZ_Edge)>400.0&&abs(GENmassZZ_Edge)<=425.0)+1.1891*(abs(GENmassZZ_Edge)>425.0&&abs(GENmassZZ_Edge)<=450.0)+1.1854*(abs(GENmassZZ_Edge)>450.0&&abs(GENmassZZ_Edge)<=475.0)+1.12864*(abs(GENmassZZ_Edge)>475.0))"
-              if doKfactorGENVar == 'ZZpt':
-                  kf  = "(0.7436*(abs(GENptZZ_Edge)>0.0&&abs(GENptZZ_Edge)<=5.0)+1.14789*(abs(GENptZZ_Edge)>5.0&&abs(GENptZZ_Edge)<=10.0)+1.33815*(abs(GENptZZ_Edge)>10.0&&abs(GENptZZ_Edge)<=15.0)+1.41420*(abs(GENptZZ_Edge)>15.0&&abs(GENptZZ_Edge)<=20.0)+1.45511*(abs(GENptZZ_Edge)>20.0&&abs(GENptZZ_Edge)<=25.0)+1.47569*(abs(GENptZZ_Edge)>25.0&&abs(GENptZZ_Edge)<=30.0)+1.49053*(abs(GENptZZ_Edge)>30.0&&abs(GENptZZ_Edge)<=35.0)+1.50622*(abs(GENptZZ_Edge)>35.0&&abs(GENptZZ_Edge)<=40.0)+1.50328*(abs(GENptZZ_Edge)>40.0&&abs(GENptZZ_Edge)<=45.0)+1.52186*(abs(GENptZZ_Edge)>45.0&&abs(GENptZZ_Edge)<=50.0)+1.52043*(abs(GENptZZ_Edge)>50.0&&abs(GENptZZ_Edge)<=55.0)+1.53977*(abs(GENptZZ_Edge)>55.0&&abs(GENptZZ_Edge)<=60.0)+1.53491*(abs(GENptZZ_Edge)>60.0&&abs(GENptZZ_Edge)<=65.0)+1.51772*(abs(GENptZZ_Edge)>65.0&&abs(GENptZZ_Edge)<=70.0)+1.54494*(abs(GENptZZ_Edge)>70.0&&abs(GENptZZ_Edge)<=75.0)+1.57762*(abs(GENptZZ_Edge)>75.0&&abs(GENptZZ_Edge)<=80.0)+1.55078*(abs(GENptZZ_Edge)>80.0&&abs(GENptZZ_Edge)<=85.0)+1.57078*(abs(GENptZZ_Edge)>85.0&&abs(GENptZZ_Edge)<=90.0)+1.56162*(abs(GENptZZ_Edge)>90.0&&abs(GENptZZ_Edge)<=95.0)+1.54183*(abs(GENptZZ_Edge)>95.0&&abs(GENptZZ_Edge)<=100.0)+1.58485*(abs(GENptZZ_Edge)>100.0))"
-              if doKfactorGENVar == 'noKFactor':
-                  kf = "1"
-          
-          if (self.doKfactor == 0): #all other MC has no NNLO/NLO reweighting
-              kf = "1"  
-          cut = cut + "* ( " + str(self.lumWeight*lumi) + " * genWeight_Edge/abs(genWeight_Edge) * " + self.puWeight +" * "+self.SFWeight+" * "+self.btagWeight+" * "+extraWeight +" * "+kf + " )" 
-      else: 
-         addDataFilters = "&&(  Flag_eeBadScFilter_Edge == 1)"
-         cut = "("+ cut + addDataFilters+ ")" + "* (" + extraWeight +")"
+          cut = cut + "* ( " + str(self.lumWeight*lumi) + " * genWeight_Edge/abs(genWeight_Edge) * " + self.puWeight +" * "+self.SFWeight+" * "+self.btagWeight+" * "+kf + " )" 
       #fileD.Close()                                                                                                                
-      if (self.doKfactor == 1): print "doing ", doKfactorGENVar, "for ZZ4l kfactor!"
-      if (self.doKfactor == 2): print "doing ", doKfactorGENVar, "for  ZZ2l kfactor!"
       self.ttree.Project(h.GetName(), var, cut, options)
       for _bin in range(1, h.GetNbinsX()+2):
           h_of.SetBinContent(_bin, h.GetBinContent(_bin))
@@ -190,13 +125,11 @@ class Sample:
      h.GetYaxis().SetTitle(ylabel)
      
      if(self.isData == 0):
-        cut = cut + "* ( " + str(self.lumWeight*lumi) + " * genWeight_Edge/abs(genWeight_Edge) * " + self.puWeight + " * " + self.SFWeight + " * " + self.btagWeight + " * " +  self.triggWeight  + "*" + extraWeight + " )" 
-     else: 
-        cut = cut + "* ( " + extraWeight + ")"
+        cut = cut + "* ( " + str(self.lumWeight*lumi) + " * genWeight_Edge/abs(genWeight_Edge) * " + self.puWeight + " * " + self.SFWeight + " * " + self.btagWeight + " * " +  self.triggWeight  + " )" 
      self.ttree.Project(name, var, cut, options) 
      return h
 
-   def getTH3F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel, extraWeight):
+   def getTH3F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel):
    
      if(xmin == xmax) and (ymax == ymin) and (zmax == zmin):
         h = TH3F(name, "", len(nbinx)-1, array('d', nbinx), len(nbiny)-1, array('d', nbiny), len(nbinz)-1, array('d', nbinz))
@@ -208,9 +141,7 @@ class Sample:
      h.GetZaxis().SetTitle(zlabel)
      
      if(self.isData == 0):
-        cut = cut + "* ( " + str(self.lumWeight*lumi) + " * genWeight_Edge/abs(genWeight_Edge) * " + self.puWeight + " * " + self.SFWeight + " * " + self.btagWeight + " * " +  self.triggWeight  + "*" + extraWeight + " )" 
-     else: 
-        cut = cut + "* ( " + extraWeight + ")"
+        cut = cut + "* ( " + str(self.lumWeight*lumi) + " * genWeight_Edge/abs(genWeight_Edge) * " + self.puWeight + " * " + self.SFWeight + " * " + self.btagWeight + " * " +  self.triggWeight  + " )" 
      self.ttree.Project(name, var, cut, options) 
      return h
 
@@ -241,11 +172,11 @@ class Block:
    def addSample(self, s):
       self.samples.append(s)
 
-   def getTH1F(self, lumi, name, var, nbin, xmin, xmax, cut, options, xlabel, extraWeight,doKFactorGENVar):
+   def getTH1F(self, lumi, name, var, nbin, xmin, xmax, cut, options, xlabel):
      for _is,s in enumerate(self.samples):
        
        AuxName = "auxT1_sample" + s.name
-       haux = s.getTH1F(lumi, AuxName, var, nbin, xmin, xmax, cut, options, xlabel, extraWeight, doKFactorGENVar)
+       haux = s.getTH1F(lumi, AuxName, var, nbin, xmin, xmax, cut, options, xlabel)
        if not _is:
           h = haux.Clone(name+'_blockHisto')
        else:
@@ -259,7 +190,7 @@ class Block:
 
      return h
 
-   def getTH2F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, cut, options, xlabel, ylabel, extraWeight):
+   def getTH2F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, cut, options, xlabel, ylabel):
      if(xmin == xmax) and (ymax == ymin):
         h = TH2F(name, "", len(nbinx)-1, array('d', nbinx),len(nbiny)-1, array('d', nbiny))
      elif (xmin == xmax):
@@ -276,13 +207,13 @@ class Block:
      for s in self.samples:
      
        AuxName = "auxT2_block" + s.name
-       haux = s.getTH2F(lumi, AuxName, var, nbinx, xmin, xmax, nbiny, ymin, ymax, cut, options, xlabel, ylabel, extraWeight)
+       haux = s.getTH2F(lumi, AuxName, var, nbinx, xmin, xmax, nbiny, ymin, ymax, cut, options, xlabel, ylabel)
        h.Add(haux)
        del haux
 
      return h   
 
-   def getTH3F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel, extraWeight):
+   def getTH3F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel):
      if(xmin == xmax) and (ymax == ymin) and (zmax == zmin):
         h = TH3F(name, "", len(nbinx)-1, array('d', nbinx),len(nbiny)-1, array('d', nbiny),len(nbinz)-1, array('d', nbinz))
      else: 
@@ -296,7 +227,7 @@ class Block:
      for s in self.samples:
      
        AuxName = "auxT3_block" + s.name
-       haux = s.getTH3F(lumi, AuxName, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel,extraWeight)
+       haux = s.getTH3F(lumi, AuxName, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel)
        h.Add(haux)
        del haux
 
@@ -342,11 +273,11 @@ class Tree:
           color = eval(theColor[0:plusposition])
           color = color + int(theColor[plusposition+1:len(theColor)])
 
-        sample = Sample(name, flocation, xsection, isdata, doKfactor, self.isScan, self.isOnEOS)
+        sample = Sample(name, flocation, xsection, isdata, self.isScan, self.isOnEOS)
         coincidentBlock = [l for l in self.blocks if l.name == block]
         if(coincidentBlock == []):
 
-          newBlock = Block(block, label, color, isdata, doKfactor)
+          newBlock = Block(block, label, color, isdata)
           newBlock.addSample(sample)
           self.addBlock(newBlock)
 
@@ -418,11 +349,11 @@ class Tree:
      return hs   
 
 
-   def getTH1F(self, lumi, name, var, nbin, xmin, xmax, cut, options, xlabel, extraWeight, doKFactorGENVar):
+   def getTH1F(self, lumi, name, var, nbin, xmin, xmax, cut, options, xlabel):
      
      for ib,b in enumerate(self.blocks):
        AuxName = "auxh1_block_" + name + "_" + b.name
-       haux = b.getTH1F(lumi, AuxName, var, nbin, xmin, xmax, cut, options, xlabel, extraWeight, doKFactorGENVar)
+       haux = b.getTH1F(lumi, AuxName, var, nbin, xmin, xmax, cut, options, xlabel)
        if not ib:
           h = haux.Clone(name+'_treeHisto')
        else:
@@ -431,7 +362,7 @@ class Tree:
        
        return h
 
-   def getTH2F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, cut, options, xlabel, extraWeight='1'):
+   def getTH2F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, cut, options, xlabel):
      if(xmin == xmax) and (ymax == ymin):
         h = TH2F(name, "", len(nbinx)-1, array('d', nbinx),len(nbiny)-1, array('d', nbiny))
      elif (xmin == xmax):
@@ -448,13 +379,13 @@ class Tree:
      for b in self.blocks:
      
        AuxName = "aux_block" + name + "_" + b.name
-       haux = b.getTH2F(lumi, AuxName, var, nbinx, xmin, xmax, nbiny, ymin, ymax, cut, options, xlabel, ylabel, extraWeight)
+       haux = b.getTH2F(lumi, AuxName, var, nbinx, xmin, xmax, nbiny, ymin, ymax, cut, options, xlabel, ylabel)
        h.Add(haux)
        del haux
 
      return h   
 
-   def getTH3F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel, extraWeight='1'):
+   def getTH3F(self, lumi, name, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel):
      if(xmin == xmax) and (ymax == ymin) and (zmax == zmin):
         h = TH3F(name, "", len(nbinx)-1, array('d', nbinx),len(nbiny)-1, array('d', nbiny), len(nbinz)-1, array('d', nbinz))
      else: 
@@ -468,7 +399,7 @@ class Tree:
      for b in self.blocks:
      
        AuxName = "aux_block" + name + "_" + b.name
-       haux = b.getTH3F(lumi, AuxName, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel, extraWeight)
+       haux = b.getTH3F(lumi, AuxName, var, nbinx, xmin, xmax, nbiny, ymin, ymax, nbinz, zmin, zmax, cut, options, xlabel, ylabel, zlabel)
        h.Add(haux)
        del haux
 
