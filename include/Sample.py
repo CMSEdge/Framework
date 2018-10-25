@@ -376,7 +376,6 @@ class Tree:
 
 
    def getTH1F(self, lumi, name, var, nbin, xmin, xmax, cut, options, xlabel, extraWeight, doKFactorGENVar):
-     
      for ib,b in enumerate(self.blocks):
        AuxName = "auxh1_block_" + name + "_" + b.name
        haux = b.getTH1F(lumi, AuxName, var, nbin, xmin, xmax, cut, options, xlabel, extraWeight, doKFactorGENVar)

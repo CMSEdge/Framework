@@ -8,41 +8,41 @@
 # BLOCK        COLOR                         NAME                 LABEL                                     LOCATION OF FRIENDS                                                     XSEC     ISDATA
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #
-data  r.kBlack      DoubleEG_Run2017B_17Nov2017_v1_runs_297046_299329                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0 
-data  r.kBlack      DoubleEG_Run2017C_17Nov2017_v1_runs_299368_302029                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleEG_Run2017D_17Nov2017_v1_runs_302030_303434                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleEG_Run2017E_17Nov2017_v1_runs_303824_304797                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleEG_Run2017F_17Nov2017_v1_runs_305040_306462                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleMuon_Run2017B_17Nov2017_v1_runs_297046_299329                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleMuon_Run2017C_17Nov2017_v1_runs_299368_302029                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleMuon_Run2017D_17Nov2017_v1_runs_302030_303434                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleMuon_Run2017E_17Nov2017_v1_runs_303824_304797                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleMuon_Run2017F_17Nov2017_v1_runs_305040_306462                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MuonEG_Run2017B_17Nov2017_v1_runs_297046_299329                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MuonEG_Run2017C_17Nov2017_v1_runs_299368_302029                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MuonEG_Run2017D_17Nov2017_v1_runs_302030_303434                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MuonEG_Run2017E_17Nov2017_v1_runs_303824_304797                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MuonEG_Run2017F_17Nov2017_v1_runs_305040_306462                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MET_Run2017B_17Nov2017_v1_runs_297046_299329                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MET_Run2017C_17Nov2017_v1_runs_299368_302029                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MET_Run2017D_17Nov2017_v1_runs_302030_303434                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MET_Run2017E_17Nov2017_v1_runs_303824_304797                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MET_Run2017F_17Nov2017_v1_runs_305040_306462                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      JetHT_Run2017B_17Nov2017_v1_runs_297046_299329                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      JetHT_Run2017C_17Nov2017_v1_runs_299368_302029                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      JetHT_Run2017D_17Nov2017_v1_runs_302030_303434                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      JetHT_Run2017E_17Nov2017_v1_runs_303824_304797                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      JetHT_Run2017F_17Nov2017_v1_runs_305040_306462                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleMuon_Run2017B_17Nov2017_v1_runs_297046_299329                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleMuon_Run2017C_17Nov2017_v1_runs_299368_302029                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleMuon_Run2017D_17Nov2017_v1_runs_302030_303434                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleMuon_Run2017E_17Nov2017_v1_runs_303824_304797                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleMuon_Run2017F_17Nov2017_v1_runs_305040_306462                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleElectron_Run2017B_17Nov2017_v1_runs_297046_299329            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleElectron_Run2017C_17Nov2017_v1_runs_299368_302029            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleElectron_Run2017D_17Nov2017_v1_runs_302030_303434            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleElectron_Run2017E_17Nov2017_v1_runs_303824_304797            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleElectron_Run2017F_17Nov2017_v1_runs_305040_306462            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0    
+data  r.kBlack      DoubleEG_Run2017B_17Nov2017_v1_runs_297046_299329                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0 
+data  r.kBlack      DoubleEG_Run2017C_17Nov2017_v1_runs_299368_302029                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      DoubleEG_Run2017D_17Nov2017_v1_runs_302030_303434                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      DoubleEG_Run2017E_17Nov2017_v1_runs_303824_304797                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      DoubleEG_Run2017F_17Nov2017_v1_runs_305040_306462                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      DoubleMuon_Run2017B_17Nov2017_v1_runs_297046_299329                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      DoubleMuon_Run2017C_17Nov2017_v1_runs_299368_302029                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      DoubleMuon_Run2017D_17Nov2017_v1_runs_302030_303434                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      DoubleMuon_Run2017E_17Nov2017_v1_runs_303824_304797                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      DoubleMuon_Run2017F_17Nov2017_v1_runs_305040_306462                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      MuonEG_Run2017B_17Nov2017_v1_runs_297046_299329                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      MuonEG_Run2017C_17Nov2017_v1_runs_299368_302029                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      MuonEG_Run2017D_17Nov2017_v1_runs_302030_303434                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      MuonEG_Run2017E_17Nov2017_v1_runs_303824_304797                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      MuonEG_Run2017F_17Nov2017_v1_runs_305040_306462                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      MET_Run2017B_17Nov2017_v1_runs_297046_299329                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      MET_Run2017C_17Nov2017_v1_runs_299368_302029                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      MET_Run2017D_17Nov2017_v1_runs_302030_303434                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      MET_Run2017E_17Nov2017_v1_runs_303824_304797                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      MET_Run2017F_17Nov2017_v1_runs_305040_306462                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      JetHT_Run2017B_17Nov2017_v1_runs_297046_299329                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      JetHT_Run2017C_17Nov2017_v1_runs_299368_302029                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      JetHT_Run2017D_17Nov2017_v1_runs_302030_303434                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      JetHT_Run2017E_17Nov2017_v1_runs_303824_304797                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      JetHT_Run2017F_17Nov2017_v1_runs_305040_306462                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      SingleMuon_Run2017B_17Nov2017_v1_runs_297046_299329                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      SingleMuon_Run2017C_17Nov2017_v1_runs_299368_302029                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      SingleMuon_Run2017D_17Nov2017_v1_runs_302030_303434                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      SingleMuon_Run2017E_17Nov2017_v1_runs_303824_304797                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      SingleMuon_Run2017F_17Nov2017_v1_runs_305040_306462                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      SingleElectron_Run2017B_17Nov2017_v1_runs_297046_299329            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      SingleElectron_Run2017C_17Nov2017_v1_runs_299368_302029            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      SingleElectron_Run2017D_17Nov2017_v1_runs_302030_303434            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      SingleElectron_Run2017E_17Nov2017_v1_runs_303824_304797            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0
+data  r.kBlack      SingleElectron_Run2017F_17Nov2017_v1_runs_305040_306462            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14/ 1    1 0    
 #----------------- monte carlo -----------------------------
 #-----------------------------------------------------------
 # BLOCK     COLOR         NAME                       LABEL                       LOCATION OF FRIENDS                                                                   XSEC    ISDATA

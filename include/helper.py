@@ -316,7 +316,7 @@ def selectSamples(inputfile, selList, sType = 'DATA'):
     checkedList = []
     typeList    = []
     for line in f.readlines():
-        print "line ", line
+        #print "line ", line
         if '#' in line or not len(line.rstrip('\r')): continue
         for _sample in selList:
             #print "_sample", _sample
