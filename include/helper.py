@@ -4,15 +4,10 @@ from   ROOT import TGraphErrors, gROOT, TCanvas, TFile
 
 
 
-
-
 def ensurePath( _path):
     d = os.path.dirname(_path)
     if not os.path.exists(d):
         os.makedirs(d)             
-
-
-
 
 
 def ratioError(num, num_e, den, den_e, opt=''):
@@ -104,14 +99,6 @@ def readFromFileRsfofDmm(theFile, dataMC):
                 if arr[0] == '':
                     print "warning probably not right rsfof!!!", arr
                 return map(float, arr)                                          
-
-
-
-
-
-
-
-
 
 def readFromFileRinout(theFile, dataMC, reg): 
 
@@ -340,7 +327,6 @@ def selectSamples(inputfile, selList, sType = 'DATA'):
                 sys.exit('exiting...')
         else:
             print 'you used some wildcards in selecting the samples. be careful with that!'
-    print typeList
     if not len(set(typeList)) == 1:
             print 'ERROR: you\'re mixing DATA and MC!'
             sys.exit('exiting...')

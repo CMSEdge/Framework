@@ -2,7 +2,6 @@ import ROOT, math, optparse, copy
 
 
 def LoadFastSimSF():
-    print 'Welcome to the FastSIMSF calculator'
 
 
     ROOT.gROOT.LoadMacro('include/FastSimSF.C+')
@@ -28,7 +27,6 @@ def LoadFastSimSF():
     muFile = ROOT.TFile('/afs/cern.ch/work/s/sesanche/public/stuffForMoriond/LepSFs/Full_Fast/sf_mu_mediumID_tightIP3D.root')
     ROOT.SetFSMuonIP2( copy.deepcopy(muFile.Get('histo2D')))
     muFile.Close()
-    print 'Setup done. Have a nice day'
 
 LoadFastSimSF()
 

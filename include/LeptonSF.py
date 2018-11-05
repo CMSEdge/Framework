@@ -24,14 +24,6 @@ import ROOT, math, optparse, copy
 # (reco scale factors when available)
 
 def LoadLeptonSF():
-    print 'Welcome to the LeptonSF calculator'
-    print 'Notice:'
-    print '+ Only full sim / data SFs are available yet'
-    print '+ 3% systematic is taken for the muons. only statistical uncertainty available in histos. Line 31 in  .C and so on'
-    print '+ no ip3d < 8 sf for muons is available'
-    print '+ no mva tight vs miniiso 0.4 is availabel for tight electrons'
-    print '+ no tracking efficiency available for muons. Geting 1.'
-
     ROOT.gROOT.LoadMacro('include/LeptonSF.C+')
     # Electrons
     elFile = ROOT.TFile('/afs/cern.ch/work/s/sesanche/public/stuffForMoriond/LepSFs/ELEC/scaleFactors.root')
@@ -58,7 +50,6 @@ def LoadLeptonSF():
     muFile = ROOT.TFile('/afs/cern.ch/work/s/sesanche/public/stuffForMoriond/LepSFs/MUON/Tracking_EfficienciesAndSF_BCDEFGH.root')
     ROOT.SetMuonTrk( copy.deepcopy(muFile.Get('ratio_eff_aeta_dr030e030_corr')))
     muFile.Close()
-    print 'Setup done. Have a nice day'
 
 LoadLeptonSF()
 

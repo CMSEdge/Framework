@@ -8,121 +8,121 @@
 # BLOCK        COLOR                         NAME                 LABEL                                     LOCATION OF FRIENDS                                                     XSEC     ISDATA
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #
-data  r.kBlack      DoubleEG_Run2017B_17Nov2017_v1_runs_297046_299329                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0 
-data  r.kBlack      DoubleEG_Run2017C_17Nov2017_v1_runs_299368_302029                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleEG_Run2017D_17Nov2017_v1_runs_302030_303434                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleEG_Run2017E_17Nov2017_v1_runs_303824_304797                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleEG_Run2017F_17Nov2017_v1_runs_305040_306462                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleMuon_Run2017B_17Nov2017_v1_runs_297046_299329                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleMuon_Run2017C_17Nov2017_v1_runs_299368_302029                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleMuon_Run2017D_17Nov2017_v1_runs_302030_303434                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleMuon_Run2017E_17Nov2017_v1_runs_303824_304797                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      DoubleMuon_Run2017F_17Nov2017_v1_runs_305040_306462                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MuonEG_Run2017B_17Nov2017_v1_runs_297046_299329                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MuonEG_Run2017C_17Nov2017_v1_runs_299368_302029                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MuonEG_Run2017D_17Nov2017_v1_runs_302030_303434                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MuonEG_Run2017E_17Nov2017_v1_runs_303824_304797                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MuonEG_Run2017F_17Nov2017_v1_runs_305040_306462                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MET_Run2017B_17Nov2017_v1_runs_297046_299329                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MET_Run2017C_17Nov2017_v1_runs_299368_302029                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MET_Run2017D_17Nov2017_v1_runs_302030_303434                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MET_Run2017E_17Nov2017_v1_runs_303824_304797                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      MET_Run2017F_17Nov2017_v1_runs_305040_306462                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      JetHT_Run2017B_17Nov2017_v1_runs_297046_299329                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      JetHT_Run2017C_17Nov2017_v1_runs_299368_302029                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      JetHT_Run2017D_17Nov2017_v1_runs_302030_303434                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      JetHT_Run2017E_17Nov2017_v1_runs_303824_304797                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      JetHT_Run2017F_17Nov2017_v1_runs_305040_306462                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleMuon_Run2017B_17Nov2017_v1_runs_297046_299329                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleMuon_Run2017C_17Nov2017_v1_runs_299368_302029                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleMuon_Run2017D_17Nov2017_v1_runs_302030_303434                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleMuon_Run2017E_17Nov2017_v1_runs_303824_304797                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleMuon_Run2017F_17Nov2017_v1_runs_305040_306462                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleElectron_Run2017B_17Nov2017_v1_runs_297046_299329            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleElectron_Run2017C_17Nov2017_v1_runs_299368_302029            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleElectron_Run2017D_17Nov2017_v1_runs_302030_303434            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleElectron_Run2017E_17Nov2017_v1_runs_303824_304797            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0
-data  r.kBlack      SingleElectron_Run2017F_17Nov2017_v1_runs_305040_306462            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 0    
+data  r.kBlack      DoubleEG_Run2017B_17Nov2017_v1_runs_297046_299329                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1  
+data  r.kBlack      DoubleEG_Run2017C_17Nov2017_v1_runs_299368_302029                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      DoubleEG_Run2017D_17Nov2017_v1_runs_302030_303434                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      DoubleEG_Run2017E_17Nov2017_v1_runs_303824_304797                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      DoubleEG_Run2017F_17Nov2017_v1_runs_305040_306462                  DoubleEG         /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      DoubleMuon_Run2017B_17Nov2017_v1_runs_297046_299329                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      DoubleMuon_Run2017C_17Nov2017_v1_runs_299368_302029                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      DoubleMuon_Run2017D_17Nov2017_v1_runs_302030_303434                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      DoubleMuon_Run2017E_17Nov2017_v1_runs_303824_304797                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      DoubleMuon_Run2017F_17Nov2017_v1_runs_305040_306462                DoubleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      MuonEG_Run2017B_17Nov2017_v1_runs_297046_299329                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      MuonEG_Run2017C_17Nov2017_v1_runs_299368_302029                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      MuonEG_Run2017D_17Nov2017_v1_runs_302030_303434                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      MuonEG_Run2017E_17Nov2017_v1_runs_303824_304797                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      MuonEG_Run2017F_17Nov2017_v1_runs_305040_306462                    MuonEG           /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      MET_Run2017B_17Nov2017_v1_runs_297046_299329                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      MET_Run2017C_17Nov2017_v1_runs_299368_302029                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      MET_Run2017D_17Nov2017_v1_runs_302030_303434                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      MET_Run2017E_17Nov2017_v1_runs_303824_304797                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      MET_Run2017F_17Nov2017_v1_runs_305040_306462                       MET              /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      JetHT_Run2017B_17Nov2017_v1_runs_297046_299329                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      JetHT_Run2017C_17Nov2017_v1_runs_299368_302029                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      JetHT_Run2017D_17Nov2017_v1_runs_302030_303434                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      JetHT_Run2017E_17Nov2017_v1_runs_303824_304797                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      JetHT_Run2017F_17Nov2017_v1_runs_305040_306462                     JetHT            /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      SingleMuon_Run2017B_17Nov2017_v1_runs_297046_299329                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      SingleMuon_Run2017C_17Nov2017_v1_runs_299368_302029                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      SingleMuon_Run2017D_17Nov2017_v1_runs_302030_303434                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      SingleMuon_Run2017E_17Nov2017_v1_runs_303824_304797                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      SingleMuon_Run2017F_17Nov2017_v1_runs_305040_306462                SingleMuon       /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      SingleElectron_Run2017B_17Nov2017_v1_runs_297046_299329            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      SingleElectron_Run2017C_17Nov2017_v1_runs_299368_302029            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      SingleElectron_Run2017D_17Nov2017_v1_runs_302030_303434            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      SingleElectron_Run2017E_17Nov2017_v1_runs_303824_304797            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1 
+data  r.kBlack      SingleElectron_Run2017F_17Nov2017_v1_runs_305040_306462            SingleElectron   /eos/cms/store/user/mvesterb/heppyFriendsData2018_May14_Skimmed2Lep/ 1    1     
 #----------------- monte carlo -----------------------------
 #-----------------------------------------------------------
 # BLOCK     COLOR         NAME                       LABEL                       LOCATION OF FRIENDS                                                                   XSEC    ISDATA
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #########################_DY+jets_####################################################################################################################
-DYJets    r.kYellow-9    DYJetsToLL_M10to50_LO          DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/  18610000.0    0 0
-DYJets    r.kYellow-9    DYJetsToLL_M50HTskimmed        DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/   6024000.0    0 0
-DYJets    r.kYellow-9    DYJetsToLL_M50_HT100to200      DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/    147400.0    0 0
-DYJets    r.kYellow-9    DYJetsToLL_M50_HT200to400      DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/     40990.0    0 0
-DYJets    r.kYellow-9    DYJetsToLL_M50_HT400to600      DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/      5678.0    0 0
-DYJets    r.kYellow-9    DYJetsToLL_M50_HT600to800      DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/      1367.0    0 0
-DYJets    r.kYellow-9    DYJetsToLL_M50_HT800to1200     DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       630.4    0 0
-DYJets    r.kYellow-9    DYJetsToLL_M50_HT1200to2500    DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       151.4    0 0
-DYJets    r.kYellow-9    DYJetsToLL_M50_HT2500toInf     DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       3.565    0 0
+DYJets    r.kYellow-9    DYJetsToLL_M10to50_LO          DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/  18610000.0    0 
+DYJets    r.kYellow-9    DYJetsToLL_M50HTskimmed        DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/   6024000.0    0 
+DYJets    r.kYellow-9    DYJetsToLL_M50_HT100to200      DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/    147400.0    0 
+DYJets    r.kYellow-9    DYJetsToLL_M50_HT200to400      DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/     40990.0    0 
+DYJets    r.kYellow-9    DYJetsToLL_M50_HT400to600      DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/      5678.0    0 
+DYJets    r.kYellow-9    DYJetsToLL_M50_HT600to800      DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/      1367.0    0 
+DYJets    r.kYellow-9    DYJetsToLL_M50_HT800to1200     DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       630.4    0 
+DYJets    r.kYellow-9    DYJetsToLL_M50_HT1200to2500    DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       151.4    0 
+DYJets    r.kYellow-9    DYJetsToLL_M50_HT2500toInf     DY+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       3.565    0 
 #########################_TTbar_#######################################################################################################################
-TTJets    r.kRed-9       TTJets                         TT+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/    831760.0     0 0
-#TTJets    r.kRed-9       TTJets_SingleLeptonFromTbar    TT+Jets     /afs/cern.ch/work/m/mvesterb/public/MC_samples/edgeZ/MC_Aug11/nLepnJetSkim/   182175.40    0 0
-TTJets    r.kRed-9       TTJets_SingleLeptonFromT       TT+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/   182175.40    0 0
+TTJets    r.kRed-9       TTJets                         TT+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/    831760.0     0 
+#TTJets    r.kRed-9       TTJets_SingleLeptonFromTbar    TT+Jets     /afs/cern.ch/work/m/mvesterb/public/MC_samples/edgeZ/MC_Aug11/nLepnJetSkim/   182175.40    0 
+TTJets    r.kRed-9       TTJets_SingleLeptonFromT       TT+Jets     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/   182175.40    0 
 #########################_singleTop_###################################################################################################################
-singleT   r.kRed-7       TToLeptons_sch                 singleT     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/      3680.7    0 0
-singleT   r.kRed-7       T_tch_powheg                   singleT     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/     44330.0    0 0
-singleT   r.kRed-7       TBar_tch_powheg                singleT     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/     26380.0    0 0
-singleT   r.kRed-7       T_tWch_noFullHad               singleT     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/     20247.8    0 0
-singleT   r.kRed-7       TBar_tWch_noFullHad_ext        singleT     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/     18502.3    0 0
-singleT   r.kRed-7       tZq_ll                         singleT     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/        75.8    0 0
+singleT   r.kRed-7       TToLeptons_sch                 singleT     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/      3680.7    0 
+singleT   r.kRed-7       T_tch_powheg                   singleT     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/     44330.0    0 
+singleT   r.kRed-7       TBar_tch_powheg                singleT     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/     26380.0    0 
+singleT   r.kRed-7       T_tWch_noFullHad               singleT     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/     20247.8    0 
+singleT   r.kRed-7       TBar_tWch_noFullHad_ext        singleT     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/     18502.3    0 
+singleT   r.kRed-7       tZq_ll                         singleT     /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/        75.8    0 
 #########################_TTZ/TTW/TWZ/TTVV_############################################################################################################
-TTZ       r.kBlue-7      TTZToLLNuNu                    TTZ         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       252.9    0 0
-TTZ       r.kBlue-7      TTZ_LO                         TTZ         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       529.7    0 0
-TTZ       r.kBlue-7      TTLLJets_m1to10                TTZ         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/        49.3    0 0
-TTZ       r.kBlue-7      TTZZ                           TTZ         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       1.572    0 0
-TTZ       r.kBlue-7      TTZH                           TTZ         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       1.253    0 0
-#TTV       r.kBlue-7      TWZ                            TTV         /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09/       11.23    0 0
-TTW       r.kBlue-7      TTWToLNu                       TTW         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       204.3    0 0
-TTW       r.kBlue-7      TTW_LO                         TTW         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       610.5    0 0
-TTW       r.kBlue-7      TTWW                           TTW         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       7.883    0 0
-TTW       r.kBlue-7      TTWZ                           TTW         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       2.974    0 0
-TTW       r.kBlue-7      TTGJets                        TTW         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/      3697.0    0 0
+TTZ       r.kBlue-7      TTZToLLNuNu                    TTZ         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       252.9    0 
+TTZ       r.kBlue-7      TTZ_LO                         TTZ         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       529.7    0 
+TTZ       r.kBlue-7      TTLLJets_m1to10                TTZ         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/        49.3    0 
+TTZ       r.kBlue-7      TTZZ                           TTZ         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       1.572    0 
+TTZ       r.kBlue-7      TTZH                           TTZ         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       1.253    0 
+#TTV       r.kBlue-7      TWZ                            TTV         /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09/       11.23    0 
+TTW       r.kBlue-7      TTWToLNu                       TTW         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       204.3    0 
+TTW       r.kBlue-7      TTW_LO                         TTW         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       610.5    0 
+TTW       r.kBlue-7      TTWW                           TTW         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       7.883    0 
+TTW       r.kBlue-7      TTWZ                           TTW         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       2.974    0 
+TTW       r.kBlue-7      TTGJets                        TTW         /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/      3697.0    0 
 #########################_WWTo2L2Nu_###################################################################################################################
-WW2l      r.kCyan+3      WWTo2L2Nu                      WW2l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/     12178.0    0 0
-WW2l      r.kCyan+3      WWTo1L1Nu2Q                    WW2l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/     49997.0    0 0
-#WW2l      r.kCyan+3      GGWWTo2L2Nu                    WW2l        /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09_skimmed/       590.6    0 0
-#WW2l      r.kCyan+3      GGHWWTo2L2Nu                   WW2l        /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09_skimmed/      1002.0    0 0
-WW2l      r.kCyan+3      WWDouble                       WW2l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/      1617.0    0 0
-#WW2l      r.kCyan+3      WpWpJJ                         WW2l        /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09_skimmed/        37.1    0 0
-#VV2l      r.kCyan+3      WZTo2L2Q                       VV2l        /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09_skimmed/      5595.0    0 0
-#VV2l      r.kCyan+3      ZZTo2L2Q                       VV2l        /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09_skimmed/      3220.0    0 0
+WW2l      r.kCyan+3      WWTo2L2Nu                      WW2l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/     12178.0    0 
+WW2l      r.kCyan+3      WWTo1L1Nu2Q                    WW2l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/     49997.0    0 
+#WW2l      r.kCyan+3      GGWWTo2L2Nu                    WW2l        /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09_skimmed/       590.6    0 
+#WW2l      r.kCyan+3      GGHWWTo2L2Nu                   WW2l        /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09_skimmed/      1002.0    0 
+WW2l      r.kCyan+3      WWDouble                       WW2l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/      1617.0    0 
+#WW2l      r.kCyan+3      WpWpJJ                         WW2l        /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09_skimmed/        37.1    0 
+#VV2l      r.kCyan+3      WZTo2L2Q                       VV2l        /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09_skimmed/      5595.0    0 
+#VV2l      r.kCyan+3      ZZTo2L2Q                       VV2l        /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09_skimmed/      3220.0    0 
 #########################_ZZTo4l_######################################################################################################################
-ZZ4l      r.kCyan+2      GluGluToContinToZZTo2e2mu      ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       7.346    0 0
-ZZ4l      r.kCyan+2      GluGluToContinToZZTo2e2tau     ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       7.346    0 0
-ZZ4l      r.kCyan+2      GluGluToContinToZZTo2mu2tau    ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       7.346    0 0
-#ZZ4l      r.kCyan+2      GluGluToContinToZZTo4e         ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       3.648    0 0
-#ZZ4l      r.kCyan+2      GluGluToContinToZZTo4mu        ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       3.648    0 0
-#ZZ4l      r.kCyan+2      GluGluToContinToZZTo4tau       ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       3.648    0 0
-ZZ4l      r.kCyan+2      ZZTo4L                         ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/      1256.0    0 1
-ZZ4l      r.kCyan+2      GGHZZ4L                        ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       13.08    0 0
-ZZ4l      r.kCyan+2      VBF_HToZZTo4L                  ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       1.034    0 0
+ZZ4l      r.kCyan+2      GluGluToContinToZZTo2e2mu      ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       7.346    0 
+ZZ4l      r.kCyan+2      GluGluToContinToZZTo2e2tau     ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       7.346    0 
+ZZ4l      r.kCyan+2      GluGluToContinToZZTo2mu2tau    ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       7.346    0 
+#ZZ4l      r.kCyan+2      GluGluToContinToZZTo4e         ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       3.648    0 
+#ZZ4l      r.kCyan+2      GluGluToContinToZZTo4mu        ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       3.648    0 
+#ZZ4l      r.kCyan+2      GluGluToContinToZZTo4tau       ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       3.648    0 
+ZZ4l      r.kCyan+2      ZZTo4L                         ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/      1256.0    0 
+ZZ4l      r.kCyan+2      GGHZZ4L                        ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       13.08    0 
+ZZ4l      r.kCyan+2      VBF_HToZZTo4L                  ZZ4l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       1.034    0 
 #########################_ZZTo2l_######################################################################################################################
-ZZ2l      r.kCyan+2      ZZTo2L2Nu                      ZZ2l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       564.0    0 2
-ZZ2l      r.kCyan+2      GluGluToContinToZZTo2e2nu      ZZ2l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       3.956    0 0
-ZZ2l      r.kCyan+2      GluGluToContinToZZTo2mu2nu     ZZ2l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       3.956    0 0
-WZ3l      r.kGreen-8     WZTo3LNu_amcatnlo              WZ3l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/      4666.0    0 0
+ZZ2l      r.kCyan+2      ZZTo2L2Nu                      ZZ2l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       564.0    0 
+ZZ2l      r.kCyan+2      GluGluToContinToZZTo2e2nu      ZZ2l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       3.956    0 
+ZZ2l      r.kCyan+2      GluGluToContinToZZTo2mu2nu     ZZ2l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       3.956    0 
+WZ3l      r.kGreen-8     WZTo3LNu_amcatnlo              WZ3l        /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/      4666.0    0 
 #########################_rares_########################################################################################################################
-rares     r.kGreen-5     WWW_4F                         rares       /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       208.6    0 0
-#rares     r.kGreen-5     WWZ                            rares       /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09_skimmed/       165.1    0 0
-rares     r.kGreen-5     WZG                            rares       /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       41.23    0 0
-rares     r.kGreen-5     WZZ                            rares       /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       55.65    0 0
-rares     r.kGreen-5     ZZZ                            rares       /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       13.98    0 0
-rares     r.kGreen-5     TTHnobb_pow                    rares       /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       215.0    0 0
-#rares     r.kGreen-5     VHToNonbb                      rares       /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09_skimmed/       927.0    0 0
-rares     r.kGreen-5     TTTT                           rares       /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       9.103    0 0
-rares     r.kGreen-5     WJetsToLNu_LO                  rares       /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/  61526700.0    0 0
+rares     r.kGreen-5     WWW_4F                         rares       /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       208.6    0 
+#rares     r.kGreen-5     WWZ                            rares       /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09_skimmed/       165.1    0 
+rares     r.kGreen-5     WZG                            rares       /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       41.23    0 
+rares     r.kGreen-5     WZZ                            rares       /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       55.65    0 
+rares     r.kGreen-5     ZZZ                            rares       /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       13.98    0 
+rares     r.kGreen-5     TTHnobb_pow                    rares       /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       215.0    0 
+#rares     r.kGreen-5     VHToNonbb                      rares       /eos/cms/store/user/mvesterb/heppyFriendsMC2018_April09_skimmed/       927.0    0 
+rares     r.kGreen-5     TTTT                           rares       /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/       9.103    0 
+rares     r.kGreen-5     WJetsToLNu_LO                  rares       /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/  61526700.0    0 
 #
-SMS_TChiWZ_ZToLL   r.kBlack+2     SMS_TChiWZ_ZToLL                    SMS_TChiWZ_ZToLL    /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 0
-#TChiWZ  r.kBlack+2   TChiWZ    TChiWZ     /afs/cern.ch/work/s/sesanche/public/forEdge/nTuplesForMoriond/mergedSignals/slimmed/   1   0   0
-#SMS_TSlepSlep  r.kBlack+2   SMS_TSlepSlep     SMS_TSlepSlep     /afs/cern.ch/work/m/mvesterb/public/MC_samples/edgeZ/signals/SMS_TSlepSlep/   1     0  0
-SMS_300_1_   r.kBlack+2     SMS_300_1_                    SMS_300_1_    /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 0
-SMS_450_50_  r.kBlack+2     SMS_450_50_                   SMS_450_50_   /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 0
-SMS_600_300_ r.kBlack+2     SMS_600_300_                  SMS_600_300_  /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 0
-SMS_600_1_   r.kBlack+2     SMS_600_1_                    SMS_600_1_    /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 0
-SMS_650_300_ r.kBlack+2     SMS_650_300_                  SMS_650_300_  /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 0
-SMS_650_1_   r.kBlack+2     SMS_650_1_                    SMS_650_1_    /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 0
-SMS_700_300_ r.kBlack+2     SMS_700_300_                  SMS_700_300_  /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 0
-SMS_700_1_   r.kBlack+2     SMS_700_1_                    SMS_700_1_    /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 0
+SMS_TChiWZ_ZToLL   r.kBlack+2     SMS_TChiWZ_ZToLL                    SMS_TChiWZ_ZToLL    /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 
+#TChiWZ  r.kBlack+2   TChiWZ    TChiWZ     /afs/cern.ch/work/s/sesanche/public/forEdge/nTuplesForMoriond/mergedSignals/slimmed/   1   0   
+#SMS_TSlepSlep  r.kBlack+2   SMS_TSlepSlep     SMS_TSlepSlep     /afs/cern.ch/work/m/mvesterb/public/MC_samples/edgeZ/signals/SMS_TSlepSlep/   1     0  
+SMS_300_1_   r.kBlack+2     SMS_300_1_                    SMS_300_1_    /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 
+SMS_450_50_  r.kBlack+2     SMS_450_50_                   SMS_450_50_   /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 
+SMS_600_300_ r.kBlack+2     SMS_600_300_                  SMS_600_300_  /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 
+SMS_600_1_   r.kBlack+2     SMS_600_1_                    SMS_600_1_    /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 
+SMS_650_300_ r.kBlack+2     SMS_650_300_                  SMS_650_300_  /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 
+SMS_650_1_   r.kBlack+2     SMS_650_1_                    SMS_650_1_    /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 
+SMS_700_300_ r.kBlack+2     SMS_700_300_                  SMS_700_300_  /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 
+SMS_700_1_   r.kBlack+2     SMS_700_1_                    SMS_700_1_    /eos/cms/store/user/mvesterb/makeSRfriendsMC_April20/          1    0 
