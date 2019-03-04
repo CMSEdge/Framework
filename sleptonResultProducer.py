@@ -123,6 +123,10 @@ def getTotErr(syst, stat):
     return tot                              
 
 
+def getFinalTotErr(err1, err2, err3):
+    tot = math.sqrt(err1**2+err2**2+err3**2)
+    return tot                            
+
 def check(check):
     if check < 0:
         return 0.
@@ -139,21 +143,31 @@ def scaleByRSFOF(histo, rsfof, rsfof_err):
     histo.Multiply(h_rsfof)
     return histo                                 
 
-def makeResultsTableSig(da, fs,da_OF, fs_stat, fs_syst,  zz, zz_stat, zz_syst, wz, wz_stat, wz_syst, rare, rare_stat, mc_full, sig1, sig2, sig3,sig4, signames):
+def makeResultsTableSig(da, fs,da_OF, fs_stat, fs_syst,  zz, zz_stat, zz_syst, wz, wz_stat, wz_syst, rare, rare_stat, dy,dy_stat, dy_syst,  mc_full, sig1, sig2, sig3,sig4, signames):
     
     line0 = '\\begin{tabular}{c c c c c}  '                                                               
     line1 = '\\\\ \hline\hline   '                                                               
     line2 = ' p_{T}^{miss} [GeV]& 100-150& 150-225 & 225-300& 300+  \\\\ \hline  '                                                               
     fsStatUp = [];fsStatDn = [];fsSyst = [];fsTotUp  = [];fsTotDn  = []; rest = []
+    dyStatUp = [];dyStatDn = [];dySyst = [];dyTotUp  = [];dyTotDn  = [];
     for i in range(1,5):
         print i
         rest.append(math.sqrt((zz_syst.GetBinError(i)**2) + (zz_stat.GetBinError(i)**2)+(wz_syst.GetBinError(i)**2) + (wz_stat.GetBinError(i)**2) + (rare_stat.GetBinError(i)**2) + (0.5*check(rare.GetBinContent(i))**2)))
         fsStatUp.append(getPoissonError(da_OF.GetBinContent(i))[1]*fs.GetBinContent(i)/da_OF.GetBinContent(i))
         fsStatDn.append(getPoissonError(da_OF.GetBinContent(i))[0]*fs.GetBinContent(i)/da_OF.GetBinContent(i))
         fsSyst.append(fs_syst.GetBinError(i))
+    dyStatUp.append(getPoissonError(dy.GetBinContent(1))[1]*0.14)
+    dyStatDn.append(getPoissonError(dy.GetBinContent(1))[0]*0.14)
+    dySyst.append(0.5*0.14*check(dy.GetBinContent(1)))
+    for i in range(2,5):
+        dyStatUp.append(1.8*0.14)
+        dyStatDn.append(0)
+        dySyst.append(0.14*1.8*0.5)
     for i in range(0, 4):
         fsTotUp.append(getTotErr(fsStatUp[i], fsSyst[i]))
         fsTotDn.append(getTotErr(fsStatDn[i], fsSyst[i]))
+        dyTotUp.append(getTotErr(dyStatUp[i], dySyst[i]))
+        dyTotDn.append(getTotErr(dyStatDn[i], dySyst[i]))
     metLabels = ['100-150 ', '150-225 ','225-300, 300+']
     print "fs bin content ", da_OF.GetBinContent(4)
     print "mc_full ", mc_full.GetBinError(4)
@@ -171,8 +185,9 @@ def makeResultsTableSig(da, fs,da_OF, fs_stat, fs_syst,  zz, zz_stat, zz_syst, w
     print 'ZZ &%.2f$\\pm$ %.2f&%.2f$\\pm$%.2f&%.2f$\\pm$%.2f&%.2f$\\pm$ %.2f\\\ ' %(zz.GetBinContent(1),getTotErr(zz_stat.GetBinError(1), zz_syst.GetBinError(1)),zz.GetBinContent(2),getTotErr(zz_stat.GetBinError(2), zz_syst.GetBinError(2)),zz.GetBinContent(3),getTotErr(zz_stat.GetBinError(3), zz_syst.GetBinError(3)),zz.GetBinContent(4), getTotErr(zz_stat.GetBinError(4), zz_syst.GetBinError(4)))
     print 'WZ &%.2f$\\pm$ %.2f&%.2f$\\pm$%.2f&%.2f$\\pm$%.2f&%.2f$\\pm$ %.2f\\\ ' %(wz.GetBinContent(1),getTotErr(wz_stat.GetBinError(1), wz_syst.GetBinError(1)),wz.GetBinContent(2),getTotErr(wz_stat.GetBinError(2), wz_syst.GetBinError(2)),wz.GetBinContent(3),getTotErr(wz_stat.GetBinError(3), wz_syst.GetBinError(3)),wz.GetBinContent(4), getTotErr(wz_stat.GetBinError(4), wz_syst.GetBinError(4)))
     #print 'WZ &%.2f$\\pm$ %.2f&%.2f$\\pm$%.2f&%.2f$\\pm$%.2f&%.2f$\\pm$ %.2f\\\ ' %(wz.GetBinContent(1),wz.GetBinError(1),wz.GetBinContent(2),wz.GetBinError(2),wz.GetBinContent(3),wz.GetBinError(3),wz.GetBinContent(4),wz.GetBinError(4))
+    print 'DY+jets&%.2f$^{+%.2f}_{-%.2f}$ &%.2f$^{+%.2f}_{-%.2f}$ &%.2f$^{+%.2f}_{-%.2f}$ &%.2f$^{+%.2f}_{-%.2f}$\\\ ' %(dy.GetBinContent(1), dyTotUp[0],dyTotDn[0], dy.GetBinContent(2), dyTotUp[1],dyTotDn[1], dy.GetBinContent(3), dyTotUp[2],dyTotDn[2],   dy.GetBinContent(4), dyTotUp[3],dyTotDn[3]) 
     print 'Rare processes&%.2f$\\pm$%.2f&%.2f$\\pm$%.2f&%.2f$\\pm$%.2f&%.2f$\\pm$ %.2f \\\\ \hline ' %(check(rare.GetBinContent(1)),rare.GetBinError(1),check(rare.GetBinContent(2)),rare.GetBinError(2),check(rare.GetBinContent(3)),rare.GetBinError(3), check(rare.GetBinContent(4)),rare.GetBinError(4))
-    print 'Total Prediction &%.2f$^{+%.2f}_{-%.2f}$ &%.2f$^{+%.2f}_{-%.2f}$ &%.2f$^{+%.2f}_{-%.2f}$ &%.2f$^{+%.2f}_{-%.2f}$\\\ ' %(mc_full.GetBinContent(1), getTotErr(fsTotUp[0],rest[0]) , getTotErr(fsTotDn[0],rest[0]), mc_full.GetBinContent(2), getTotErr(fsTotUp[1],rest[1]) , getTotErr(fsTotDn[1],rest[1]), mc_full.GetBinContent(3), getTotErr(fsTotUp[2],rest[2]), getTotErr(fsTotDn[2],rest[2]), mc_full.GetBinContent(4), getTotErr(fsTotUp[3],rest[3]), getTotErr(fsTotDn[3],rest[3])) 
+    print 'Total Prediction &%.2f$^{+%.2f}_{-%.2f}$ &%.2f$^{+%.2f}_{-%.2f}$ &%.2f$^{+%.2f}_{-%.2f}$ &%.2f$^{+%.2f}_{-%.2f}$\\\ '%(mc_full.GetBinContent(1), getFinalTotErr(fsTotUp[0],dyTotUp[0],rest[0]), getFinalTotErr(fsTotDn[0],dyTotDn[0],rest[0]), mc_full.GetBinContent(2), getFinalTotErr(fsTotUp[1],dyTotUp[1],rest[1]) , getFinalTotErr(fsTotDn[1],dyTotDn[1],rest[1]), mc_full.GetBinContent(3), getFinalTotErr(fsTotUp[2],dyTotUp[2],rest[2]), getFinalTotErr(fsTotDn[2],dyTotDn[2],rest[2]), mc_full.GetBinContent(4), getFinalTotErr(fsTotUp[3],dyTotUp[3],rest[3]), getFinalTotErr(fsTotDn[3],dyTotDn[3],rest[3])) 
     print 'Observed data &%d$ &%d &%d &%d\\\ ' %(da.GetBinContent(1), da.GetBinContent(2), da.GetBinContent(3), da.GetBinContent(4)) 
     print 'm(slep):%s,m(LSP):%s&%.2f$\\pm$%.2f& %.2f$\\pm$%.2f& %.2f$\\pm$%.2f& %.2f$\\pm$%.2f \\\  ' %( signames[0][0], signames[0][1],   sig1.GetBinContent(1),sig1.GetBinError(1),sig1.GetBinContent(2),sig1.GetBinError(2),sig1.GetBinContent(3),sig1.GetBinError(3), sig1.GetBinContent(4),sig1.GetBinError(4))
     print 'm(slep):%s,m(LSP):%s&%.2f$\\pm$%.2f& %.2f$\\pm$%.2f& %.2f$\\pm$%.2f& %.2f$\\pm$%.2f \\\  ' %( signames[1][0], signames[1][1],   sig2.GetBinContent(1),sig2.GetBinError(1),sig2.GetBinContent(2),sig2.GetBinError(2),sig2.GetBinContent(3),sig2.GetBinError(3), sig2.GetBinContent(4),sig2.GetBinError(4))
@@ -384,7 +399,26 @@ def weightedAverage( factor, direct, unwght):
         prediction_final.SetBinContent(i, unwght.GetBinContent(i)*rsfof_final.GetBinContent(i))
         prediction_final.SetBinError  (i, math.sqrt( (unwght.GetBinError(i)*rsfof_final.GetBinContent(i))**2 + (unwght.GetBinContent(i)*rsfof_final.GetBinError(i))**2))
 
-    return [rsfof_factor, rsfof_direct, rsfof_final, prediction_final]                                                                                                    
+    return [rsfof_factor, rsfof_direct, rsfof_final, prediction_final]                                                                                                                                                                                             
+
+def weightedAverageEEMM( factor, direct, unwght):
+    
+    rsfof_direct = copy.deepcopy(factor)
+    prediction_final    = copy.deepcopy(unwght)
+    
+    for i in range(1, unwght.GetNbinsX()+1):
+        if not unwght.GetBinContent(i): 
+            rsfof_direct.SetBinContent( i, 0.) 
+            prediction_final.SetBinContent( i, 0.)    
+            continue 
+        rsfof_direct.SetBinContent(i, direct.GetBinContent(i) / unwght.GetBinContent(i))
+        rsfof_direct.SetBinError  (i, math.sqrt(abs(direct.GetBinError(i)**2 - (rsfof_direct.GetBinContent(i)*unwght.GetBinError(i))**2)) / unwght.GetBinContent(i) )
+        
+        prediction_final.SetBinContent(i, unwght.GetBinContent(i)*rsfof_direct.GetBinContent(i))
+        prediction_final.SetBinError  (i, math.sqrt( (unwght.GetBinError(i)*rsfof_direct.GetBinContent(i))**2 + (unwght.GetBinContent(i)*rsfof_direct.GetBinError(i))**2))
+
+    return [rsfof_direct, rsfof_direct, rsfof_direct, prediction_final]                                                                                                                                                                                            
+
 
 
 def makePred(scan, specialcut = '', scutstring = '', doCumulative = False, nbins=0, xmin=0, xmax=0):
@@ -516,7 +550,7 @@ def makeResultData(analysis, var, signames, maxrun = 999999, lint = 35.9, specia
     
     da_OF_direct = copy.deepcopy(da_OF)
     print "doing this flavor!", scutstring
-    if scutstring == '':
+    if scutstring == 'SF':
         da_OF_direct = scaleByRSFOF(da_OF_direct, rsfof_da[0], getFinalError(rsfof_da[1], rsfof_da[2]))
     if scutstring == 'ee':
         da_OF_direct = scaleByRSFOF(da_OF_direct, rsfofee_da[0], getFinalError(rsfofee_da[1], rsfofee_da[2]))
@@ -528,10 +562,10 @@ def makeResultData(analysis, var, signames, maxrun = 999999, lint = 35.9, specia
     
     result = weightedAverage( da_OF_factor, da_OF_direct, da_OF) 
     if scutstring == 'ee':
-        result = weightedAverage( da_OF_direct, da_OF_direct, da_OF) 
+        result = weightedAverageEEMM( da_OF_direct, da_OF_direct, da_OF)
     if scutstring == 'mm':
-        result = weightedAverage( da_OF_direct, da_OF_direct, da_OF) 
-    if scutstring == '':
+        result = weightedAverageEEMM( da_OF_direct, da_OF_direct, da_OF) 
+    if scutstring == 'SF':
         result = weightedAverage( da_OF_factor, da_OF_direct, da_OF) 
 
     ### 
@@ -571,15 +605,19 @@ def makeResultData(analysis, var, signames, maxrun = 999999, lint = 35.9, specia
     doPDFvariations = False
     zz_orig = treeZZ.getTH1F(lint, var+"zz_SF", "met_Edge",nbins, 1,1, cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jet,cuts.SF, cuts.lepsFromZ]), '', xlabel, "1",'ZZpt')
     wz_orig = treeWZ.getTH1F(lint, var+"wz_SF", "met_Edge",nbins, 1,1, cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jet,cuts.SF, cuts.lepsFromZ]), '', xlabel, "1",kf)
+    dy_orig = treeDY.getTH1F(lint, var+"dy_SF", "met_Edge",nbins, 1,1, cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jetOnZ,cuts.SF]), '', xlabel, "1",'ZZpt')
     zz      = treeZZ.getTH1F(lint,"zz_SF"+scutstring, treevar,nbins, 1,1, cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jet,cuts.SF, cuts.lepsFromZ]), '', xlabel, "1",'ZZpt')
     zz_syst  = treeZZ.getTH1F(lint,"zz_systSF"+scutstring, treevar,nbins, 1,1, cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jet,cuts.SF, cuts.lepsFromZ]), '', xlabel, "1",'ZZpt')
     wz      = treeWZ.getTH1F(lint,"wz_SF"+scutstring, treevar,nbins, 1,1, cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jet,cuts.SF, cuts.lepsFromZ]), '', xlabel,"1", kf)
     wz_syst  = treeWZ.getTH1F(lint,"wz_systSF"+scutstring, treevar,nbins, 1,1, cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jet,cuts.SF, cuts.lepsFromZ]), '', xlabel,"1", kf)
+    dy      = treeDY.getTH1F(lint,"dy_SF"+scutstring, treevar,nbins, 1,1, cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jetOnZ,cuts.SF]), '', xlabel, "1",'ZZpt')
+    dy_syst  = treeDY.getTH1F(lint,"dy_systSF"+scutstring, treevar,nbins, 1,1, cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jetOnZ,cuts.SF]), '', xlabel, "1",'ZZpt')
+    dy_stat  = treeDY.getTH1F(lint,"dy_statSF"+scutstring, treevar,nbins, 1,1, cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jetOnZ,cuts.SF]), '', xlabel, "1",'ZZpt')
     if doPDFvariations:
         arrZZ1 = [];arrZZ2 = [];arrZZ3 = []; arrZZ4 = [];arrWZ1 = [];arrWZ2 = [];arrWZ3 = []; arrWZ4 = [];valZZ = [];valWZ = []
         fPDF = TFile("pdfVariations.root", "UPDATE");
         for i in range(9, 109, 1): #these are the indices of the 100 pdf weights 
-            print "doing ", i
+            #print "doing ", i
             zz_lhe= treeZZ.getTH1F(lint,"z"+str(i),"met_Edge",nbins,1,1,cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jet,cuts.SF,cuts.lepsFromZ]),'',xlabel,"LHEweight_wgt_Edge["+str(i)+"]","ZZpt")
             wz_lhe= treeWZ.getTH1F(lint,"w"+str(i),"met_Edge",nbins,1,1,cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jet,cuts.SF,cuts.lepsFromZ]),'',xlabel,"LHEweight_wgt_Edge["+str(i)+"]",kf)
             valZZ.append(1)
@@ -603,14 +641,14 @@ def makeResultData(analysis, var, signames, maxrun = 999999, lint = 35.9, specia
         tZZ_met1.Write("tZZ_met1");tZZ_met2.Write("tZZ_met2");tZZ_met3.Write("tZZ_met3");tZZ_met4.Write("tZZ_met4");
         tWZ_met1.Write("tWZ_met1");tWZ_met2.Write("tWZ_met2");tWZ_met3.Write("tWZ_met3");tWZ_met4.Write("tWZ_met4");
         fPDF.Close()
-        print "tZZ_met1.GetRMS()",tZZ_met1.GetRMS() 
-        print "tWZ_met1.GetRMS()",tWZ_met1.GetRMS()
-        print "tZZ_met2.GetRMS()",tZZ_met2.GetRMS() 
-        print "tWZ_met2.GetRMS()",tWZ_met2.GetRMS()
-        print "tZZ_met3.GetRMS()",tZZ_met3.GetRMS() 
-        print "tWZ_met3.GetRMS()",tWZ_met3.GetRMS()
-        print "tZZ_met4.GetRMS()",tZZ_met4.GetRMS() 
-        print "tWZ_met4.GetRMS()",tWZ_met4.GetRMS() 
+        #print "tZZ_met1.GetRMS()",tZZ_met1.GetRMS() 
+        #print "tWZ_met1.GetRMS()",tWZ_met1.GetRMS()
+        #print "tZZ_met2.GetRMS()",tZZ_met2.GetRMS() 
+        #print "tWZ_met2.GetRMS()",tWZ_met2.GetRMS()
+        #print "tZZ_met3.GetRMS()",tZZ_met3.GetRMS() 
+        #print "tWZ_met3.GetRMS()",tWZ_met3.GetRMS()
+        #print "tZZ_met4.GetRMS()",tZZ_met4.GetRMS() 
+        #print "tWZ_met4.GetRMS()",tWZ_met4.GetRMS() 
     
     ZZ_met1 = 0.220514311817
     WZ_met1 = 0.111147118377
@@ -648,33 +686,33 @@ def makeResultData(analysis, var, signames, maxrun = 999999, lint = 35.9, specia
     zz_jecDn    = treeZZ.getTH1F(lint,"zz_SF_jecDn", "met_jecDn_Edge",nbins, 1,1, cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jet,cuts.SF, cuts.lepsFromZ]), '', xlabel, "1",'ZZpt')
     wz_jecUp    = treeWZ.getTH1F(lint,"wz_SF_jecUp", "met_jecUp_Edge",nbins, 1,1, cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jet,cuts.SF, cuts.lepsFromZ]), '', xlabel, "1",kf)
     wz_jecDn    = treeWZ.getTH1F(lint,"wz_SF_jecDn", "met_jecDn_Edge",nbins, 1,1, cuts.AddList([specialcut,cuts.goodLepton,cuts.slep0jet,cuts.SF, cuts.lepsFromZ]), '', xlabel, "1",kf)
-    print "#############zzQCD INCL #############################################"
-    print "zz_qcdUp 1", abs(zz_qcdInclUp.GetBinContent(1) - zz_qcdInclNom.GetBinContent(1))
-    print "zz_qcdDn 1", abs(zz_qcdInclDn.GetBinContent(1) - zz_qcdInclNom.GetBinContent(1))
-    print "zz_qcdUp 2", abs(zz_qcdInclUp.GetBinContent(2) - zz_qcdInclNom.GetBinContent(2))
-    print "zz_qcdDn 2", abs(zz_qcdInclDn.GetBinContent(2) - zz_qcdInclNom.GetBinContent(2))
-    print "zz_qcdUp 3", abs(zz_qcdInclUp.GetBinContent(3) - zz_qcdInclNom.GetBinContent(3))
-    print "zz_qcdDn 3", abs(zz_qcdInclDn.GetBinContent(3) - zz_qcdInclNom.GetBinContent(3))
-    print "zz_qcdUp 4", abs(zz_qcdInclUp.GetBinContent(4) - zz_qcdInclNom.GetBinContent(4))
-    print "zz_qcdDn 4", abs(zz_qcdInclDn.GetBinContent(4) - zz_qcdInclNom.GetBinContent(4))
-    print "#############zzQCD EXCL #############################################"
-    print "zz_qcdUp 1", abs(zz_qcdExclUp.GetBinContent(1) - zz_qcdExclNom.GetBinContent(1))
-    print "zz_qcdDn 1", abs(zz_qcdExclDn.GetBinContent(1) - zz_qcdExclNom.GetBinContent(1))
-    print "zz_qcdUp 2", abs(zz_qcdExclUp.GetBinContent(2) - zz_qcdExclNom.GetBinContent(2))
-    print "zz_qcdDn 2", abs(zz_qcdExclDn.GetBinContent(2) - zz_qcdExclNom.GetBinContent(2))
-    print "zz_qcdUp 3", abs(zz_qcdExclUp.GetBinContent(3) - zz_qcdExclNom.GetBinContent(3))
-    print "zz_qcdDn 3", abs(zz_qcdExclDn.GetBinContent(3) - zz_qcdExclNom.GetBinContent(3))
-    print "zz_qcdUp 4", abs(zz_qcdExclUp.GetBinContent(4) - zz_qcdExclNom.GetBinContent(4))
-    print "zz_qcdDn 4", abs(zz_qcdExclDn.GetBinContent(4) - zz_qcdExclNom.GetBinContent(4))
-    print "#############zzQCD TOT #############################################"
-    print "zz_qcdUp 1",math.sqrt( abs(zz_qcdInclUp.GetBinContent(1) - zz_qcdInclNom.GetBinContent(1))**2+ abs(zz_qcdExclUp.GetBinContent(1) - zz_qcdExclNom.GetBinContent(1))**2)
-    print "zz_qcdDn 1",math.sqrt( abs(zz_qcdInclDn.GetBinContent(1) - zz_qcdInclNom.GetBinContent(1))**2+ abs(zz_qcdExclDn.GetBinContent(1) - zz_qcdExclNom.GetBinContent(1))**2)
-    print "zz_qcdUp 2",math.sqrt( abs(zz_qcdInclUp.GetBinContent(2) - zz_qcdInclNom.GetBinContent(2))**2+ abs(zz_qcdExclUp.GetBinContent(2) - zz_qcdExclNom.GetBinContent(2))**2)
-    print "zz_qcdDn 2",math.sqrt( abs(zz_qcdInclDn.GetBinContent(2) - zz_qcdInclNom.GetBinContent(2))**2+ abs(zz_qcdExclDn.GetBinContent(2) - zz_qcdExclNom.GetBinContent(2))**2)
-    print "zz_qcdUp 3",math.sqrt( abs(zz_qcdInclUp.GetBinContent(3) - zz_qcdInclNom.GetBinContent(3))**2+ abs(zz_qcdExclUp.GetBinContent(3) - zz_qcdExclNom.GetBinContent(3))**2)
-    print "zz_qcdDn 3",math.sqrt( abs(zz_qcdInclDn.GetBinContent(3) - zz_qcdInclNom.GetBinContent(3))**2+ abs(zz_qcdExclDn.GetBinContent(3) - zz_qcdExclNom.GetBinContent(3))**2)
-    print "zz_qcdUp 4",math.sqrt( abs(zz_qcdInclUp.GetBinContent(4) - zz_qcdInclNom.GetBinContent(4))**2+ abs(zz_qcdExclUp.GetBinContent(4) - zz_qcdExclNom.GetBinContent(4))**2)
-    print "zz_qcdDn 4",math.sqrt( abs(zz_qcdInclDn.GetBinContent(4) - zz_qcdInclNom.GetBinContent(4))**2+ abs(zz_qcdExclDn.GetBinContent(4) - zz_qcdExclNom.GetBinContent(4))**2)
+    #print "#############zzQCD INCL #############################################"
+    #print "zz_qcdUp 1", abs(zz_qcdInclUp.GetBinContent(1) - zz_qcdInclNom.GetBinContent(1))
+    #print "zz_qcdDn 1", abs(zz_qcdInclDn.GetBinContent(1) - zz_qcdInclNom.GetBinContent(1))
+    #print "zz_qcdUp 2", abs(zz_qcdInclUp.GetBinContent(2) - zz_qcdInclNom.GetBinContent(2))
+    #print "zz_qcdDn 2", abs(zz_qcdInclDn.GetBinContent(2) - zz_qcdInclNom.GetBinContent(2))
+    #print "zz_qcdUp 3", abs(zz_qcdInclUp.GetBinContent(3) - zz_qcdInclNom.GetBinContent(3))
+    #print "zz_qcdDn 3", abs(zz_qcdInclDn.GetBinContent(3) - zz_qcdInclNom.GetBinContent(3))
+    #print "zz_qcdUp 4", abs(zz_qcdInclUp.GetBinContent(4) - zz_qcdInclNom.GetBinContent(4))
+    #print "zz_qcdDn 4", abs(zz_qcdInclDn.GetBinContent(4) - zz_qcdInclNom.GetBinContent(4))
+    #print "#############zzQCD EXCL #############################################"
+    #print "zz_qcdUp 1", abs(zz_qcdExclUp.GetBinContent(1) - zz_qcdExclNom.GetBinContent(1))
+    #print "zz_qcdDn 1", abs(zz_qcdExclDn.GetBinContent(1) - zz_qcdExclNom.GetBinContent(1))
+    #print "zz_qcdUp 2", abs(zz_qcdExclUp.GetBinContent(2) - zz_qcdExclNom.GetBinContent(2))
+    #print "zz_qcdDn 2", abs(zz_qcdExclDn.GetBinContent(2) - zz_qcdExclNom.GetBinContent(2))
+    #print "zz_qcdUp 3", abs(zz_qcdExclUp.GetBinContent(3) - zz_qcdExclNom.GetBinContent(3))
+    #print "zz_qcdDn 3", abs(zz_qcdExclDn.GetBinContent(3) - zz_qcdExclNom.GetBinContent(3))
+    #print "zz_qcdUp 4", abs(zz_qcdExclUp.GetBinContent(4) - zz_qcdExclNom.GetBinContent(4))
+    #print "zz_qcdDn 4", abs(zz_qcdExclDn.GetBinContent(4) - zz_qcdExclNom.GetBinContent(4))
+    #print "#############zzQCD TOT #############################################"
+    #print "zz_qcdUp 1",math.sqrt( abs(zz_qcdInclUp.GetBinContent(1) - zz_qcdInclNom.GetBinContent(1))**2+ abs(zz_qcdExclUp.GetBinContent(1) - zz_qcdExclNom.GetBinContent(1))**2)
+    #print "zz_qcdDn 1",math.sqrt( abs(zz_qcdInclDn.GetBinContent(1) - zz_qcdInclNom.GetBinContent(1))**2+ abs(zz_qcdExclDn.GetBinContent(1) - zz_qcdExclNom.GetBinContent(1))**2)
+    #print "zz_qcdUp 2",math.sqrt( abs(zz_qcdInclUp.GetBinContent(2) - zz_qcdInclNom.GetBinContent(2))**2+ abs(zz_qcdExclUp.GetBinContent(2) - zz_qcdExclNom.GetBinContent(2))**2)
+    #print "zz_qcdDn 2",math.sqrt( abs(zz_qcdInclDn.GetBinContent(2) - zz_qcdInclNom.GetBinContent(2))**2+ abs(zz_qcdExclDn.GetBinContent(2) - zz_qcdExclNom.GetBinContent(2))**2)
+    #print "zz_qcdUp 3",math.sqrt( abs(zz_qcdInclUp.GetBinContent(3) - zz_qcdInclNom.GetBinContent(3))**2+ abs(zz_qcdExclUp.GetBinContent(3) - zz_qcdExclNom.GetBinContent(3))**2)
+    #print "zz_qcdDn 3",math.sqrt( abs(zz_qcdInclDn.GetBinContent(3) - zz_qcdInclNom.GetBinContent(3))**2+ abs(zz_qcdExclDn.GetBinContent(3) - zz_qcdExclNom.GetBinContent(3))**2)
+    #print "zz_qcdUp 4",math.sqrt( abs(zz_qcdInclUp.GetBinContent(4) - zz_qcdInclNom.GetBinContent(4))**2+ abs(zz_qcdExclUp.GetBinContent(4) - zz_qcdExclNom.GetBinContent(4))**2)
+    #print "zz_qcdDn 4",math.sqrt( abs(zz_qcdInclDn.GetBinContent(4) - zz_qcdInclNom.GetBinContent(4))**2+ abs(zz_qcdExclDn.GetBinContent(4) - zz_qcdExclNom.GetBinContent(4))**2)
     
    # print "#############wzQCD#############################################"
    # print "wz_qcdUp 1", abs(wz_qcdUp.GetBinContent(1) - wz_qcdNom.GetBinContent(1))
@@ -726,10 +764,10 @@ def makeResultData(analysis, var, signames, maxrun = 999999, lint = 35.9, specia
     zz_pt.Scale(1./zz_pt.Integral())
     zz_noKF.Scale(zz_noScale.Integral()) 
     zz_pt.Scale(zz_noScale.Integral()) 
-    print "zz kfactoris now 1", abs(zz_noKF.GetBinContent(1) - zz_pt.GetBinContent(1))
-    print "zz kfactoris now 2", abs(zz_noKF.GetBinContent(2) - zz_pt.GetBinContent(2))
-    print "zz kfactoris now 3", abs(zz_noKF.GetBinContent(3) - zz_pt.GetBinContent(3))
-    print "zz kfactoris now 4", abs(zz_noKF.GetBinContent(4) - zz_pt.GetBinContent(4))
+    #print "zz kfactoris now 1", abs(zz_noKF.GetBinContent(1) - zz_pt.GetBinContent(1))
+    #print "zz kfactoris now 2", abs(zz_noKF.GetBinContent(2) - zz_pt.GetBinContent(2))
+    #print "zz kfactoris now 3", abs(zz_noKF.GetBinContent(3) - zz_pt.GetBinContent(3))
+    #print "zz kfactoris now 4", abs(zz_noKF.GetBinContent(4) - zz_pt.GetBinContent(4))
 
 
 
@@ -744,8 +782,10 @@ def makeResultData(analysis, var, signames, maxrun = 999999, lint = 35.9, specia
     for i in [0, 1, 2, 3]:
         zz.SetBinError(i, math.sqrt((zz.GetBinContent(i)*math.sqrt(0.07**2 + lepUnc**2+triggerUnc**2))**2+zz.GetBinError(i)**2 + max(math.sqrt(abs(zz_qcdExclUp.GetBinContent(i)-zz_qcdExclNom.GetBinContent(i))**2+ abs(zz_qcdInclUp.GetBinContent(i)-zz_qcdInclNom.GetBinContent(i))**2),math.sqrt(abs(zz_qcdExclDn.GetBinContent(i)-zz_qcdExclNom.GetBinContent(i))**2+ abs(zz_qcdInclUp.GetBinContent(i)-zz_qcdInclNom.GetBinContent(i))**2))+max(abs(zz_jecUp.GetBinContent(i)-zz.GetBinContent(i))**2,abs(zz_jecDn.GetBinContent(i)-zz.GetBinContent(i))**2)+abs(zz_noKF.GetBinContent(i)-zz_pt.GetBinContent(i))**2 + (ZZ_met[i])**2  ))
         zz_syst.SetBinError(i, math.sqrt((zz.GetBinContent(i)*math.sqrt(0.07**2 + lepUnc**2+triggerUnc**2))**2+ max(math.sqrt(abs(zz_qcdExclUp.GetBinContent(i)-zz_qcdExclNom.GetBinContent(i))**2+ abs(zz_qcdInclUp.GetBinContent(i)-zz_qcdInclNom.GetBinContent(i))**2),math.sqrt(abs(zz_qcdExclDn.GetBinContent(i)-zz_qcdExclNom.GetBinContent(i))**2+ abs(zz_qcdInclUp.GetBinContent(i)-zz_qcdInclNom.GetBinContent(i))**2))+max(abs(zz_jecUp.GetBinContent(i)-zz.GetBinContent(i))**2,abs(zz_jecDn.GetBinContent(i)-zz.GetBinContent(i))**2)+abs(zz_noKF.GetBinContent(i)-zz_pt.GetBinContent(i))**2 + (ZZ_met[i])**2  ))
-        wz.SetBinError(1, math.sqrt((wz.GetBinContent(1)*math.sqrt(0.06**2 +0.05**2+  lepUnc**2+triggerUnc**2))**2+wz.GetBinError(i)**2 + max(math.sqrt(abs(wz_qcdExclUp.GetBinContent(i)-wz_qcdExclNom.GetBinContent(i))**2+ abs(wz_qcdInclUp.GetBinContent(i)-wz_qcdInclNom.GetBinContent(i))**2),math.sqrt(abs(wz_qcdExclDn.GetBinContent(i)-wz_qcdExclNom.GetBinContent(i))**2+ abs(wz_qcdInclUp.GetBinContent(i)-wz_qcdInclNom.GetBinContent(i))**2))+max(abs(wz_jecUp.GetBinContent(i)-wz.GetBinContent(i))**2,abs(wz_jecDn.GetBinContent(i)-wz.GetBinContent(i))**2)+ (WZ_met[i])**2  ))
+        wz.SetBinError(i, math.sqrt((wz.GetBinContent(i)*math.sqrt(0.06**2 +0.05**2+  lepUnc**2+triggerUnc**2))**2+wz.GetBinError(i)**2 + max(math.sqrt(abs(wz_qcdExclUp.GetBinContent(i)-wz_qcdExclNom.GetBinContent(i))**2+ abs(wz_qcdInclUp.GetBinContent(i)-wz_qcdInclNom.GetBinContent(i))**2),math.sqrt(abs(wz_qcdExclDn.GetBinContent(i)-wz_qcdExclNom.GetBinContent(i))**2+ abs(wz_qcdInclUp.GetBinContent(i)-wz_qcdInclNom.GetBinContent(i))**2))+max(abs(wz_jecUp.GetBinContent(i)-wz.GetBinContent(i))**2,abs(wz_jecDn.GetBinContent(i)-wz.GetBinContent(i))**2)+ (WZ_met[i])**2  ))
         wz_syst.SetBinError(i, math.sqrt((wz.GetBinContent(i)*math.sqrt(0.06**2 +0.05**2+ lepUnc**2+triggerUnc**2))**2+ max(math.sqrt(abs(wz_qcdExclUp.GetBinContent(i)-wz_qcdExclNom.GetBinContent(i))**2+ abs(wz_qcdInclUp.GetBinContent(i)-wz_qcdInclNom.GetBinContent(i))**2),math.sqrt(abs(wz_qcdExclDn.GetBinContent(i)-wz_qcdExclNom.GetBinContent(i))**2+ abs(wz_qcdInclUp.GetBinContent(i)-wz_qcdInclNom.GetBinContent(i))**2))+max(abs(wz_jecUp.GetBinContent(i)-wz.GetBinContent(i))**2,abs(wz_jecDn.GetBinContent(i)-wz.GetBinContent(i))**2)+ (WZ_met[i])**2  ))
+        dy.SetBinError(i, math.sqrt(dy.GetBinError(i)**2+(0.5*dy.GetBinContent(i))**2  ))
+        dy_syst.SetBinError(i, math.sqrt((0.5*dy.GetBinContent(i))**2  ))
 
     others = treeOTHERS.getTH1F(lint, var+"others"+scutstring, treevar, nbins, 1, 1, cuts.AddList([specialcut, cuts.goodLepton,  cuts.slep0jet, cuts.SF]), '', xlabel, "1",kf)
     others_orig = treeOTHERS.getTH1F(lint, var+"others_orig"+scutstring, treevar, nbins, 1, 1, cuts.AddList([specialcut, cuts.goodLepton,  cuts.slep0jet, cuts.SF]), '', xlabel, "1",kf)
@@ -753,16 +793,22 @@ def makeResultData(analysis, var, signames, maxrun = 999999, lint = 35.9, specia
         others.SetBinError(bin, math.sqrt((others.GetBinContent(bin)*0.5)**2 + others.GetBinError(bin)**2))
     
     # aesthetics
+    print "dy before rinout ", dy.Integral()
+    dy.Scale(0.138)
+    print "dy after rinout ", dy.Integral()
     wz.Scale(1.06);wz_jecUp.Scale(1.06);wz_jecDn.Scale(1.06)
     zz.Scale(0.94);zz_jecUp.Scale(0.94);zz_jecDn.Scale(0.94)
     rare = copy.deepcopy(others)
-    rare.SetFillColorAlpha(r.kCyan-5, 1);rare.SetTitle("Rares");rare.SetLineColor(r.kBlack)
+    #rare.Add(dy, 1.);
+    rare.SetFillColorAlpha(r.kViolet+3, 1);rare.SetTitle("Rare processes");rare.SetLineColor(r.kBlack)
+    dy.SetFillColorAlpha(r.kYellow-9, 1);dy.SetTitle("DY+jets");dy.SetLineColor(r.kBlack)
     zz.SetFillColorAlpha(r.kCyan+2, 1);zz.SetTitle("ZZ#rightarrow 2l");zz.SetLineColor(r.kBlack)
     wz.SetFillColorAlpha(r.kGreen-8, 1);wz.SetTitle("WZ#rightarrow 3l");wz.SetLineColor(r.kBlack)
-    prediction.SetFillColorAlpha(r.kRed-9, 0.7);prediction.SetTitle("Flavor Symmetric");
+    prediction.SetFillColorAlpha(r.kRed-9, 0.7);prediction.SetTitle("Flavor symmetric");
     da_SF.SetTitle("data SF")       
     #mc_FS.SetTitle("FS MC");mc_FS.SetFillColorAlpha(r.kRed-9, 0.7)       
 
+    mc_stack.Add(dy      );                      
     mc_stack.Add(rare      );                      
     mc_stack.Add(wz        );                     
     mc_stack.Add(zz        );                     
@@ -772,12 +818,13 @@ def makeResultData(analysis, var, signames, maxrun = 999999, lint = 35.9, specia
     mc_stack.GetXaxis().SetTitle('p_{T}^{miss} [GeV]'); 
     #mc_full = copy.deepcopy(mc_FS);         
     mc_full = copy.deepcopy(prediction);         
+    mc_full.Add(dy, 1.);                       
     mc_full.Add(rare, 1.);                       
     mc_full.Add(wz, 1.);                      
     mc_full.Add(zz, 1.);                     
     print "mc_full error", mc_full.GetBinError(4)
     mc_full_e = copy.deepcopy(mc_full);          
-    mc_full_e.SetFillColorAlpha(r.kBlue+1, 0.8);mc_full_e.SetFillStyle(3017); mc_full_e.SetMarkerSize(0.);
+    mc_full_e.SetFillColorAlpha(r.kBlue+3, 1);mc_full_e.SetFillStyle(3017); mc_full_e.SetMarkerSize(0.);
     
     maxrat = 0.5
     for ib in range(1,da_SF.GetNbinsX()+1):
@@ -795,11 +842,14 @@ def makeResultData(analysis, var, signames, maxrun = 999999, lint = 35.9, specia
     plot_result = Canvas.Canvas('results/%s/plot_result_%s_daPreddaObs%s'%(newLumiString, var, '' if not scutstring else '_'+scutstring), 'png,pdf', 0.6, 0.59, 0.90, 0.87)
     plot_result.addStack(mc_stack, "HIST" , 1, 1)
     plot_result.addHisto(mc_full_e, 'E2,SAME'  , '' , 'PL', r.kBlack , 1, -1)
-    plot_result.addHisto(da_SF    , 'E1,SAME'  , 'Observed data '+scutstring, 'PL', r.kBlack  , 1,  0)
+    if scutstring == 'ee':string = 'ee'
+    if scutstring == 'mm':string = '#mu#mu'
+    if scutstring == 'SF':string = 'ee+#mu#mu'
+    plot_result.addHisto(da_SF    , 'E1,SAME'  , 'Observed data '+string, 'PL', r.kBlack  , 1,  0)
     #plot_result.saveRatio(1, 1, 0, lint, mc_full, mc_full, 0. , int(maxrat+1.0)) 
     #THIS IS TO UNBLIND!
     plot_result.saveRatio(1, 1, 0, lint, da_SF, mc_full, 0. , int(maxrat+1.0))                                                                                                       
-    makeResultsTable(da_SF, prediction, da_OF_orig, prediction_stat, prediction_syst, zz, zz_orig, zz_syst,  wz, wz_orig, wz_syst, rare, others_orig, mc_full)
+    makeResultsTable(da_SF, prediction, da_OF_orig, prediction_stat, prediction_syst, zz, zz_orig, zz_syst,  wz, wz_orig, wz_syst, rare,  others_orig, mc_full)
      
     plot_resultSigs = Canvas.Canvas('results/%s/plot_result_%s_daPreddaObs%s_withSignal'%(newLumiString, var, '' if not scutstring else '_'+scutstring), 'png,pdf', 0.6, 0.59, 0.90, 0.87)
     plot_resultSigs.addStack(mc_stack, "HIST" , 1, 1)
@@ -808,12 +858,13 @@ def makeResultData(analysis, var, signames, maxrun = 999999, lint = 35.9, specia
     plot_resultSigs.addHisto(sig2, "HIST,SAME", "m_{l}: %s, m_{{\Chi_{1}^{0}}} : %s" %(signames[1][0], signames[1][1]), "L", r.kCyan-7, 1, 0)
     plot_resultSigs.addHisto(sig3, "HIST,SAME", "m_{l}: %s, m_{{\Chi_{1}^{0}}} : %s" %(signames[2][0], signames[2][1]), "L", r.kPink-4, 1, 0)
     plot_resultSigs.addHisto(sig4, "HIST,SAME", "m_{l}: %s, m_{{\Chi_{1}^{0}}} : %s" %(signames[3][0], signames[3][1]), "L", r.kOrange-4, 1, 0)
-    plot_resultSigs.addHisto(da_SF, 'E1,SAME'  , 'Observed data', 'PL', r.kBlack  , 1,  0)
+    plot_resultSigs.addHisto(da_SF, 'E1,SAME'  , 'Observed data'+string, 'PL', r.kBlack  , 1,  0)
     plot_resultSigs.saveRatio(1, 1, 0, lint, da_SF, mc_full, 0. , int(maxrat+1.0)) 
-    makeResultsTableSig(da_SF, prediction, da_OF_orig, prediction_stat, prediction_syst,  zz, zz_orig, zz_syst, wz, wz_orig, wz_syst, rare, others_orig, mc_full, sig1, sig2, sig3,sig4, signames)
+    makeResultsTableSig(da_SF, prediction, da_OF_orig, prediction_stat, prediction_syst,  zz, zz_orig, zz_syst, wz, wz_orig, wz_syst, rare, others_orig, dy, dy_orig, dy_syst, mc_full, sig1, sig2, sig3,sig4, signames)
 
-    tfile = r.TFile('datacards/forDatacards_slepton_2017_%s.root'%scutstring,'recreate')
+    tfile = r.TFile('datacards/forDatacards_slepton_2017%s_withDY.root'%scutstring,'recreate')
     tfile.cd()
+    tfile.WriteTObject(dy_stat      , 'dy_stat')
     tfile.WriteTObject(rare      , 'rare')
     tfile.WriteTObject(wz     , 'wz_SF')
     tfile.WriteTObject(zz     , 'zz_SF')
@@ -910,7 +961,6 @@ if __name__ == '__main__':
                    'MuonEG_Run2016H_03Feb2017_ver2_v1_runs_281085_284035', 
                    'MuonEG_Run2016H_03Feb2017_ver3_v1_runs_284036_284044']    
  
-    #daDatasets = daDatasetsB +daDatasetsC+ daDatasetsD     
     daDatasets = daDatasetsB + daDatasetsC + daDatasetsD +daDatasetsE + daDatasetsF + daDatasetsG + daDatasetsH      
     treeMC = Sample.Tree(helper.selectSamples(opts.sampleFile, mcDatasets, 'MC'), 'MC'  , 0, isScan = 0)
     treeDY = Sample.Tree(helper.selectSamples(opts.sampleFile, dyDatasets, 'DY'), 'DY'  , 0, isScan = 0)
@@ -920,10 +970,12 @@ if __name__ == '__main__':
     treeZZ = Sample.Tree(helper.selectSamples(opts.sampleFile, zzDatasets, 'ZZ'), 'ZZ'  , 0, isScan = 0)
     treeDA = Sample.Tree(helper.selectSamples(opts.sampleFile, daDatasets, 'DA'), 'DATA', 1, isScan = 0)
     
-    signals = ['SMS_450_40', 'SMS_375_160', 'SMS_250_180', 'SMS_100_1']
-    signames = [[450, 40], [375, 160], [250, 180], [100, 1]]
-    xsecf = open('datacards/xsec_SUM_13tev_fit_ee.txt', 'r')
-    #xsecf = open('datacards/xsec_lLlL_13tev_fit.txt', 'r')xsec_SUM_13tev_fit_ee.txt
+    #signals = ['SMS_450_40', 'SMS_375_160', 'SMS_250_180', 'SMS_100_1']
+    #signames = [[450, 40], [375, 160], [250, 180], [100, 1]]
+    signals = ['SMS_450_20', 'SMS_400_20', 'SMS_350_20', 'SMS_100_1']
+    signames = [[450, 20], [400, 20], [350, 20], [100, 1]]    
+    xsecf = open('datacards/xsec_SUM_13tev_fit.txt', 'r')
+    #xsecf = open('datacards/xsec_lLlL_13tev_fit.txt', 'r')
     xsecs = eval(xsecf.read())
     xsecf.close()                                             
     treeSIG1 = Sample.Tree(helper.selectSamples("samplesSlepton.dat", [signals[0]], 'SI'), 'SI', 0, isScan =  xsecs[signames[0][0]][0])
@@ -949,7 +1001,7 @@ if __name__ == '__main__':
     #rsfof, rsfof_e, rsfof_mc, rsfof_mc_e, rmue_a_da, rmue_a_mc, rmue_b_da, rmue_b_mc =  makeFactorsTable()
     ## result plots in different variables:
     for v in ['met']:
-        makeResultData('slepton2017', v,signames, maxrun,lint,specialcut='' , scutstring = '',    _options='returnplot,splitFlavor')
+        makeResultData('slepton2017', v,signames, maxrun,lint,specialcut='' , scutstring = 'SF',    _options='returnplot,splitFlavor')
         #makeResultData('slepton2017ee', v,signames, maxrun,lint,specialcut='(Lep1_pdgId_Edge * Lep2_pdgId_Edge == -121)' , scutstring = 'ee',    _options='returnplot,splitFlavor')
         #makeResultData('slepton2017mm', v,signames, maxrun,lint,specialcut='(Lep1_pdgId_Edge * Lep2_pdgId_Edge == -169)' , scutstring = 'mm',    _options='returnplot,splitFlavor')
         #makeClosureTestPlots('slepton2017','met0jet','nJet25_Edge  == 0 && mt2_Edge < 90 && mt2_Edge > 60' , '60-90', True)

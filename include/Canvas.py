@@ -62,7 +62,7 @@ class Canvas:
       latexd.SetTextFont(42);
       latexd.SetTextAlign(31);
       latexd.SetTextSize(0.06);
-      latexd.DrawLatex(0.15, 0.93, "Events")  
+      #latexd.DrawLatex(0.15, 0.93, "Events")  
 
       #if(isData):
       #  latexb.DrawLatex(0.44, 0.93, "#it{Preliminary}")
@@ -104,13 +104,23 @@ class Canvas:
       latexd.SetTextColor(r.kBlack);
       latexd.SetTextFont(42);
       latexd.SetTextAlign(31);
-      latexd.SetTextSize(0.04);
-      latexd.DrawLatex(0.07, 0.93, "Events")  
+      latexd.SetTextSize(0.04);          
+      #latexd.DrawLatex(0.07, 0.93, "Events")  
 
       #if(isData):
       #  latexb.DrawLatex(0.38, 0.93, "#it{Preliminary}")
       #else:
-      #  latexb.DrawLatex(0.38, 0.93, "#it{Simulation}")
+      latexb.DrawLatex(0.415, 0.93, "#it{Supplementary}")
+      
+
+
+      latexe = TLatex()
+      latexe.SetNDC();
+      latexe.SetTextColor(r.kBlack);
+      latexe.SetTextFont(42);
+      latexe.SetTextAlign(31);
+      latexe.SetTextSize(0.03);          
+      latexe.DrawLatex(0.33, 0.86, "arXiv: 1806.05264")
 
       text_lumi = str(lumi) + " fb^{-1} (13 TeV)"
       latexc = TLatex()
@@ -258,10 +268,15 @@ class Canvas:
 
    def makeLegend(self):
 
-      for i in range(0, len(self.histos)):
-          for j in range(0, len(self.orderForLegend)):
-              if(self.orderForLegend[j] != -1 and self.orderForLegend[j] == i):
+      for i in xrange(len(self.histos)-1, -1, -1):
+      #for i in range(0, len(self.histos)):
+          print "i", i
+          for j in xrange(len(self.orderForLegend)-1, -1, -1):
+              #for j in range(0, len(self.orderForLegend)):
+              if(self.orderForLegend[j] == i):
+              #if(self.orderForLegend[j] != -1 and self.orderForLegend[j] == i):
                   self.myLegend.AddEntry(self.histos[j], self.labels[j], self.labelsOption[j])
+                  #self.myLegend.AddEntry(self.histos[j], self.labels[j], self.labelsOption[j])
           
 
    def ensurePath(self, _path):
@@ -338,10 +353,11 @@ class Canvas:
           tmp_ratio.GetXaxis().SetLabelOffset(0.08);
           tmp_ratio.GetXaxis().SetTitle('');
           tmp_ratio.SetMarkerStyle(tmp_hMC.GetMarkerStyle());
-          tmp_ratio.SetFillColorAlpha(r.kBlue-3,0.9)
+          tmp_ratio.SetFillColorAlpha(r.kBlue+3,1.0)
           tmp_ratio.SetFillStyle(3017)
           tmp_ratio.SetMarkerColor(r.kBlack);
-          tmp_ratio.SetMarkerSize(0.6);
+          #tmp_ratio.SetMarkerSize(0.6);
+          #tmp_ratio.SetMarkerSize(0.6);
           #tmp_ratio.SetMarkerColor(r.kBlack if len(hMClist) == 1 else tmp_hMC.GetMarkerColor());
           #tmp_ratio.SetLineColor  (r.kBlack if len(hMClist) == 1 else tmp_hMC.GetLineColor  ());
           tmp_ratio.SetLineColor  (tmp_hMC.GetLineColor());

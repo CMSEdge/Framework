@@ -56,6 +56,7 @@ def LoadLeptonSF():
     ROOT.SetMuonIP2( copy.deepcopy(muFile.Get('SF')))
     muFile.Close()
     muFile = ROOT.TFile('/afs/cern.ch/work/s/sesanche/public/stuffForMoriond/LepSFs/MUON/Tracking_EfficienciesAndSF_BCDEFGH.root')
+    #ROOT.SetMuonTrk( copy.deepcopy(muFile.Get('ratio_eff_aeta_tk0_dr030e030_corr')))
     ROOT.SetMuonTrk( copy.deepcopy(muFile.Get('ratio_eff_aeta_dr030e030_corr')))
     muFile.Close()
     print 'Setup done. Have a nice day'
