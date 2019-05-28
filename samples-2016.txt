@@ -9,32 +9,37 @@
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #
 #
-DEF:path:/pool/ciencias/userstorage/sscruz/NanoAOD/Edge_17_05_19/
+DEF:path:/pool/cienciasrw/userstorage/sscruz/NanoAOD/Edge_17_05_19/
 DEF:year:2016
+data  r.kBlack       DoubleEG_Run{year}B_{year}          DoubleEG             {path}  1    1 0 
 data  r.kBlack       DoubleEG_Run{year}C_{year}          DoubleEG             {path}  1    1 0 
 data  r.kBlack       DoubleEG_Run{year}D_{year}          DoubleEG             {path}  1    1 0 
 data  r.kBlack       DoubleEG_Run{year}E_{year}          DoubleEG             {path}  1    1 0 
 data  r.kBlack       DoubleEG_Run{year}F_{year}          DoubleEG             {path}  1    1 0 
 data  r.kBlack       DoubleEG_Run{year}G_{year}          DoubleEG             {path}  1    1 0 
 data  r.kBlack       DoubleEG_Run{year}H_{year}          DoubleEG             {path}  1    1 0 
+data  r.kBlack       DoubleMuon_Run{year}B_{year}          DoubleMuon             {path}  1    1 0 
 data  r.kBlack       DoubleMuon_Run{year}C_{year}          DoubleMuon             {path}  1    1 0 
 data  r.kBlack       DoubleMuon_Run{year}D_{year}          DoubleMuon             {path}  1    1 0 
 data  r.kBlack       DoubleMuon_Run{year}E_{year}          DoubleMuon             {path}  1    1 0 
 data  r.kBlack       DoubleMuon_Run{year}F_{year}          DoubleMuon             {path}  1    1 0 
 data  r.kBlack       DoubleMuon_Run{year}G_{year}          DoubleMuon             {path}  1    1 0 
 data  r.kBlack       DoubleMuon_Run{year}H_{year}          DoubleMuon             {path}  1    1 0 
+data  r.kBlack       MuonEG_Run{year}B_{year}          MuonEG             {path}  1    1 0 
 data  r.kBlack       MuonEG_Run{year}C_{year}          MuonEG             {path}  1    1 0 
 data  r.kBlack       MuonEG_Run{year}D_{year}          MuonEG             {path}  1    1 0 
 data  r.kBlack       MuonEG_Run{year}E_{year}          MuonEG             {path}  1    1 0 
 data  r.kBlack       MuonEG_Run{year}F_{year}          MuonEG             {path}  1    1 0 
 data  r.kBlack       MuonEG_Run{year}G_{year}          MuonEG             {path}  1    1 0 
 data  r.kBlack       MuonEG_Run{year}H_{year}          MuonEG             {path}  1    1 0 
+data  r.kBlack       SingleElectron_Run{year}B_{year}          SingleElectron             {path}  1    1 0 
 data  r.kBlack       SingleElectron_Run{year}C_{year}          SingleElectron             {path}  1    1 0 
 data  r.kBlack       SingleElectron_Run{year}D_{year}          SingleElectron             {path}  1    1 0 
 data  r.kBlack       SingleElectron_Run{year}E_{year}          SingleElectron             {path}  1    1 0 
 data  r.kBlack       SingleElectron_Run{year}F_{year}          SingleElectron             {path}  1    1 0 
 data  r.kBlack       SingleElectron_Run{year}G_{year}          SingleElectron             {path}  1    1 0 
 data  r.kBlack       SingleElectron_Run{year}H_{year}          SingleElectron             {path}  1    1 0 
+data  r.kBlack       SingleMuon_Run{year}B_{year}          SingleMuon             {path}  1    1 0 
 data  r.kBlack       SingleMuon_Run{year}C_{year}          SingleMuon             {path}  1    1 0 
 data  r.kBlack       SingleMuon_Run{year}D_{year}          SingleMuon             {path}  1    1 0 
 data  r.kBlack       SingleMuon_Run{year}E_{year}          SingleMuon             {path}  1    1 0 
